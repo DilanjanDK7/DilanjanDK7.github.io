@@ -1,7 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilanjan DK | Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <header class="hero">
+        <h1>Dilanjan DK</h1>
+        <p>Welcome to my portfolio & fun project space!</p>
+        <button id="scrollToProjects">See My Projects</button>
+    </header>
+    <main>
+        <section id="projects" class="projects-section">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card" onclick="showProjectDetails('project1')">
+                    <h3>Project One</h3>
+                    <p>Short description of project one.</p>
+                </div>
+                <div class="project-card" onclick="showProjectDetails('project2')">
+                    <h3>Project Two</h3>
+                    <p>Short description of project two.</p>
+                </div>
+                <div class="project-card" onclick="showProjectDetails('project3')">
+                    <h3>Project Three</h3>
+                    <p>Short description of project three.</p>
+                </div>
+            </div>
+            <div id="projectDetails" class="project-details-modal hidden">
+                <div class="modal-content">
+                    <span id="closeModal">&times;</span>
+                    <div id="projectDetailsContent"></div>
+                </div>
+            </div>
+        </section>
+        <section class="contact-section">
+            <h2>Contact</h2>
+            <form id="contactForm">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+            <div id="formMessage"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
+    </footer>
+    <script src="main.js"></script>
 </body>
 </html>
