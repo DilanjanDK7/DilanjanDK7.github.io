@@ -135,6 +135,65 @@ footer {
     font-size: 1rem;
     margin-top: 2rem;
 }
+.about-flex {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+.about-text {
+    flex: 2;
+    min-width: 220px;
+}
+.about-image {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    justify-content: center;
+}
+.project-img {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(37,117,252,0.10);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.interactive-diagram {
+    margin: 3rem auto 0 auto;
+    max-width: 700px;
+    background: #f8faff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(37,117,252,0.07);
+    padding: 2rem 1rem 1rem 1rem;
+}
+.back-link {
+    display: inline-block;
+    margin: 1rem 0 0 0;
+    color: #fff;
+    background: #2575fc;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+.back-link:hover {
+    background: #6a11cb;
+}
+.profile-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 12px rgba(37,117,252,0.15);
+    border: 4px solid #fff;
+    object-fit: cover;
+}
 @media (max-width: 700px) {
     .projects-grid {
         flex-direction: column;
@@ -142,5 +201,14 @@ footer {
     }
     header.hero h1 {
         font-size: 2.2rem;
+    }
+}
+@media (max-width: 900px) {
+    .about-flex {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+    .interactive-diagram {
+        padding: 1rem 0.2rem 0.5rem 0.2rem;
     }
 }

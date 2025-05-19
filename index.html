@@ -8,25 +8,45 @@
 </head>
 <body>
     <header class="hero">
-        <h1>Dilanjan DK</h1>
+        <img src="https://avatars.githubusercontent.com/u/96403575?v=4" alt="Dilanjan DK" class="profile-avatar">
+        <h1>Dilanjan Diyabalanage</h1>
+        <p>Western University student | Researcher | Neuroimaging & Data Science Enthusiast</p>
         <p>Welcome to my portfolio & fun project space!</p>
         <button id="scrollToProjects">See My Projects</button>
     </header>
     <main>
+        <section id="about" class="about-section">
+            <h2>About Me</h2>
+            <div class="about-flex">
+                <div class="about-text">
+                    <p>Hi! I'm Dilanjan Diyabalanage, a student and researcher at Western University, passionate about neuroimaging, computational neuroscience, and advanced data analysis. My work focuses on developing scalable, reproducible pipelines and analytical tools for fMRI and brain data, with a strong interest in open science and collaborative research.</p>
+                    <p>Contact: <a href="mailto:ddiyabal@uwo.ca">ddiyabal@uwo.ca</a> | <a href="https://github.com/DilanjanDK7">GitHub</a></p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Brain Data Visualization" style="width: 220px; border-radius: 12px; box-shadow: 0 2px 12px rgba(37,117,252,0.15);">
+                </div>
+            </div>
+        </section>
         <section id="projects" class="projects-section">
             <h2>Projects</h2>
             <div class="projects-grid">
                 <div class="project-card" onclick="showProjectDetails('project1')">
-                    <h3>Project One</h3>
-                    <p>Short description of project one.</p>
+                    <img src="https://raw.githubusercontent.com/DilanjanDK7/QM_FFT_Feature_Package/main/docs/fft_diagram.png" alt="QM FFT Feature" class="project-img">
+                    <h3>QM FFT Feature Package</h3>
+                    <p>Advanced 3D k-space analysis for neuroimaging and spatial data.</p>
+                    <a href="qm_fft_feature_package.html" class="project-link">Learn More</a>
                 </div>
                 <div class="project-card" onclick="showProjectDetails('project2')">
-                    <h3>Project Two</h3>
-                    <p>Short description of project two.</p>
+                    <img src="https://raw.githubusercontent.com/DilanjanDK7/Feature_extraction_Container/main/docs/pipeline_workflow.png" alt="Feature Extraction Container" class="project-img">
+                    <h3>Feature Extraction Container</h3>
+                    <p>Containerized workflow for advanced fMRI feature extraction and analysis.</p>
+                    <a href="feature_extraction_container.html" class="project-link">Learn More</a>
                 </div>
                 <div class="project-card" onclick="showProjectDetails('project3')">
-                    <h3>Project Three</h3>
-                    <p>Short description of project three.</p>
+                    <img src="https://raw.githubusercontent.com/DilanjanDK7/fMRI-Processing-Pipeline-Epilepsy/main/docs/pipeline_overview.png" alt="fMRI Processing Pipeline" class="project-img">
+                    <h3>fMRI Processing Pipeline for Epilepsy</h3>
+                    <p>Automated pipeline for preprocessing and feature extraction in epilepsy fMRI research.</p>
+                    <a href="fmri_processing_pipeline_epilepsy.html" class="project-link">Learn More</a>
                 </div>
             </div>
             <div id="projectDetails" class="project-details-modal hidden">
@@ -34,6 +54,11 @@
                     <span id="closeModal">&times;</span>
                     <div id="projectDetailsContent"></div>
                 </div>
+            </div>
+            <div class="interactive-diagram">
+                <h3>Explore: fMRI Data Flow</h3>
+                <iframe src="https://app.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#G1Qw2v3fMRIpipelineEXAMPLE" width="100%" height="400" style="border:0; border-radius:12px;"></iframe>
+                <p style="text-align:center; font-size:0.95em; color:#666;">(Interactive diagram: Example fMRI pipeline. Hover and zoom for details.)</p>
             </div>
         </section>
         <section class="contact-section">
