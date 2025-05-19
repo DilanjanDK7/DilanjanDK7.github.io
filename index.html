@@ -76,5 +76,48 @@
         <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
     </footer>
     <script src="main.js"></script>
+    <script>
+    // Animated hero text
+    const heroTitle = document.querySelector('.hero h1');
+    if (heroTitle) {
+        heroTitle.style.opacity = 0;
+        setTimeout(() => {
+            heroTitle.style.transition = 'opacity 1.2s cubic-bezier(.4,2,.6,1)';
+            heroTitle.style.opacity = 1;
+        }, 300);
+    }
+    // Parallax effect for hero background
+    document.addEventListener('mousemove', function(e) {
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            const x = (e.clientX / window.innerWidth - 0.5) * 10;
+            const y = (e.clientY / window.innerHeight - 0.5) * 10;
+            hero.style.backgroundPosition = `${50 + x}% ${50 + y}%`;
+        }
+    });
+    // Interactive About image hover
+    const aboutImg = document.querySelector('.about-image img');
+    if (aboutImg) {
+        aboutImg.addEventListener('mouseenter', () => {
+            aboutImg.style.transform = 'scale(1.08) rotate(-2deg)';
+            aboutImg.style.boxShadow = '0 8px 32px rgba(37,117,252,0.18)';
+        });
+        aboutImg.addEventListener('mouseleave', () => {
+            aboutImg.style.transform = 'scale(1) rotate(0)';
+            aboutImg.style.boxShadow = '0 2px 12px rgba(37,117,252,0.15)';
+        });
+    }
+    // Project card hover effect (JS fallback for mobile)
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('touchstart', () => {
+            card.style.transform = 'scale(1.04)';
+            card.style.boxShadow = '0 8px 32px rgba(37,117,252,0.18)';
+        });
+        card.addEventListener('touchend', () => {
+            card.style.transform = '';
+            card.style.boxShadow = '';
+        });
+    });
+    </script>
 </body>
 </html>

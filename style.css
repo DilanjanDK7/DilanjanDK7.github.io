@@ -10,6 +10,25 @@ header.hero {
     color: #fff;
     text-align: center;
     padding: 4rem 1rem 3rem 1rem;
+    position: relative;
+    overflow: hidden;
+    background-size: 200% 200%;
+    animation: gradientMove 8s ease-in-out infinite alternate;
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+}
+header.hero::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 90%;
+    width: 120vw;
+    height: 120px;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 80%);
+    transform: translateX(-50%);
+    pointer-events: none;
 }
 header.hero h1 {
     font-size: 3rem;
@@ -40,6 +59,8 @@ header.hero button:hover {
 .projects-section h2 {
     text-align: center;
     margin-bottom: 2rem;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
 }
 .projects-grid {
     display: flex;
@@ -54,11 +75,44 @@ header.hero button:hover {
     padding: 2rem 1.5rem;
     width: 260px;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
 }
 .project-card:hover {
     transform: translateY(-8px) scale(1.03);
     box-shadow: 0 6px 24px rgba(37,117,252,0.15);
+    border: 2px solid #2575fc;
+    z-index: 2;
+}
+.project-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: linear-gradient(120deg, rgba(106,17,203,0.07), rgba(37,117,252,0.07));
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 1;
+}
+.project-card:hover::before {
+    opacity: 1;
+}
+.project-link {
+    display: inline-block;
+    margin-top: 1rem;
+    background: #2575fc;
+    color: #fff;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.2s;
+    position: relative;
+    z-index: 2;
+}
+.project-link:hover {
+    background: #6a11cb;
 }
 .project-details-modal {
     position: fixed;
@@ -94,6 +148,8 @@ header.hero button:hover {
 .contact-section h2 {
     text-align: center;
     margin-bottom: 1.5rem;
+    font-size: 2rem;
+    letter-spacing: 1px;
 }
 #contactForm {
     max-width: 400px;
@@ -107,6 +163,13 @@ header.hero button:hover {
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 1rem;
+    background: #f8faff;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+#contactForm input:focus, #contactForm textarea:focus {
+    border: 1.5px solid #2575fc;
+    outline: none;
+    box-shadow: 0 0 0 2px #e3eaff;
 }
 #contactForm button {
     background: #2575fc;
@@ -117,6 +180,7 @@ header.hero button:hover {
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.2s;
+    box-shadow: 0 2px 8px rgba(37,117,252,0.08);
 }
 #contactForm button:hover {
     background: #6a11cb;
@@ -128,12 +192,13 @@ header.hero button:hover {
     font-weight: bold;
 }
 footer {
-    background: #222;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
     color: #fff;
     text-align: center;
     padding: 1.2rem 0;
     font-size: 1rem;
     margin-top: 2rem;
+    letter-spacing: 0.5px;
 }
 .about-flex {
     display: flex;
@@ -193,6 +258,17 @@ footer {
     box-shadow: 0 2px 12px rgba(37,117,252,0.15);
     border: 4px solid #fff;
     object-fit: cover;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    background: #f4f6fb;
+}
+::-webkit-scrollbar-thumb {
+    background: #c3d0e8;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a0b6e0;
 }
 @media (max-width: 700px) {
     .projects-grid {
