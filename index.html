@@ -4,9 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dilanjan DK | Portfolio</title>
+    <meta name="description" content="Portfolio of Dilanjan Diyabalanage — neuroimaging researcher and developer. Projects in fMRI processing, feature extraction, and FFT-based analysis.">
+    <meta name="author" content="Dilanjan DK">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="theme-color" content="#2575fc">
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/96403575?v=4">
+    <link rel="canonical" href="https://dilanjandk7.github.io/">
+    <meta property="og:title" content="Dilanjan DK | Portfolio">
+    <meta property="og:description" content="Neuroimaging & data science projects: fMRI pipelines, feature extraction, QM-FFT analysis.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dilanjandk7.github.io/">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/96403575?v=4">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dilanjan DK | Portfolio">
+    <meta name="twitter:description" content="Neuroimaging & data science projects: fMRI pipelines, feature extraction, QM-FFT analysis.">
+    <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/96403575?v=4">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://raw.githubusercontent.com https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self'; upgrade-insecure-requests">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav class="site-nav" aria-label="Primary">
+        <div class="nav-inner">
+            <a class="brand" href="#top" aria-label="Home">DDK</a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact">Contact</a>
+                <button id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">🌙</button>
+            </div>
+        </div>
+    </nav>
     <header class="hero">
         <img src="https://avatars.githubusercontent.com/u/96403575?v=4" alt="Dilanjan DK" class="profile-avatar">
         <h1>Dilanjan Diyabalanage</h1>
@@ -20,104 +47,63 @@
             <div class="about-flex">
                 <div class="about-text">
                     <p>Hi! I'm Dilanjan Diyabalanage, a student and researcher at Western University, passionate about neuroimaging, computational neuroscience, and advanced data analysis. My work focuses on developing scalable, reproducible pipelines and analytical tools for fMRI and brain data, with a strong interest in open science and collaborative research.</p>
-                    <p>Contact: <a href="mailto:ddiyabal@uwo.ca">ddiyabal@uwo.ca</a> | <a href="https://github.com/DilanjanDK7">GitHub</a></p>
+                    <p>Contact: <a href="mailto:ddiyabal@uwo.ca">ddiyabal@uwo.ca</a> | <a href="https://github.com/DilanjanDK7" target="_blank" rel="noopener noreferrer">GitHub</a></p>
                 </div>
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Brain Data Visualization" style="width: 220px; border-radius: 12px; box-shadow: 0 2px 12px rgba(37,117,252,0.15);">
+                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" loading="lazy" alt="Brain Data Visualization" style="width: 220px; border-radius: 12px; box-shadow: 0 2px 12px rgba(37,117,252,0.15);">
                 </div>
             </div>
         </section>
         <section id="projects" class="projects-section">
             <h2>Projects</h2>
             <div class="projects-grid">
-                <div class="project-card" onclick="showProjectDetails('project1')">
-                    <img src="https://raw.githubusercontent.com/DilanjanDK7/QM_FFT_Feature_Package/main/docs/fft_diagram.png" alt="QM FFT Feature" class="project-img">
+                <div class="project-card" data-project="qm_fft">
+                    <img src="https://raw.githubusercontent.com/DilanjanDK7/QM_FFT_Feature_Package/main/docs/fft_diagram.png" loading="lazy" alt="QM FFT Feature" class="project-img">
                     <h3>QM FFT Feature Package</h3>
                     <p>Advanced 3D k-space analysis for neuroimaging and spatial data.</p>
                     <a href="qm_fft_feature_package.html" class="project-link">Learn More</a>
                 </div>
-                <div class="project-card" onclick="showProjectDetails('project2')">
-                    <img src="https://raw.githubusercontent.com/DilanjanDK7/Feature_extraction_Container/main/docs/pipeline_workflow.png" alt="Feature Extraction Container" class="project-img">
+                <div class="project-card" data-project="feature_container">
+                    <img src="https://raw.githubusercontent.com/DilanjanDK7/Feature_extraction_Container/main/docs/pipeline_workflow.png" loading="lazy" alt="Feature Extraction Container" class="project-img">
                     <h3>Feature Extraction Container</h3>
                     <p>Containerized workflow for advanced fMRI feature extraction and analysis.</p>
                     <a href="feature_extraction_container.html" class="project-link">Learn More</a>
                 </div>
-                <div class="project-card" onclick="showProjectDetails('project3')">
-                    <img src="https://raw.githubusercontent.com/DilanjanDK7/fMRI-Processing-Pipeline-Epilepsy/main/docs/pipeline_overview.png" alt="fMRI Processing Pipeline" class="project-img">
+                <div class="project-card" data-project="fmri_pipeline">
+                    <img src="https://raw.githubusercontent.com/DilanjanDK7/fMRI-Processing-Pipeline-Epilepsy/main/docs/pipeline_overview.png" loading="lazy" alt="fMRI Processing Pipeline" class="project-img">
                     <h3>fMRI Processing Pipeline for Epilepsy</h3>
                     <p>Automated pipeline for preprocessing and feature extraction in epilepsy fMRI research.</p>
                     <a href="fmri_processing_pipeline_epilepsy.html" class="project-link">Learn More</a>
                 </div>
             </div>
-            <div id="projectDetails" class="project-details-modal hidden">
+            <div id="projectDetails" class="project-details-modal hidden" role="dialog" aria-modal="true" aria-labelledby="projectDetailsTitle" tabindex="-1">
                 <div class="modal-content">
-                    <span id="closeModal">&times;</span>
-                    <div id="projectDetailsContent"></div>
+                    <button id="closeModal" aria-label="Close modal">&times;</button>
+                    <div id="projectDetailsContent">
+                        <h3 id="projectDetailsTitle" class="visually-hidden">Project details</h3>
+                    </div>
                 </div>
             </div>
             <div class="interactive-diagram">
                 <h3>Explore: fMRI Data Flow</h3>
-                <iframe src="https://app.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#G1Qw2v3fMRIpipelineEXAMPLE" width="100%" height="400" style="border:0; border-radius:12px;"></iframe>
+                <iframe title="Interactive fMRI pipeline diagram" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://app.diagrams.net/?lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1#G1Qw2v3fMRIpipelineEXAMPLE" width="100%" height="400" style="border:0; border-radius:12px;"></iframe>
                 <p style="text-align:center; font-size:0.95em; color:#666;">(Interactive diagram: Example fMRI pipeline. Hover and zoom for details.)</p>
             </div>
         </section>
-        <section class="contact-section">
+        <section id="contact" class="contact-section">
             <h2>Contact</h2>
-            <form id="contactForm">
-                <input type="text" placeholder="Your Name" required>
-                <input type="email" placeholder="Your Email" required>
-                <textarea placeholder="Your Message" required></textarea>
+            <form id="contactForm" autocomplete="on">
+                <input type="text" name="name" placeholder="Your Name" autocomplete="name" required>
+                <input type="email" name="email" placeholder="Your Email" autocomplete="email" required>
+                <textarea name="message" placeholder="Your Message" required></textarea>
                 <button type="submit">Send</button>
             </form>
-            <div id="formMessage"></div>
+            <div id="formMessage" role="status" aria-live="polite"></div>
         </section>
     </main>
     <footer>
         <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
     </footer>
     <script src="main.js"></script>
-    <script>
-    // Animated hero text
-    const heroTitle = document.querySelector('.hero h1');
-    if (heroTitle) {
-        heroTitle.style.opacity = 0;
-        setTimeout(() => {
-            heroTitle.style.transition = 'opacity 1.2s cubic-bezier(.4,2,.6,1)';
-            heroTitle.style.opacity = 1;
-        }, 300);
-    }
-    // Parallax effect for hero background
-    document.addEventListener('mousemove', function(e) {
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            const x = (e.clientX / window.innerWidth - 0.5) * 10;
-            const y = (e.clientY / window.innerHeight - 0.5) * 10;
-            hero.style.backgroundPosition = `${50 + x}% ${50 + y}%`;
-        }
-    });
-    // Interactive About image hover
-    const aboutImg = document.querySelector('.about-image img');
-    if (aboutImg) {
-        aboutImg.addEventListener('mouseenter', () => {
-            aboutImg.style.transform = 'scale(1.08) rotate(-2deg)';
-            aboutImg.style.boxShadow = '0 8px 32px rgba(37,117,252,0.18)';
-        });
-        aboutImg.addEventListener('mouseleave', () => {
-            aboutImg.style.transform = 'scale(1) rotate(0)';
-            aboutImg.style.boxShadow = '0 2px 12px rgba(37,117,252,0.15)';
-        });
-    }
-    // Project card hover effect (JS fallback for mobile)
-    document.querySelectorAll('.project-card').forEach(card => {
-        card.addEventListener('touchstart', () => {
-            card.style.transform = 'scale(1.04)';
-            card.style.boxShadow = '0 8px 32px rgba(37,117,252,0.18)';
-        });
-        card.addEventListener('touchend', () => {
-            card.style.transform = '';
-            card.style.boxShadow = '';
-        });
-    });
-    </script>
 </body>
 </html>
