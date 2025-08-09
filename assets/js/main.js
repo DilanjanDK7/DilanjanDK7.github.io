@@ -83,17 +83,17 @@
     qm_fft: {
       title: 'QM FFT Feature Package',
       description: 'High-performance NUFFT-based 3D analysis: k-space masking, gradient mapping, spectral metrics, batch HDF5 IO, and interactive 3D visualizations.',
-      link: 'qm_fft_feature_package.html'
+      link: 'projects/qm_fft_feature_package.html'
     },
     feature_container: {
       title: 'Feature Extraction Container',
       description: 'Dockerized, Snakemake-managed pipeline for ALFF/fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis with robust docs.',
-      link: 'feature_extraction_container.html'
+      link: 'projects/feature_extraction_container.html'
     },
     fmri_pipeline: {
       title: 'fMRI Processing Pipeline for Epilepsy',
       description: 'Automated end-to-end pipeline: DICOM→BIDS (optional), fMRIPrep preprocessing, and advanced feature extraction for epilepsy research.',
-      link: 'fmri_processing_pipeline_epilepsy.html'
+      link: 'projects/fmri_processing_pipeline_epilepsy.html'
     }
   };
 
@@ -180,3 +180,5 @@
     });
   }
 })();
+
+

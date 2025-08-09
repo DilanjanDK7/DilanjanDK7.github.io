@@ -8,7 +8,7 @@
     <meta name="author" content="Dilanjan DK">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#2575fc">
-    <link rel="icon" href="https://avatars.githubusercontent.com/u/96403575?v=4">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="canonical" href="https://dilanjandk7.github.io/">
     <meta property="og:title" content="Dilanjan DK | Portfolio">
     <meta property="og:description" content="Neuroimaging & data science projects: fMRI pipelines, feature extraction, QM-FFT analysis.">
@@ -19,10 +19,12 @@
     <meta name="twitter:title" content="Dilanjan DK | Portfolio">
     <meta name="twitter:description" content="Neuroimaging & data science projects: fMRI pipelines, feature extraction, QM-FFT analysis.">
     <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/96403575?v=4">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://avatars.githubusercontent.com https://raw.githubusercontent.com https://images.unsplash.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self'; upgrade-insecure-requests">
-    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://raw.githubusercontent.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self'; upgrade-insecure-requests">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="manifest" href="assets/manifest.webmanifest">
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <nav class="site-nav" aria-label="Primary">
         <div class="nav-inner">
             <a class="brand" href="#top" aria-label="Home">DDK</a>
@@ -35,13 +37,13 @@
         </div>
     </nav>
     <header class="hero">
-        <img src="https://avatars.githubusercontent.com/u/96403575?v=4" alt="Dilanjan DK" class="profile-avatar">
+        <img src="assets/images/avatar.svg" alt="Dilanjan DK" class="profile-avatar" width="110" height="110">
         <h1>Dilanjan Diyabalanage</h1>
         <p>Western University student | Researcher | Neuroimaging & Data Science Enthusiast</p>
         <p>Welcome to my portfolio & fun project space!</p>
         <button id="scrollToProjects">See My Projects</button>
     </header>
-    <main>
+    <main id="main">
         <section id="about" class="about-section">
             <h2>About Me</h2>
             <div class="about-flex">
@@ -50,7 +52,7 @@
                     <p>Contact: <a href="mailto:ddiyabal@uwo.ca">ddiyabal@uwo.ca</a> | <a href="https://github.com/DilanjanDK7" target="_blank" rel="noopener noreferrer">GitHub</a></p>
                 </div>
                 <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" loading="lazy" alt="Brain Data Visualization" style="width: 220px; border-radius: 12px; box-shadow: 0 2px 12px rgba(37,117,252,0.15);">
+                    <img src="assets/images/avatar.svg" loading="lazy" alt="Brain Data Visualization" width="220" height="220" style="width: 220px; border-radius: 12px; box-shadow: 0 2px 12px rgba(37,117,252,0.15);">
                 </div>
             </div>
         </section>
@@ -61,19 +63,19 @@
                     <img src="https://raw.githubusercontent.com/DilanjanDK7/QM_FFT_Feature_Package/main/docs/fft_diagram.png" loading="lazy" alt="QM FFT Feature" class="project-img">
                     <h3>QM FFT Feature Package</h3>
                     <p>Advanced 3D k-space analysis for neuroimaging and spatial data.</p>
-                    <a href="qm_fft_feature_package.html" class="project-link">Learn More</a>
+                    <a href="projects/qm_fft_feature_package.html" class="project-link">Learn More</a>
                 </div>
                 <div class="project-card" data-project="feature_container">
                     <img src="https://raw.githubusercontent.com/DilanjanDK7/Feature_extraction_Container/main/docs/pipeline_workflow.png" loading="lazy" alt="Feature Extraction Container" class="project-img">
                     <h3>Feature Extraction Container</h3>
                     <p>Containerized workflow for advanced fMRI feature extraction and analysis.</p>
-                    <a href="feature_extraction_container.html" class="project-link">Learn More</a>
+                    <a href="projects/feature_extraction_container.html" class="project-link">Learn More</a>
                 </div>
                 <div class="project-card" data-project="fmri_pipeline">
                     <img src="https://raw.githubusercontent.com/DilanjanDK7/fMRI-Processing-Pipeline-Epilepsy/main/docs/pipeline_overview.png" loading="lazy" alt="fMRI Processing Pipeline" class="project-img">
                     <h3>fMRI Processing Pipeline for Epilepsy</h3>
                     <p>Automated pipeline for preprocessing and feature extraction in epilepsy fMRI research.</p>
-                    <a href="fmri_processing_pipeline_epilepsy.html" class="project-link">Learn More</a>
+                    <a href="projects/fmri_processing_pipeline_epilepsy.html" class="project-link">Learn More</a>
                 </div>
             </div>
             <div id="projectDetails" class="project-details-modal hidden" role="dialog" aria-modal="true" aria-labelledby="projectDetailsTitle" tabindex="-1">
@@ -104,6 +106,6 @@
     <footer>
         <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
     </footer>
-    <script src="main.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

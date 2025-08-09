@@ -32,6 +32,24 @@ body {
     color: var(--text);
     transition: background 0.3s ease, color 0.3s ease;
 }
+/* Skip link */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+.skip-link:focus {
+    position: static;
+    width: auto; height: auto;
+    margin: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+}
 /* A11y helper */
 .visually-hidden {
     position: absolute !important;
@@ -372,3 +390,5 @@ footer {
         padding: 1rem 0.2rem 0.5rem 0.2rem;
     }
 }
+
+
