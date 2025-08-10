@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Abstract gradient background">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6a11cb"/>
+      <stop offset="100%" stop-color="#2575fc"/>
+    </linearGradient>
+    <radialGradient id="r1" cx="30%" cy="35%" r="40%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="r2" cx="75%" cy="25%" r="35%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="r3" cx="55%" cy="70%" r="45%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blurHeavy">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="60"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g1)"/>
+  <g filter="url(#blurHeavy)">
+    <circle cx="420" cy="320" r="320" fill="url(#r1)"/>
+    <circle cx="1180" cy="260" r="300" fill="url(#r2)"/>
+    <circle cx="900" cy="720" r="380" fill="url(#r3)"/>
+  </g>
+</svg>
+
+
