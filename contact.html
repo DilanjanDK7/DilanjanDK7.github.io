@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Dilanjan DK</title>
+  <meta name="description" content="Contact Dilanjan DK for research, collaboration, or questions.">
+  <meta name="author" content="Dilanjan DK">
+  <meta name="theme-color" content="#2575fc">
+  <link rel="canonical" href="https://dilanjandk7.github.io/contact.html">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self' https://formspree.io https://api.netlify.com https://api.netlify.app; upgrade-insecure-requests">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="assets/manifest.webmanifest">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="Home">DDK</a>
+      <div class="nav-links">
+        <a href="about.html">About</a>
+        <a href="projects/">Projects</a>
+        <a href="contact.html">Contact</a>
+        <button id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </nav>
+  <header class="hero">
+    <h1>Contact</h1>
+    <p>Say hello — I’d love to hear from you.</p>
+  </header>
+  <main id="main" class="contact-section" style="max-width: 800px; margin: 0 auto;">
+    <h2 style="text-align:center">Get in touch</h2>
+    <form id="contactForm" action="https://formspree.io/f/mwkggdjb" method="POST">
+      <input type="text" name="name" placeholder="Your Name" autocomplete="name" required>
+      <input type="email" name="email" placeholder="Your Email" autocomplete="email" required>
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <div id="formMessage" role="status" aria-live="polite"></div>
+  </main>
+  <footer>
+    <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
+  </footer>
+  <script src="assets/js/main.js"></script>
+  <script>
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new URLSearchParams(payload)
+        });
+        if (res.ok) {
+          document.getElementById('formMessage').textContent = 'Thanks! Your message was sent.';
+          form.reset();
+        } else {
+          document.getElementById('formMessage').textContent = 'Oops, something went wrong. Please try again later.';
+        }
+      } catch (err) {
+        document.getElementById('formMessage').textContent = 'Network error. Please try again later.';
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

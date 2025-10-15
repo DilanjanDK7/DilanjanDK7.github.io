@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Dilanjan DK</title>
+  <meta name="description" content="Projects by Dilanjan DK in neuroimaging, fMRI processing, and feature extraction.">
+  <meta name="author" content="Dilanjan DK">
+  <meta name="theme-color" content="#2575fc">
+  <link rel="canonical" href="https://dilanjandk7.github.io/projects/">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://raw.githubusercontent.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self'; upgrade-insecure-requests">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../assets/manifest.webmanifest">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="site-nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a class="brand" href="../index.html" aria-label="Home">DDK</a>
+      <div class="nav-links">
+        <a href="../about.html">About</a>
+        <a href="../projects/">Projects</a>
+        <a href="../contact.html">Contact</a>
+        <button id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </nav>
+  <header class="hero">
+    <h1>Projects</h1>
+    <p>Selected research, pipelines, and tools.</p>
+  </header>
+  <main id="main" class="projects-section">
+    <div class="projects-grid" id="projectsGrid"></div>
+  </main>
+  <footer>
+    <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
+  </footer>
+  <script src="../assets/js/main.js"></script>
+  <script>
+    fetch('../assets/data/projects.json')
+      .then(r => r.json())
+      .then(items => {
+        const grid = document.getElementById('projectsGrid');
+        grid.innerHTML = items.map(p => `
+          <div class="project-card" data-project="${p.key}">
+            <img src="${p.image}" loading="lazy" alt="${p.title}" class="project-img" />
+            <h3>${p.title}</h3>
+            <p>${p.description}</p>
+            <a href="${p.link}" class="project-link">Learn More</a>
+          </div>
+        `).join('');
+      });
+  </script>
+</body>
+</html>
+
+
+
+
+
