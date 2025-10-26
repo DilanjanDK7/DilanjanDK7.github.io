@@ -97,14 +97,13 @@
                         </div>
                     </div>
 
-                    <h3>Share (Export/Import)</h3>
+                    <h3>Share</h3>
                     <div class="share-grid">
-                        <button id="exportMyAvailability" type="button" class="btn">Copy my availability</button>
-                        <input id="shareLink" type="text" readonly placeholder="Your availability JSON will appear here when copied">
-                        <textarea id="importText" rows="4" placeholder="Paste someone's availability JSON here to merge"></textarea>
-                        <button id="importAvailability" type="button" class="btn">Add to group</button>
-                        <button id="createEventBtn" type="button" class="btn primary">Enable live share</button>
-                        <input id="eventLink" type="text" readonly placeholder="Shareable event link will appear here">
+                        <button id="createEventBtn" type="button" class="btn primary">Create / Update event link</button>
+                        <div style="display:grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+                            <input id="eventLink" type="text" readonly placeholder="Shareable event link will appear here">
+                            <button id="copyEventLink" type="button" class="btn">Copy</button>
+                        </div>
                     </div>
 
                     <h3>Calendar</h3>

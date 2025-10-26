@@ -126,35 +126,13 @@
       updateTZDisplay();
     });
 
-    const exportBtn = document.getElementById('exportMyAvailability');
-    const shareLink = document.getElementById('shareLink');
-    const importText = document.getElementById('importText');
-    const importBtn = document.getElementById('importAvailability');
     const createEventBtn = document.getElementById('createEventBtn');
     const eventLink = document.getElementById('eventLink');
+    const copyEventLink = document.getElementById('copyEventLink');
     
-    exportBtn?.addEventListener('click', () => {
-      const myData = exportMyAvailability();
-      const text = JSON.stringify(myData, null, 2);
-      try { 
-        navigator.clipboard.writeText(text); 
-        shareLink.value = text;
-      } catch (_) {
-        shareLink.value = text;
-      }
-    });
-    
-    importBtn?.addEventListener('click', () => {
-      const text = importText?.value.trim();
-      if (!text) return;
-      try {
-        const obj = JSON.parse(text);
-        mergeAvailabilityImport(obj);
-        renderGrid(false);
-        computeBest();
-      } catch (_) {
-        alert('Invalid JSON. Make sure you copied the complete availability data.');
-      }
+    copyEventLink?.addEventListener('click', async () => {
+      if (!eventLink?.value) return;
+      try { await navigator.clipboard.writeText(eventLink.value); } catch (_) {}
     });
 
     createEventBtn?.addEventListener('click', async () => {
