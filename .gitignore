@@ -1,5 +1,5 @@
 # Firebase config (contains secrets)
-# assets/js/firebase-config.js
+assets/js/firebase-config.js
 
 # Node modules (if added later)
 node_modules/
