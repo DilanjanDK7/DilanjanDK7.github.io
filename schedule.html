@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule | Dilanjan DK</title>
+    <meta name="description" content="Plan availability and find the best time to meet with an interactive availability grid and shareable settings — no sign-in required.">
+    <meta name="author" content="Dilanjan DK">
+    <meta name="theme-color" content="#2575fc">
+    <link rel="canonical" href="https://dilanjandk7.github.io/schedule.html">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; connect-src 'self'; upgrade-insecure-requests">
+    <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="assets/manifest.webmanifest">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <nav class="site-nav" aria-label="Primary">
+        <div class="nav-inner">
+            <a class="brand" href="index.html" aria-label="Home">DDK</a>
+            <div class="nav-links">
+                <a href="about.html">About</a>
+                <a href="projects/">Projects</a>
+                <a href="schedule.html" aria-current="page">Schedule</a>
+                <a href="contact.html">Contact</a>
+                <button id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">🌙</button>
+            </div>
+        </div>
+    </nav>
+    <header class="hero">
+        <h1>Plan a Time Together</h1>
+        <p>Create an event, mark your availability, and find the best overlap.</p>
+    </header>
+    <main id="main" class="projects-section" style="padding-top: 2rem;">
+        <section class="scheduler" aria-label="Scheduling tool" style="max-width: 1200px; margin: 0 auto;">
+            <div class="scheduler-layout">
+                <aside class="scheduler-panel" aria-label="Event settings">
+                    <h2 style="margin-top:0">Event</h2>
+                    <div class="form-grid">
+                        <label>
+                            <span>Event name</span>
+                            <input id="eventName" type="text" placeholder="Study group / Standup / Coffee" autocomplete="off">
+                        </label>
+                        <label>
+                            <span>Your name (optional)</span>
+                            <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
+                        </label>
+                        <label>
+                            <span>Start date</span>
+                            <input id="startDate" type="date">
+                        </label>
+                        <label>
+                            <span>End date</span>
+                            <input id="endDate" type="date">
+                        </label>
+                        <label>
+                            <span>Days of week</span>
+                            <div class="dow-picker" role="group" aria-label="Days of week">
+                                <button data-dow="1" type="button">Mon</button>
+                                <button data-dow="2" type="button">Tue</button>
+                                <button data-dow="3" type="button">Wed</button>
+                                <button data-dow="4" type="button">Thu</button>
+                                <button data-dow="5" type="button">Fri</button>
+                                <button data-dow="6" type="button">Sat</button>
+                                <button data-dow="0" type="button">Sun</button>
+                            </div>
+                        </label>
+                        <label>
+                            <span>Daily start</span>
+                            <input id="dayStart" type="time" value="09:00">
+                        </label>
+                        <label>
+                            <span>Daily end</span>
+                            <input id="dayEnd" type="time" value="18:00">
+                        </label>
+                        <label>
+                            <span>Slot length</span>
+                            <select id="slotMinutes">
+                                <option value="15">15 min</option>
+                                <option value="30" selected>30 min</option>
+                                <option value="60">60 min</option>
+                            </select>
+                        </label>
+                        <div class="tz-row">
+                            <div>
+                                <div style="font-weight:600; font-size:0.95rem; margin-bottom:0.25rem;">Time zone</div>
+                                <div id="tzDisplay" style="font-size:0.9rem; color:var(--muted)">Detecting…</div>
+                            </div>
+                            <button id="toggleLocalTZ" type="button" class="btn">Use local</button>
+                        </div>
+                        <div class="actions">
+                            <button id="applySettings" type="button" class="btn primary">Apply settings</button>
+                        </div>
+                    </div>
+
+                    <h3>Share & Merge</h3>
+                    <div class="share-grid">
+                        <button id="makeShareLink" type="button" class="btn">Generate share link</button>
+                        <input id="shareLink" type="text" readonly placeholder="Share link will appear here">
+                        <button id="copyMyAvailability" type="button" class="btn">Copy my availability</button>
+                        <textarea id="importText" rows="3" placeholder="Paste someone’s availability JSON here"></textarea>
+                        <button id="importAvailability" type="button" class="btn">Add to group</button>
+                    </div>
+
+                    <h3>Quick select</h3>
+                    <div class="quick-grid">
+                        <button id="selectAll" type="button" class="btn">Select all</button>
+                        <button id="clearAll" type="button" class="btn">Clear</button>
+                        <button id="invertSel" type="button" class="btn">Invert</button>
+                        <button id="copyPrevDay" type="button" class="btn">Copy previous day</button>
+                    </div>
+                </aside>
+
+                <section class="scheduler-main" aria-label="Availability grid">
+                    <div class="grid-header">
+                        <div class="grid-title">Availability</div>
+                        <div class="grid-legend" aria-hidden="true">
+                            <span class="legend-swatch swatch-0"></span><span class="legend-label">0</span>
+                            <span class="legend-swatch swatch-1"></span><span class="legend-label">1</span>
+                            <span class="legend-swatch swatch-2"></span><span class="legend-label">2</span>
+                            <span class="legend-swatch swatch-3"></span><span class="legend-label">3+</span>
+                        </div>
+                    </div>
+                    <div id="availabilityGrid" class="availability-grid" role="grid" aria-label="Time slots"></div>
+
+                    <div class="best-times">
+                        <h3>Best times</h3>
+                        <ol id="bestSlots"></ol>
+                    </div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/schedule.js"></script>
+</body>
+<style>
+/* Inline minimal layout guards if main CSS hasn’t loaded yet */
+.scheduler-layout{display:grid;grid-template-columns:320px 1fr;gap:1.5rem}
+@media(max-width:1000px){.scheduler-layout{grid-template-columns:1fr}}
+</style>
+</html>
+
+

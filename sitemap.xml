@@ -21,6 +21,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://dilanjandk7.github.io/schedule.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://dilanjandk7.github.io/projects/qm_fft_feature_package.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
