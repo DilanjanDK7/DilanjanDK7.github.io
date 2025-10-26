@@ -409,6 +409,10 @@ footer {
 .cal-cell.in-range { background: color-mix(in hsl, var(--primary) 12%, var(--card)); border-color: color-mix(in hsl, var(--primary) 40%, var(--border)); }
 .cal-cell.selected { outline: 2px solid var(--primary); outline-offset: -2px; font-weight: 700; }
 
+/* Status Display */
+.status-display { padding: 2rem; background: var(--card); border-radius: 12px; text-align: center; font-weight: 600; margin-bottom: 1rem; }
+.status-display.error { background: #f8d7da; color: #721c24; }
+
 /* Participants + Live */
 .participants-list { list-style: none; padding: 0; margin: 0.5rem 0 1rem 0; display: grid; gap: 0.4rem; }
 .participants-list li { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.4rem 0.6rem; font-size: 0.95rem; }

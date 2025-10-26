@@ -22,6 +22,7 @@
     isHost: false,
     calMonth: null,
     persistTimer: null,
+    participantCount: 0, // Added for dynamic coloring
   };
 
   const els = {
@@ -53,13 +54,25 @@
     participantsList: document.getElementById('participantsList'),
     liveBadge: document.getElementById('liveBadge'),
     minAvailable: document.getElementById('minAvailable'),
+    statusDisplay: document.getElementById('statusDisplay'),
   };
 
   init();
 
   function init() {
     restoreFromURL();
-    restoreDraft();
+    if (state.eventId) {
+      showStatus('Loading event...');
+      // Disable form while loading event data
+      disableForm(true);
+      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
+        showStatus('Live sharing is not configured. Cannot load event.', true);
+        return;
+      }
+    } else {
+      // Not loading a shared event, restore local draft
+      restoreDraft();
+    }
     state.meKey = getMeKey();
     updateTZDisplay();
     initDOW();
@@ -344,9 +357,27 @@
     const [dateIso] = key.split(' ');
     const set = state.availability.get(dateIso)?.get(key) || new Set();
     const count = set.size;
+    const total = state.participantCount || count;
+    
     cellEl.classList.toggle('me', set.has(state.meKey));
     cellEl.setAttribute('data-count', String(count));
-    cellEl.title = `${count} available`;
+    cellEl.title = `${count} available: ${Array.from(set).join(', ')}`;
+
+    // Dynamic coloring
+    if (total > 0) {
+      const ratio = count / total;
+      if (count === 0) {
+        cellEl.style.background = '';
+      } else if (ratio < 0.5) {
+        cellEl.style.background = '#e3ecff'; // Light blue
+      } else if (ratio < 1) {
+        cellEl.style.background = '#cbdcff'; // Medium blue
+      } else { // Everyone is available
+        cellEl.style.background = '#b3caff'; // Dark blue
+      }
+    } else {
+      cellEl.style.background = '';
+    }
   }
 
   function computeBest() {
@@ -516,7 +547,6 @@
   }
   // --- Firebase integration (uses window.FIREBASE_CONFIG) ---
   async function firebaseModules() {
-    if (!window.FIREBASE_CONFIG) return null;
     const v = '10.13.2';
     const appMod = await import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`);
     const fsMod = await import(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore.js`);
@@ -526,7 +556,7 @@
 
   window.initFirebase = async function initFirebase() {
     try {
-      if (!window.FIREBASE_CONFIG) return; // not configured yet
+      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") return;
       const { appMod, fsMod, auMod } = await firebaseModules();
       const { initializeApp } = appMod;
       const { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, enableIndexedDbPersistence, serverTimestamp } = fsMod;
@@ -552,7 +582,7 @@
       window.__fb = { doc, setDoc, getDoc, collection, onSnapshot, serverTimestamp, signInAnonymously };
     } catch (e) {
       console.error('Firebase init failed', e);
-      alert('Live sharing failed to initialize. Check console for details and verify your Firebase config and domain restrictions.');
+      showStatus(`Live sharing failed to initialize. Check console for errors and verify your Firebase config, domain restrictions, and API key restrictions.`, true);
     }
   };
 
@@ -637,7 +667,12 @@
     const partsRef = window.__fb.collection(state.db, 'events', eventId, 'participants');
 
     const unsubEvent = window.__fb.onSnapshot(eventRef, (snap) => {
-      if (!snap.exists()) return;
+      if (!snap.exists()) {
+        showStatus('Error: Event not found or has been deleted.', true);
+        return;
+      }
+      hideStatus();
+      disableForm(false);
       const d = snap.data();
       state.isHost = !!(state.auth?.currentUser && d.hostUid === state.auth.currentUser.uid);
       const metaChanged =
@@ -690,6 +725,7 @@
         }
       });
       state.availability = newAvail;
+      state.participantCount = names.length;
       els.grid?.querySelectorAll('.slot').forEach(paintSlot);
       computeBest();
       renderParticipants(names);
@@ -733,6 +769,28 @@
     t.hidden = false;
     clearTimeout(t._timer);
     t._timer = setTimeout(() => { t.hidden = true; }, 1800);
+  }
+
+  function showStatus(text, isError = false) {
+    if (!els.statusDisplay) return;
+    els.statusDisplay.textContent = text;
+    els.statusDisplay.classList.toggle('error', isError);
+    els.statusDisplay.hidden = false;
+    if (els.grid) els.grid.hidden = true;
+  }
+
+  function hideStatus() {
+    if (!els.statusDisplay) return;
+    els.statusDisplay.hidden = true;
+    if (els.grid) els.grid.hidden = false;
+  }
+
+  function disableForm(disabled) {
+    const form = els.eventName?.closest('.scheduler-panel');
+    if (!form) return;
+    form.querySelectorAll('input, select, button').forEach(el => {
+      el.disabled = disabled;
+    });
   }
 
   // --- Calendar rendering ---
