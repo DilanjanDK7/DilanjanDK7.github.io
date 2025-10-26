@@ -136,7 +136,16 @@
     });
 
     createEventBtn?.addEventListener('click', async () => {
-      if (!state.db) { alert('Still initializing...'); return; }
+      // Guard: config missing
+      if (!window.FIREBASE_CONFIG) {
+        alert('Live sharing is not configured. Please add your Firebase config in assets/js/firebase-config.js and reload.');
+        return;
+      }
+      // Lazy init if needed
+      if (!state.db && typeof window.initFirebase === 'function') {
+        await window.initFirebase();
+      }
+      if (!state.db) { alert('Live sharing is still initializing. Please try again in a moment.'); return; }
       if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
       const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
       state.eventId = eventId;
@@ -530,6 +539,7 @@
       window.__fb = { doc, setDoc, getDoc, collection, onSnapshot, serverTimestamp, signInAnonymously };
     } catch (e) {
       console.error('Firebase init failed', e);
+      alert('Live sharing failed to initialize. Check console for details and verify your Firebase config and domain restrictions.');
     }
   };
 
