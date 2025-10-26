@@ -41,17 +41,175 @@
             
             <h3>Key Features</h3>
             <ul>
-                <li>Interactive 3D brain rendering and visualization</li>
-                <li>Support for multiple neuroimaging data formats</li>
+                <li>Interactive 3D brain rendering and visualization with Plotly integration</li>
+                <li>Support for multiple neuroimaging data formats (NIfTI, CIFTI, GIFTI)</li>
                 <li>Advanced surface and volume rendering capabilities</li>
-                <li>Integration with popular neuroimaging analysis pipelines</li>
+                <li>Multiple quality presets (draft, standard, publication, print)</li>
+                <li>TemplateFlow support for standardized brain templates</li>
+                <li>Command-line interface for batch processing</li>
                 <li>Customizable visualization parameters and color schemes</li>
                 <li>Export capabilities for high-quality figures and animations</li>
                 <li>Comprehensive documentation and usage examples</li>
                 <li>Modular design for easy integration and extension</li>
             </ul>
             
-            <h3>Applications</h3>
+            <h2>Installation</h2>
+            <h3>Requirements</h3>
+            <ul>
+                <li>Python 3.8 or higher</li>
+                <li>NumPy, SciPy, Matplotlib, Nibabel</li>
+                <li>Nilearn for brain template support</li>
+                <li>Optional: Plotly for 3D interactive visualization</li>
+                <li>Optional: TemplateFlow for additional brain templates</li>
+            </ul>
+            
+            <h3>Installation Methods</h3>
+            <h4>From PyPI (Recommended)</h4>
+            <pre><code>pip install brainviz-dk</code></pre>
+            
+            <h4>From Source</h4>
+            <pre><code>git clone https://github.com/DilanjanDK7/brainviz_dk.git
+cd brainviz_dk
+pip install -e .</code></pre>
+            
+            <h4>For Development</h4>
+            <pre><code>git clone https://github.com/DilanjanDK7/brainviz_dk.git
+cd brainviz_dk
+pip install -e .[dev]</code></pre>
+            
+            <h3>Optional Features Setup</h3>
+            <h4>Plotly 3D Interactive Viewer</h4>
+            <pre><code>pip install brainviz-dk[plotly]</code></pre>
+            
+            <h4>TemplateFlow Support</h4>
+            <pre><code>pip install brainviz-dk[templateflow]</code></pre>
+            
+            <h3>Verifying Installation</h3>
+            <pre><code>python -c "import brainviz_dk; print('BrainViz DK installed successfully!')"</code></pre>
+            
+            <h2>Quick Start Guide</h2>
+            <h3>Basic Surface Plotting</h3>
+            <pre><code>import brainviz_dk as bv
+
+# Single view plot
+bv.plot_surface('path/to/surface_data.nii.gz')
+
+# Multiple views
+bv.plot_surface('path/to/surface_data.nii.gz', views=['lateral', 'medial', 'dorsal'])</code></pre>
+            
+            <h3>Quality Presets</h3>
+            <pre><code># Draft quality (fast preview)
+bv.plot_surface('data.nii.gz', quality='draft')
+
+# Publication quality
+bv.plot_surface('data.nii.gz', quality='publication')</code></pre>
+            
+            <h3>Volumetric Visualization</h3>
+            <pre><code># Orthogonal slices
+bv.plot_volume('path/to/volume_data.nii.gz', view_type='ortho')
+
+# Glass brain
+bv.plot_volume('path/to/volume_data.nii.gz', view_type='glass')
+
+# Mosaic view
+bv.plot_volume('path/to/volume_data.nii.gz', view_type='mosaic')</code></pre>
+            
+            <h2>Command-Line Interface</h2>
+            <h3>Basic Usage</h3>
+            <pre><code># Surface plotting
+brainviz-dk surface data.nii.gz --output plot.png
+
+# Volume plotting
+brainviz-dk volume data.nii.gz --view-type ortho --output plot.png
+
+# List available templates
+brainviz-dk templates list</code></pre>
+            
+            <h3>Advanced CLI Examples</h3>
+            <pre><code># Custom quality settings
+brainviz-dk surface data.nii.gz --quality publication --dpi 300 --output high_res.png
+
+# Thresholded statistical maps
+brainviz-dk surface stats.nii.gz --threshold 3.0 --colormap hot --output stats.png
+
+# Batch processing
+brainviz-dk surface *.nii.gz --output-dir plots/ --quality standard</code></pre>
+            
+            <h2>Quality Presets</h2>
+            <p>BrainViz DK offers several quality presets optimized for different use cases:</p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <thead>
+                    <tr style="background-color: #f5f5f5;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">Preset</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">DPI</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Processing Time</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">draft</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">72</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Fast</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Quick previews, testing</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">standard</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">150</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Medium</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">General use, presentations</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">publication</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">300</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Slow</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Journal articles, high-quality figures</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">print</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">600</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Very Slow</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Print media, posters</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h2>Brain Templates</h2>
+            <p>BrainViz DK supports multiple standardized brain templates:</p>
+            
+            <h3>Available Templates</h3>
+            <ul>
+                <li><strong>MNI152 (nilearn):</strong> Standard MNI space template</li>
+                <li><strong>MNI152NLin2009cAsym (TemplateFlow):</strong> High-resolution MNI template</li>
+                <li><strong>fsaverage (nilearn):</strong> FreeSurfer average template</li>
+            </ul>
+            
+            <h3>Template Management</h3>
+            <pre><code># List available templates
+import brainviz_dk as bv
+bv.list_templates()
+
+# Load specific template
+template = bv.load_template('MNI152')</code></pre>
+            
+            <h2>Advanced Usage</h2>
+            <h3>Custom Figure Sizes</h3>
+            <pre><code>bv.plot_surface('data.nii.gz', figsize=(12, 8), quality='publication')</code></pre>
+            
+            <h3>Threshold and Colormap Adjustments</h3>
+            <pre><code>bv.plot_surface('stats.nii.gz', 
+                threshold=2.3, 
+                colormap='hot', 
+                vmin=2.3, 
+                vmax=6.0)</code></pre>
+            
+            <h3>ROI Overlays</h3>
+            <pre><code>bv.plot_surface('data.nii.gz', 
+                roi_overlay='roi_mask.nii.gz',
+                roi_colors=['red', 'blue', 'green'])</code></pre>
+            
+            <h2>Applications</h2>
             <ul>
                 <li>fMRI data visualization and analysis</li>
                 <li>Structural MRI brain mapping</li>
@@ -59,29 +217,37 @@
                 <li>Statistical brain mapping</li>
                 <li>Research presentation and publication graphics</li>
                 <li>Educational neuroimaging demonstrations</li>
+                <li>Quality control and data inspection</li>
+                <li>Group analysis reports</li>
             </ul>
             
-            <h3>Technical Specifications</h3>
+            <h2>Performance Considerations</h2>
             <ul>
-                <li>Built with modern Python libraries for optimal performance</li>
-                <li>Cross-platform compatibility (Windows, macOS, Linux)</li>
-                <li>GPU acceleration support for large datasets</li>
-                <li>Memory-efficient processing for high-resolution data</li>
-                <li>Extensible architecture for custom visualization modules</li>
+                <li><strong>Memory Usage:</strong> High-resolution templates may require significant RAM</li>
+                <li><strong>Processing Time:</strong> Publication quality settings take longer but produce better results</li>
+                <li><strong>Disk Space:</strong> Template downloads require several GB of storage</li>
+                <li><strong>GPU Acceleration:</strong> Available for large datasets and complex visualizations</li>
             </ul>
             
-            <h3>Documentation & Usage</h3>
+            <h2>Documentation & Resources</h2>
             <ul>
+                <li><a href="https://brainviz-dk.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">Official Documentation (ReadTheDocs)</a></li>
                 <li><a href="https://github.com/DilanjanDK7/brainviz_dk" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
                 <li><a href="https://github.com/DilanjanDK7/brainviz_dk/blob/main/README.md" target="_blank" rel="noopener noreferrer">README & Installation Guide</a></li>
-                <li><a href="https://github.com/DilanjanDK7/brainviz_dk/tree/main/docs" target="_blank" rel="noopener noreferrer">Documentation</a></li>
                 <li><a href="https://github.com/DilanjanDK7/brainviz_dk/tree/main/examples" target="_blank" rel="noopener noreferrer">Usage Examples</a></li>
+                <li><a href="https://pypi.org/project/brainviz-dk/" target="_blank" rel="noopener noreferrer">PyPI Package</a></li>
             </ul>
             
-            <h3>Repository Structure</h3>
-            <p>The repository includes comprehensive documentation, usage examples, and testing frameworks, making it easy for researchers and developers to integrate BrainViz DK into their neuroimaging workflows.</p>
+            <h2>Troubleshooting</h2>
+            <h3>Common Issues</h3>
+            <ul>
+                <li><strong>Missing Dependencies:</strong> Ensure all required packages are installed</li>
+                <li><strong>Template Download Problems:</strong> Check internet connection and disk space</li>
+                <li><strong>Memory Concerns:</strong> Use lower resolution templates for large datasets</li>
+                <li><strong>Platform-Specific Issues:</strong> See documentation for OS-specific guidance</li>
+            </ul>
             
-            <h3>Contact</h3>
+            <h2>Contact</h2>
             <p>For questions, collaboration, or feature requests, contact Dilanjan DK at <a href="mailto:ddiyabal@uwo.ca">ddiyabal@uwo.ca</a>.</p>
         </section>
     </main>
