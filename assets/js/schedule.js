@@ -26,6 +26,8 @@
 
   const els = {
     eventName: document.getElementById('eventName'),
+    eventNameRow: document.getElementById('eventNameRow'),
+    pageTitle: document.getElementById('pageTitle'),
     participantName: document.getElementById('participantName'),
     participantPassword: document.getElementById('participantPassword'),
     startDate: document.getElementById('startDate'),
@@ -479,6 +481,7 @@
     }
     // fill UI
     if (els.eventName) els.eventName.value = state.eventName;
+    if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
     if (els.startDate) els.startDate.value = state.startDate ? formatISODate(state.startDate) : '';
     if (els.endDate) els.endDate.value = state.endDate ? formatISODate(state.endDate) : '';
     if (els.dayStart) els.dayStart.value = state.dayStart;
@@ -632,6 +635,8 @@
         d.slotMinutes !== state.slotMinutes || (Array.isArray(d.daysOfWeek) && d.daysOfWeek.length !== state.daysOfWeek.size);
       state.eventName = d.eventName || state.eventName;
       if (els.eventName && d.eventName) els.eventName.value = d.eventName;
+      if (els.pageTitle && d.eventName) els.pageTitle.textContent = d.eventName;
+      updateEventNameVisibility();
       if (d.startDate) { state.startDate = parseDateInput(d.startDate); if (els.startDate) els.startDate.value = d.startDate; }
       if (d.endDate) { state.endDate = parseDateInput(d.endDate); if (els.endDate) els.endDate.value = d.endDate; }
       if (d.dayStart) { state.dayStart = d.dayStart; if (els.dayStart) els.dayStart.value = d.dayStart; }
@@ -679,6 +684,16 @@
 
     state.unsub = () => { unsubEvent(); unsubParts(); };
   };
+
+  function updateEventNameVisibility() {
+    if (!els.eventNameRow) return;
+    // Hide event name editing for non-hosts when viewing an event
+    if (state.eventId && !state.isHost) {
+      els.eventNameRow.style.display = 'none';
+    } else {
+      els.eventNameRow.style.display = '';
+    }
+  }
 
   function renderParticipants(names) {
     if (!els.participantsList) return;
