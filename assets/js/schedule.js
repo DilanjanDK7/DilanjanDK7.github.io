@@ -48,6 +48,9 @@
     clearAll: document.getElementById('clearAll'),
     invertSel: document.getElementById('invertSel'),
     copyPrevDay: document.getElementById('copyPrevDay'),
+    participantsList: document.getElementById('participantsList'),
+    liveBadge: document.getElementById('liveBadge'),
+    minAvailable: document.getElementById('minAvailable'),
   };
 
   init();
@@ -132,7 +135,7 @@
     
     copyEventLink?.addEventListener('click', async () => {
       if (!eventLink?.value) return;
-      try { await navigator.clipboard.writeText(eventLink.value); } catch (_) {}
+      try { await navigator.clipboard.writeText(eventLink.value); showToast('Link copied'); } catch (_) { showToast('Copy failed'); }
     });
 
     createEventBtn?.addEventListener('click', async () => {
@@ -344,7 +347,8 @@
     for (const [dateIso, dayMap] of state.availability.entries()) {
       for (const [timeKey, set] of dayMap.entries()) {
         const count = set.size;
-        if (count > 0) scores.push({ key: timeKey, count });
+        const minReq = Number(els.minAvailable?.value || '1');
+        if (count >= minReq) scores.push({ key: timeKey, count });
       }
     }
     scores.sort((a,b) => b.count - a.count || a.key.localeCompare(b.key));
@@ -647,6 +651,7 @@
 
     const unsubParts = window.__fb.onSnapshot(partsRef, (qs) => {
       const newAvail = new Map();
+      const names = [];
       function ensure(map, dateIso, key) {
         if (!map.has(dateIso)) map.set(dateIso, new Map());
         const day = map.get(dateIso);
@@ -656,6 +661,7 @@
       qs.forEach(docSnap => {
         const pdata = docSnap.data();
         const pname = pdata.name || 'Guest';
+        names.push(pname);
         const slots = pdata.slots || {};
         for (const [dateIso, arr] of Object.entries(slots)) {
           for (const time of arr) {
@@ -667,10 +673,36 @@
       state.availability = newAvail;
       els.grid?.querySelectorAll('.slot').forEach(paintSlot);
       computeBest();
+      renderParticipants(names);
+      setLive(true);
     });
 
     state.unsub = () => { unsubEvent(); unsubParts(); };
   };
+
+  function renderParticipants(names) {
+    if (!els.participantsList) return;
+    const unique = Array.from(new Set(names)).sort();
+    els.participantsList.innerHTML = unique.map(n => `<li>${escapeHtml(n)}</li>`).join('') || '<li>No participants yet</li>';
+  }
+
+  function setLive(on) {
+    if (!els.liveBadge) return;
+    els.liveBadge.style.display = on ? 'inline-block' : 'none';
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"]{/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','{':'&#123;'}[c]); });
+  }
+
+  function showToast(text) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = text;
+    t.hidden = false;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.hidden = true; }, 1800);
+  }
 
   // --- Calendar rendering ---
   window.initCalendar = function initCalendar() {

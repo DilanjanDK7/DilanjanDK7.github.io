@@ -409,6 +409,15 @@ footer {
 .cal-cell.in-range { background: color-mix(in hsl, var(--primary) 12%, var(--card)); border-color: color-mix(in hsl, var(--primary) 40%, var(--border)); }
 .cal-cell.selected { outline: 2px solid var(--primary); outline-offset: -2px; font-weight: 700; }
 
+/* Participants + Live */
+.participants-list { list-style: none; padding: 0; margin: 0.5rem 0 1rem 0; display: grid; gap: 0.4rem; }
+.participants-list li { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 0.4rem 0.6rem; font-size: 0.95rem; }
+.live-badge { display: inline-block; background: #e91e63; color: #fff; font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 999px; margin-left: 0.4rem; vertical-align: middle; animation: pulse 1.8s ease-in-out infinite; }
+
+/* Toast */
+.toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 0.6rem 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,0.15); z-index: 2000; }
+
+
 .about-flex {
     display: flex;
     gap: 2rem;

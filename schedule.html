@@ -8,7 +8,7 @@
     <meta name="author" content="Dilanjan DK">
     <meta name="theme-color" content="#2575fc">
     <link rel="canonical" href="https://dilanjandk7.github.io/schedule.html">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.gstatic.com; font-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.gstatic.com; font-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.googleapis.com; upgrade-insecure-requests">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="assets/manifest.webmanifest">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -85,6 +85,16 @@
                                 <option value="60">60 min</option>
                             </select>
                         </label>
+                        <label>
+                            <span>Minimum people</span>
+                            <select id="minAvailable">
+                                <option value="1" selected>1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </label>
                         <div class="tz-row">
                             <div>
                                 <div style="font-weight:600; font-size:0.95rem; margin-bottom:0.25rem;">Time zone</div>
@@ -105,6 +115,9 @@
                             <button id="copyEventLink" type="button" class="btn">Copy</button>
                         </div>
                     </div>
+
+                    <h3>Participants <span id="liveBadge" class="live-badge" aria-hidden="true">Live</span></h3>
+                    <ul id="participantsList" class="participants-list" aria-live="polite"></ul>
 
                     <h3>Calendar</h3>
                     <div class="calendar" id="calendar" aria-label="Calendar date picker"></div>
@@ -144,6 +157,7 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/schedule.js"></script>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
 </body>
 <style>
 /* Inline minimal layout guards if main CSS hasn’t loaded yet */
