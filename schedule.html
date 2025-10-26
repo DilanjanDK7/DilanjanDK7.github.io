@@ -36,19 +36,23 @@
             <div class="scheduler-layout">
                 <aside class="scheduler-panel" aria-label="Event settings">
                     <h2 style="margin-top:0">Event</h2>
+                    <div class="form-grid">
+                        <label>
+                            <span>Your name (optional)</span>
+                            <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
+                        </label>
+                        <label>
+                            <span>Access password</span>
+                            <input id="participantPassword" type="password" placeholder="Optional, for re-editing">
+                        </label>
+                    </div>
+
+                    <h3 id="eventSettingsHeader">Event Settings</h3>
                     <fieldset id="eventSettings" style="border:0; padding:0; margin:0;">
                         <div class="form-grid">
                             <label id="eventNameRow">
                                 <span>Event name</span>
                                 <input id="eventName" type="text" placeholder="Study group / Standup / Coffee" autocomplete="off">
-                            </label>
-                            <label>
-                                <span>Your name (optional)</span>
-                                <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
-                            </label>
-                            <label>
-                                <span>Access password</span>
-                                <input id="participantPassword" type="password" placeholder="Optional, for re-editing">
                             </label>
                             <label>
                                 <span>Start date</span>
@@ -86,16 +90,6 @@
                                     <option value="60">60 min</option>
                                 </select>
                             </label>
-                            <label>
-                                <span>Minimum people</span>
-                                <select id="minAvailable">
-                                    <option value="1" selected>1+</option>
-                                    <option value="2">2+</option>
-                                    <option value="3">3+</option>
-                                    <option value="4">4+</option>
-                                    <option value="5">5+</option>
-                                </select>
-                            </label>
                             <div class="tz-row">
                                 <div>
                                     <div style="font-weight:600; font-size:0.95rem; margin-bottom:0.25rem;">Time zone</div>
@@ -108,6 +102,20 @@
                             </div>
                         </div>
                     </fieldset>
+
+                    <h3>View</h3>
+                    <div class="form-grid">
+                        <label>
+                            <span>Minimum people</span>
+                            <select id="minAvailable">
+                                <option value="1" selected>1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </label>
+                    </div>
 
                     <h3>Share</h3>
                     <div class="share-grid">

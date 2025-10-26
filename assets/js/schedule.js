@@ -56,7 +56,10 @@
     minAvailable: document.getElementById('minAvailable'),
     statusDisplay: document.getElementById('statusDisplay'),
     eventSettings: document.getElementById('eventSettings'),
+    eventSettingsHeader: document.getElementById('eventSettingsHeader'),
     createEventBtn: document.getElementById('createEventBtn'),
+    eventLink: document.getElementById('eventLink'),
+    copyEventLink: document.getElementById('copyEventLink'),
   };
 
   init();
@@ -96,7 +99,6 @@
     // Initialize Firebase lazily after UI is ready
     if (typeof window.initFirebase === 'function') window.initFirebase();
     updateControlsForRole();
-    updateEventNameVisibility();
   }
 
   function getMeKey() {
@@ -186,7 +188,7 @@
       if (typeof window.subscribeToEvent === 'function') window.subscribeToEvent(eventId);
       if (typeof window.persistEventMeta === 'function') await window.persistEventMeta();
       if (typeof window.persistMyAvailability === 'function') await window.persistMyAvailability();
-      updateEventNameVisibility();
+      updateControlsForRole();
     });
 
     els.selectAll?.addEventListener('click', () => bulkSelect('all'));
@@ -687,7 +689,6 @@
       state.eventName = d.eventName || state.eventName;
       if (els.eventName && d.eventName) els.eventName.value = d.eventName;
       if (els.pageTitle && d.eventName) els.pageTitle.textContent = d.eventName;
-      updateEventNameVisibility();
       if (d.startDate) { state.startDate = parseDateInput(d.startDate); if (els.startDate) els.startDate.value = d.startDate; }
       if (d.endDate) { state.endDate = parseDateInput(d.endDate); if (els.endDate) els.endDate.value = d.endDate; }
       if (d.dayStart) { state.dayStart = d.dayStart; if (els.dayStart) els.dayStart.value = d.dayStart; }
@@ -739,18 +740,6 @@
     state.unsub = () => { unsubEvent(); unsubParts(); };
   };
 
-  function updateEventNameVisibility() {
-    if (!els.eventNameRow) return;
-    // Hide event name editing for non-hosts when viewing an event
-    if (state.eventId && !state.isHost) {
-      els.eventNameRow.style.display = 'none';
-      if (els.applySettings) els.applySettings.disabled = true;
-    } else {
-      els.eventNameRow.style.display = '';
-      if (els.applySettings) els.applySettings.disabled = false;
-    }
-  }
-
   function renderParticipants(names) {
     if (!els.participantsList) return;
     const unique = Array.from(new Set(names)).sort();
@@ -801,15 +790,31 @@
     const isHost = state.isHost;
     const isEvent = !!state.eventId;
 
+    // Hide entire Event Settings section for non-host participants
+    if (els.eventSettingsHeader) {
+        els.eventSettingsHeader.style.display = (isEvent && !isHost) ? 'none' : '';
+    }
     if (els.eventSettings) {
+        els.eventSettings.style.display = (isEvent && !isHost) ? 'none' : '';
         els.eventSettings.disabled = isEvent && !isHost;
     }
+
+    // Hide Share section for non-host participants
     if (els.createEventBtn) {
-        if (isEvent && !isHost) {
-            els.createEventBtn.style.display = 'none';
-        } else {
-            els.createEventBtn.style.display = '';
-            els.createEventBtn.textContent = isEvent ? 'Update Event Link' : 'Create Event Link';
+        const shareSection = els.createEventBtn.closest('div')?.previousElementSibling;
+        if (shareSection && shareSection.tagName === 'H3') {
+            shareSection.style.display = (isEvent && !isHost) ? 'none' : '';
+        }
+        const shareGrid = els.createEventBtn.parentElement;
+        if (shareGrid) {
+            shareGrid.style.display = (isEvent && !isHost) ? 'none' : '';
+        }
+        
+        // Update button text for host
+        if (isEvent && isHost) {
+            els.createEventBtn.textContent = 'Update Event Link';
+        } else if (!isEvent) {
+            els.createEventBtn.textContent = 'Create Event Link';
         }
     }
   }
