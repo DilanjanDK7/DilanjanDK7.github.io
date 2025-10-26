@@ -80,6 +80,7 @@
     if (state.startDate && state.endDate) renderGrid();
     // Initialize Firebase lazily after UI is ready
     if (typeof window.initFirebase === 'function') window.initFirebase();
+    updateEventNameVisibility();
   }
 
   function getMeKey() {
@@ -120,6 +121,7 @@
       state.slotMinutes = Number(els.slotMinutes?.value || 30);
       persistDraft();
       renderGrid();
+      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
       computeBest();
       // If bound to an event, persist settings
       if (typeof window.persistEventMeta === 'function') window.persistEventMeta();
@@ -151,6 +153,9 @@
         await window.initFirebase();
       }
       if (!state.db) { alert('Live sharing is still initializing. Please try again in a moment.'); return; }
+      // Capture latest event name from input before creating/updating
+      state.eventName = (els.eventName?.value || '').trim();
+      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
       if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
       const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
       state.eventId = eventId;
@@ -165,6 +170,7 @@
       if (typeof window.subscribeToEvent === 'function') window.subscribeToEvent(eventId);
       if (typeof window.persistEventMeta === 'function') await window.persistEventMeta();
       if (typeof window.persistMyAvailability === 'function') await window.persistMyAvailability();
+      updateEventNameVisibility();
     });
 
     els.selectAll?.addEventListener('click', () => bulkSelect('all'));
@@ -579,6 +585,12 @@
         daysOfWeek: Array.from(state.daysOfWeek),
       });
       state.isHost = true;
+    } else {
+      // Event exists; ensure title is up to date if host
+      const cur = snap.data();
+      if (state.isHost && state.eventName && cur.eventName !== state.eventName) {
+        await window.__fb.setDoc(ref, { eventName: state.eventName, updatedAt: window.__fb.serverTimestamp() }, { merge: true });
+      }
     }
     return id;
   };
@@ -632,7 +644,8 @@
         (d.startDate && (!state.startDate || formatISODate(state.startDate) !== d.startDate)) ||
         (d.endDate && (!state.endDate || formatISODate(state.endDate) !== d.endDate)) ||
         d.dayStart !== state.dayStart || d.dayEnd !== state.dayEnd ||
-        d.slotMinutes !== state.slotMinutes || (Array.isArray(d.daysOfWeek) && d.daysOfWeek.length !== state.daysOfWeek.size);
+        d.slotMinutes !== state.slotMinutes || (Array.isArray(d.daysOfWeek) && d.daysOfWeek.length !== state.daysOfWeek.size) ||
+        (typeof d.eventName === 'string' && d.eventName !== state.eventName);
       state.eventName = d.eventName || state.eventName;
       if (els.eventName && d.eventName) els.eventName.value = d.eventName;
       if (els.pageTitle && d.eventName) els.pageTitle.textContent = d.eventName;
@@ -650,6 +663,7 @@
         });
       }
       if (metaChanged) {
+        if (typeof d.eventName === 'string' && els.pageTitle) els.pageTitle.textContent = d.eventName || 'Event';
         renderGrid(false);
       }
     });
@@ -690,8 +704,10 @@
     // Hide event name editing for non-hosts when viewing an event
     if (state.eventId && !state.isHost) {
       els.eventNameRow.style.display = 'none';
+      if (els.applySettings) els.applySettings.disabled = true;
     } else {
       els.eventNameRow.style.display = '';
+      if (els.applySettings) els.applySettings.disabled = false;
     }
   }
 
