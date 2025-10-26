@@ -8,7 +8,7 @@
     <meta name="author" content="Dilanjan DK">
     <meta name="theme-color" content="#2575fc">
     <link rel="canonical" href="https://dilanjandk7.github.io/schedule.html">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; connect-src 'self'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.gstatic.com; font-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com; upgrade-insecure-requests">
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="assets/manifest.webmanifest">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -44,6 +44,10 @@
                         <label>
                             <span>Your name (optional)</span>
                             <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
+                        </label>
+                        <label>
+                            <span>Access password</span>
+                            <input id="participantPassword" type="password" placeholder="Optional, for re-editing">
                         </label>
                         <label>
                             <span>Start date</span>
@@ -93,14 +97,18 @@
                         </div>
                     </div>
 
-                    <h3>Share & Merge</h3>
+                    <h3>Share (Export/Import)</h3>
                     <div class="share-grid">
-                        <button id="makeShareLink" type="button" class="btn">Generate share link</button>
-                        <input id="shareLink" type="text" readonly placeholder="Share link will appear here">
-                        <button id="copyMyAvailability" type="button" class="btn">Copy my availability</button>
-                        <textarea id="importText" rows="3" placeholder="Paste someone’s availability JSON here"></textarea>
+                        <button id="exportMyAvailability" type="button" class="btn">Copy my availability</button>
+                        <input id="shareLink" type="text" readonly placeholder="Your availability JSON will appear here when copied">
+                        <textarea id="importText" rows="4" placeholder="Paste someone's availability JSON here to merge"></textarea>
                         <button id="importAvailability" type="button" class="btn">Add to group</button>
+                        <button id="createEventBtn" type="button" class="btn primary">Enable live share</button>
+                        <input id="eventLink" type="text" readonly placeholder="Shareable event link will appear here">
                     </div>
+
+                    <h3>Calendar</h3>
+                    <div class="calendar" id="calendar" aria-label="Calendar date picker"></div>
 
                     <h3>Quick select</h3>
                     <div class="quick-grid">
@@ -135,6 +143,7 @@
         <p>&copy; 2025 Dilanjan DK. All rights reserved.</p>
     </footer>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/schedule.js"></script>
 </body>
 <style>

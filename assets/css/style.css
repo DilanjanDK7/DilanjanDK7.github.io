@@ -398,6 +398,17 @@ footer {
 /* Responsive columns based on number of days */
 .availability-grid .grid-row { grid-auto-flow: column; }
 
+/* Calendar */
+.calendar { border: 1px solid var(--border); border-radius: 12px; padding: 0.6rem; background: var(--surface); }
+.cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
+.cal-title { font-weight: 700; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.cal-label { font-size: 0.8rem; color: var(--muted); text-align: center; }
+.cal-cell { padding: 0.5rem; text-align: center; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; }
+.cal-cell.out { opacity: 0.4; cursor: default; }
+.cal-cell.in-range { background: color-mix(in hsl, var(--primary) 12%, var(--card)); border-color: color-mix(in hsl, var(--primary) 40%, var(--border)); }
+.cal-cell.selected { outline: 2px solid var(--primary); outline-offset: -2px; font-weight: 700; }
+
 .about-flex {
     display: flex;
     gap: 2rem;

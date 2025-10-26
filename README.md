@@ -25,6 +25,46 @@ Personal portfolio for Dilanjan DK (ddiyabal@uwo.ca). Built as a static site and
 
 Open `index.html` in your browser. No build step required.
 
+### Scheduler (Schedule Page)
+
+The page `schedule.html` provides a When2Meet-style scheduler with a calendar picker and optional real-time collaboration backed by Firebase Firestore.
+
+Setup (optional, for sharing without JSON):
+
+1. Firebase project
+   - Create a Firebase project (console)
+   - Add a Web App, copy config into `assets/js/firebase-config.js`
+   - Enable Authentication → Anonymous
+   - Enable Firestore (Production mode)
+
+2. Security Rules (Firestore)
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /events/{eventId} {
+      allow read: if true; // anyone with link can view
+      allow create: if request.auth != null; // host must be signed in anonymously
+      allow update: if request.auth != null && request.resource.data.hostUid == resource.data.hostUid; // only host updates event meta
+      allow delete: if false;
+
+      match /participants/{uid} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == uid; // each user writes only their own availability
+      }
+    }
+  }
+}
+```
+
+3. CSP
+   - `schedule.html` includes CSP allowing required Firebase endpoints.
+
+Usage:
+ - Open `schedule.html`, click Create event to generate a share link
+ - Share the link; participants mark availability live (no JSON paste)
+ - Host can adjust date range and slot settings; updates sync to everyone
+
 ## Deployment
 
 Push to the default branch of this repository. In repository settings, enable GitHub Pages with the root (`/`) as the source.
