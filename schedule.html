@@ -36,76 +36,78 @@
             <div class="scheduler-layout">
                 <aside class="scheduler-panel" aria-label="Event settings">
                     <h2 style="margin-top:0">Event</h2>
-                    <div class="form-grid">
-                        <label id="eventNameRow">
-                            <span>Event name</span>
-                            <input id="eventName" type="text" placeholder="Study group / Standup / Coffee" autocomplete="off">
-                        </label>
-                        <label>
-                            <span>Your name (optional)</span>
-                            <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
-                        </label>
-                        <label>
-                            <span>Access password</span>
-                            <input id="participantPassword" type="password" placeholder="Optional, for re-editing">
-                        </label>
-                        <label>
-                            <span>Start date</span>
-                            <input id="startDate" type="date">
-                        </label>
-                        <label>
-                            <span>End date</span>
-                            <input id="endDate" type="date">
-                        </label>
-                        <label>
-                            <span>Days of week</span>
-                            <div class="dow-picker" role="group" aria-label="Days of week">
-                                <button data-dow="1" type="button">Mon</button>
-                                <button data-dow="2" type="button">Tue</button>
-                                <button data-dow="3" type="button">Wed</button>
-                                <button data-dow="4" type="button">Thu</button>
-                                <button data-dow="5" type="button">Fri</button>
-                                <button data-dow="6" type="button">Sat</button>
-                                <button data-dow="0" type="button">Sun</button>
+                    <fieldset id="eventSettings" style="border:0; padding:0; margin:0;">
+                        <div class="form-grid">
+                            <label id="eventNameRow">
+                                <span>Event name</span>
+                                <input id="eventName" type="text" placeholder="Study group / Standup / Coffee" autocomplete="off">
+                            </label>
+                            <label>
+                                <span>Your name (optional)</span>
+                                <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
+                            </label>
+                            <label>
+                                <span>Access password</span>
+                                <input id="participantPassword" type="password" placeholder="Optional, for re-editing">
+                            </label>
+                            <label>
+                                <span>Start date</span>
+                                <input id="startDate" type="date">
+                            </label>
+                            <label>
+                                <span>End date</span>
+                                <input id="endDate" type="date">
+                            </label>
+                            <label>
+                                <span>Days of week</span>
+                                <div class="dow-picker" role="group" aria-label="Days of week">
+                                    <button data-dow="1" type="button">Mon</button>
+                                    <button data-dow="2" type="button">Tue</button>
+                                    <button data-dow="3" type="button">Wed</button>
+                                    <button data-dow="4" type="button">Thu</button>
+                                    <button data-dow="5" type="button">Fri</button>
+                                    <button data-dow="6" type="button">Sat</button>
+                                    <button data-dow="0" type="button">Sun</button>
+                                </div>
+                            </label>
+                            <label>
+                                <span>Daily start</span>
+                                <input id="dayStart" type="time" value="09:00">
+                            </label>
+                            <label>
+                                <span>Daily end</span>
+                                <input id="dayEnd" type="time" value="18:00">
+                            </label>
+                            <label>
+                                <span>Slot length</span>
+                                <select id="slotMinutes">
+                                    <option value="15">15 min</option>
+                                    <option value="30" selected>30 min</option>
+                                    <option value="60">60 min</option>
+                                </select>
+                            </label>
+                            <label>
+                                <span>Minimum people</span>
+                                <select id="minAvailable">
+                                    <option value="1" selected>1+</option>
+                                    <option value="2">2+</option>
+                                    <option value="3">3+</option>
+                                    <option value="4">4+</option>
+                                    <option value="5">5+</option>
+                                </select>
+                            </label>
+                            <div class="tz-row">
+                                <div>
+                                    <div style="font-weight:600; font-size:0.95rem; margin-bottom:0.25rem;">Time zone</div>
+                                    <div id="tzDisplay" style="font-size:0.9rem; color:var(--muted)">Detecting…</div>
+                                </div>
+                                <button id="toggleLocalTZ" type="button" class="btn">Use local</button>
                             </div>
-                        </label>
-                        <label>
-                            <span>Daily start</span>
-                            <input id="dayStart" type="time" value="09:00">
-                        </label>
-                        <label>
-                            <span>Daily end</span>
-                            <input id="dayEnd" type="time" value="18:00">
-                        </label>
-                        <label>
-                            <span>Slot length</span>
-                            <select id="slotMinutes">
-                                <option value="15">15 min</option>
-                                <option value="30" selected>30 min</option>
-                                <option value="60">60 min</option>
-                            </select>
-                        </label>
-                        <label>
-                            <span>Minimum people</span>
-                            <select id="minAvailable">
-                                <option value="1" selected>1+</option>
-                                <option value="2">2+</option>
-                                <option value="3">3+</option>
-                                <option value="4">4+</option>
-                                <option value="5">5+</option>
-                            </select>
-                        </label>
-                        <div class="tz-row">
-                            <div>
-                                <div style="font-weight:600; font-size:0.95rem; margin-bottom:0.25rem;">Time zone</div>
-                                <div id="tzDisplay" style="font-size:0.9rem; color:var(--muted)">Detecting…</div>
+                            <div class="actions">
+                                <button id="applySettings" type="button" class="btn primary">Apply settings</button>
                             </div>
-                            <button id="toggleLocalTZ" type="button" class="btn">Use local</button>
                         </div>
-                        <div class="actions">
-                            <button id="applySettings" type="button" class="btn primary">Apply settings</button>
-                        </div>
-                    </div>
+                    </fieldset>
 
                     <h3>Share</h3>
                     <div class="share-grid">

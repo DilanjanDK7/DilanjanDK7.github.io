@@ -55,6 +55,8 @@
     liveBadge: document.getElementById('liveBadge'),
     minAvailable: document.getElementById('minAvailable'),
     statusDisplay: document.getElementById('statusDisplay'),
+    eventSettings: document.getElementById('eventSettings'),
+    createEventBtn: document.getElementById('createEventBtn'),
   };
 
   init();
@@ -93,6 +95,7 @@
     if (state.startDate && state.endDate) renderGrid();
     // Initialize Firebase lazily after UI is ready
     if (typeof window.initFirebase === 'function') window.initFirebase();
+    updateControlsForRole();
     updateEventNameVisibility();
   }
 
@@ -701,6 +704,7 @@
         if (typeof d.eventName === 'string' && els.pageTitle) els.pageTitle.textContent = d.eventName || 'Event';
         renderGrid(false);
       }
+      updateControlsForRole();
     });
 
     const unsubParts = window.__fb.onSnapshot(partsRef, (qs) => {
@@ -793,6 +797,23 @@
     });
   }
 
+  function updateControlsForRole() {
+    const isHost = state.isHost;
+    const isEvent = !!state.eventId;
+
+    if (els.eventSettings) {
+        els.eventSettings.disabled = isEvent && !isHost;
+    }
+    if (els.createEventBtn) {
+        if (isEvent && !isHost) {
+            els.createEventBtn.style.display = 'none';
+        } else {
+            els.createEventBtn.style.display = '';
+            els.createEventBtn.textContent = isEvent ? 'Update Event Link' : 'Create Event Link';
+        }
+    }
+  }
+
   // --- Calendar rendering ---
   window.initCalendar = function initCalendar() {
     const cal = document.getElementById('calendar');
@@ -833,14 +854,21 @@
       const isEnd = state.endDate && cur.toDateString() === state.endDate.toDateString();
       if (isStart || isEnd) el.classList.add('selected');
       el.addEventListener('click', () => {
+        const clickedDate = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate());
+        
         if (!state.startDate || (state.startDate && state.endDate)) {
-          state.startDate = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate());
-          state.endDate = null;
+          // This is the first click of a new selection, reset to a single day
+          state.startDate = clickedDate;
+          state.endDate = clickedDate;
         } else {
-          let s = state.startDate; let e = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate());
-          if (e < s) { const tmp = s; s = e; e = tmp; }
-          state.startDate = s; state.endDate = e;
+          // This is the second click, completing a range
+          let s = state.startDate;
+          let e = clickedDate;
+          if (e < s) { [s, e] = [e, s]; } // swap
+          state.startDate = s;
+          state.endDate = e;
         }
+
         if (els.startDate) els.startDate.value = state.startDate ? formatISODate(state.startDate) : '';
         if (els.endDate) els.endDate.value = state.endDate ? formatISODate(state.endDate) : '';
         window.renderCalendar();
