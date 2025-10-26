@@ -68,8 +68,8 @@
     restoreFromURL();
     if (state.eventId) {
       showStatus('Loading event...');
-      // Disable form while loading event data
-      disableForm(true);
+      // Don't disable entire form yet - let participants interact with grid immediately
+      // Actual settings will be locked via updateControlsForRole() once event loads
       if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
         showStatus('Live sharing is not configured. Cannot load event.', true);
         return;
@@ -677,7 +677,6 @@
         return;
       }
       hideStatus();
-      disableForm(false);
       const d = snap.data();
       state.isHost = !!(state.auth?.currentUser && d.hostUid === state.auth.currentUser.uid);
       const metaChanged =
@@ -779,11 +778,7 @@
   }
 
   function disableForm(disabled) {
-    const form = els.eventName?.closest('.scheduler-panel');
-    if (!form) return;
-    form.querySelectorAll('input, select, button').forEach(el => {
-      el.disabled = disabled;
-    });
+    // Legacy function - no longer used. Control is now via updateControlsForRole()
   }
 
   function updateControlsForRole() {
@@ -796,7 +791,18 @@
     }
     if (els.eventSettings) {
         els.eventSettings.style.display = (isEvent && !isHost) ? 'none' : '';
-        els.eventSettings.disabled = isEvent && !isHost;
+        els.eventSettings.disabled = false;  // Never blanket-disable; visibility controls access
+    }
+
+    // Disable individual settings fields for participants
+    if (isEvent && !isHost && els.eventSettings) {
+      els.eventSettings.querySelectorAll('input, select, button').forEach(el => {
+        el.disabled = true;
+      });
+    } else if (els.eventSettings) {
+      els.eventSettings.querySelectorAll('input, select, button').forEach(el => {
+        el.disabled = false;
+      });
     }
 
     // Hide Share section for non-host participants
@@ -817,6 +823,12 @@
             els.createEventBtn.textContent = 'Create Event Link';
         }
     }
+
+    // Always enable grid and participant inputs (name, password, view options)
+    if (els.participantName) els.participantName.disabled = false;
+    if (els.participantPassword) els.participantPassword.disabled = false;
+    if (els.minAvailable) els.minAvailable.disabled = false;
+    if (els.grid) els.grid.style.pointerEvents = 'auto';
   }
 
   // --- Calendar rendering ---
