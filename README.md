@@ -12,6 +12,7 @@ Personal portfolio for Dilanjan DK (ddiyabal@uwo.ca). Built as a static site and
 - `assets/`
   - `css/style.css`: Global styles (light/dark, components)
   - `js/main.js`: Behavior (theme, modal, accessibility, interactions)
+  - `js/firebase-config.example.js`: Template for local Firebase config (copy to `firebase-config.js`, don't commit real keys)
   - `icons/favicon.svg`: Site icon
   - `manifest.webmanifest`: Web manifest
   - `images/`: Place custom images here
@@ -24,6 +25,9 @@ Personal portfolio for Dilanjan DK (ddiyabal@uwo.ca). Built as a static site and
 ## Local development
 
 Open `index.html` in your browser. No build step required.
+Secrets
+- Never commit `assets/js/firebase-config.js`. Use `assets/js/firebase-config.example.js` locally.
+- If a key was exposed, rotate it and add HTTP referrer restrictions in Google Cloud Console (restrict to your domain). Also restrict enabled APIs to only Firebase Auth and Firestore.
 
 ### Scheduler (Schedule Page)
 
