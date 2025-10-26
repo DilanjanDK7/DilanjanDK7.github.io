@@ -752,7 +752,7 @@
   }
 
   function escapeHtml(s) {
-    return String(s).replace(/[&<>"]{/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','{':'&#123;'}[c]); });
+    return String(s).replace(/[&<>"{}]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','{':'&#123;','}':'&#125;'}[c]); });
   }
 
   function showToast(text) {
