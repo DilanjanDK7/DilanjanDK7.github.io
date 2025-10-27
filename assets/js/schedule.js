@@ -612,14 +612,19 @@
       onAuthStateChanged(auth, (u) => {
         if (u) {
           console.log(`[Scheduler] Auth state changed: Signed in as ${u.uid}`);
-          if (state.eventId) window.subscribeToEvent(state.eventId);
+          if (state.eventId) {
+            console.log(`[Scheduler] Auth ready, subscribing to event: ${state.eventId}`);
+            window.subscribeToEvent(state.eventId);
+          }
         } else {
           console.log('[Scheduler] Auth state changed: Signed out.');
         }
       });
 
       if (state.eventId) {
+        console.log(`[Scheduler] Firebase initialized, ensuring sign-in for event: ${state.eventId}`);
         await window.ensureSignedIn();
+        console.log(`[Scheduler] Signed in, subscribing to event now...`);
         window.subscribeToEvent(state.eventId);
       }
 
