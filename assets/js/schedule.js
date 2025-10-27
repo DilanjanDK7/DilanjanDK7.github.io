@@ -688,6 +688,7 @@
       hideStatus();
       const d = snap.data();
       state.isHost = !!(state.auth?.currentUser && d.hostUid === state.auth.currentUser.uid);
+      
       const metaChanged =
         (d.startDate && (!state.startDate || formatISODate(state.startDate) !== d.startDate)) ||
         (d.endDate && (!state.endDate || formatISODate(state.endDate) !== d.endDate)) ||
@@ -695,27 +696,39 @@
         d.slotMinutes !== state.slotMinutes || (Array.isArray(d.daysOfWeek) && d.daysOfWeek.length !== state.daysOfWeek.size) ||
         (typeof d.eventName === 'string' && d.eventName !== state.eventName);
       
-      state.eventName = d.eventName || state.eventName;
-      if (els.eventName && d.eventName) els.eventName.value = d.eventName;
-      if (els.pageTitle && d.eventName) els.pageTitle.textContent = d.eventName;
-      if (d.startDate) { state.startDate = parseDateInput(d.startDate); if (els.startDate) els.startDate.value = d.startDate; }
-      if (d.endDate) { state.endDate = parseDateInput(d.endDate); if (els.endDate) els.endDate.value = d.endDate; }
-      if (d.dayStart) { state.dayStart = d.dayStart; if (els.dayStart) els.dayStart.value = d.dayStart; }
-      if (d.dayEnd) { state.dayEnd = d.dayEnd; if (els.dayEnd) els.dayEnd.value = d.dayEnd; }
-      if (d.slotMinutes) { state.slotMinutes = d.slotMinutes; if (els.slotMinutes) els.slotMinutes.value = String(d.slotMinutes); }
+      // Update state from Firestore data
+      state.eventName = d.eventName || 'Event';
+      state.startDate = d.startDate ? parseDateInput(d.startDate) : null;
+      state.endDate = d.endDate ? parseDateInput(d.endDate) : null;
+      state.dayStart = d.dayStart || '09:00';
+      state.dayEnd = d.dayEnd || '18:00';
+      state.slotMinutes = d.slotMinutes || 30;
       if (Array.isArray(d.daysOfWeek)) {
         state.daysOfWeek = new Set(d.daysOfWeek);
-        els.dowPicker?.querySelectorAll('button').forEach(btn => {
-          const dow = Number(btn.getAttribute('data-dow'));
-          syncDowButton(btn, state.daysOfWeek.has(dow));
-        });
       }
+      
+      // Update UI from new state
+      if (els.eventName) els.eventName.value = state.eventName;
+      if (els.pageTitle) els.pageTitle.textContent = state.eventName;
+      if (els.startDate && state.startDate) els.startDate.value = formatISODate(state.startDate);
+      if (els.endDate && state.endDate) els.endDate.value = formatISODate(state.endDate);
+      if (els.dayStart) els.dayStart.value = state.dayStart;
+      if (els.dayEnd) els.dayEnd.value = state.dayEnd;
+      if (els.slotMinutes) els.slotMinutes.value = String(state.slotMinutes);
+      els.dowPicker?.querySelectorAll('button').forEach(btn => {
+        const dow = Number(btn.getAttribute('data-dow'));
+        syncDowButton(btn, state.daysOfWeek.has(dow));
+      });
 
-      // On first load, ALWAYS render the grid. On subsequent updates, only render if needed.
+      // On first load, OR if metadata changed, re-render the grid and calendar
       if (metaChanged || isFirstEventSnapshot) {
-        if (typeof d.eventName === 'string' && els.pageTitle) els.pageTitle.textContent = d.eventName || 'Event';
+        if (state.startDate) {
+            state.calMonth = new Date(state.startDate.getFullYear(), state.startDate.getMonth(), 1);
+            if (typeof window.renderCalendar === 'function') window.renderCalendar();
+        }
         renderGrid(false);
       }
+      
       updateControlsForRole();
       isFirstEventSnapshot = false;
     });
