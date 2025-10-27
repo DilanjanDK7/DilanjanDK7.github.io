@@ -65,30 +65,25 @@
   init();
 
   function init() {
-    console.log('🚀 Page initializing...');
     restoreFromURL();
-    console.log('📋 Event ID from URL:', state.eventId);
-    if (state.eventId) {
-      console.log('⏳ Loading event:', state.eventId);
+    const isSharedEvent = !!state.eventId;
+
+    if (isSharedEvent) {
       showStatus('Loading event...');
-      // Don't disable entire form yet - let participants interact with grid immediately
-      // Actual settings will be locked via updateControlsForRole() once event loads
       if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
-        console.log('❌ Firebase config missing');
         showStatus('Live sharing is not configured. Cannot load event.', true);
         return;
       }
-      console.log('✅ Firebase config found');
     } else {
-      console.log('ℹ️ No event ID, loading local draft');
       // Not loading a shared event, restore local draft
       restoreDraft();
     }
     state.meKey = getMeKey();
     updateTZDisplay();
     initDOW();
-    // Defaults: next 7 days if none provided
-    if (!state.startDate || !state.endDate) {
+
+    // Defaults: next 7 days if none provided AND it's not a shared event
+    if (!isSharedEvent && (!state.startDate || !state.endDate)) {
       const today = new Date();
       const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       const end = new Date(start);
@@ -98,16 +93,19 @@
       if (els.startDate) els.startDate.value = formatISODate(start);
       if (els.endDate) els.endDate.value = formatISODate(end);
     }
+
     attachHandlers();
     // Calendar picker
     if (typeof window.initCalendar === 'function') window.initCalendar();
-    if (state.startDate && state.endDate) renderGrid();
+    
+    // Only render grid if it's NOT a shared event. Shared events render inside the subscription callback.
+    if (!isSharedEvent && state.startDate && state.endDate) {
+        renderGrid();
+    }
+    
     // Initialize Firebase lazily after UI is ready
-    console.log('🔥 Calling initFirebase...');
     if (typeof window.initFirebase === 'function') window.initFirebase();
-    console.log('🎛️ Updating controls for role...');
     updateControlsForRole();
-    console.log('✅ Init complete');
   }
 
   function getMeKey() {
@@ -570,48 +568,26 @@
 
   window.initFirebase = async function initFirebase() {
     try {
-      console.log('🔥 initFirebase called');
-      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
-        console.log('❌ No Firebase config');
-        return;
-      }
-      console.log('📥 Loading Firebase modules...');
+      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") return;
       const { appMod, fsMod, auMod } = await firebaseModules();
       const { initializeApp } = appMod;
       const { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, enableIndexedDbPersistence, serverTimestamp } = fsMod;
       const { getAuth, signInAnonymously, onAuthStateChanged } = auMod;
 
-      console.log('🔧 Initializing Firebase app...');
       const app = initializeApp(window.FIREBASE_CONFIG);
-      console.log('📊 Setting up Firestore...');
       const db = getFirestore(app);
-      console.log('🔐 Setting up Auth...');
       const auth = getAuth(app);
-      try {
-        console.log('💾 Enabling offline persistence...');
-        await enableIndexedDbPersistence(db);
-        console.log('✅ Offline persistence enabled');
-      } catch (e) {
-        console.log('⚠️ Offline persistence failed:', e.message);
-      }
+      try { await enableIndexedDbPersistence(db); } catch (_) {}
       state.db = db;
       state.auth = auth;
-      console.log('✅ Firebase initialized, db:', !!db, 'auth:', !!auth);
 
       onAuthStateChanged(auth, (u) => {
-        console.log('🔄 Auth state changed:', !!u, 'has eventId:', !!state.eventId);
-        if (u && state.eventId) {
-          console.log('🔗 Subscribing to event:', state.eventId);
-          window.subscribeToEvent(state.eventId);
-        }
+        if (u && state.eventId) window.subscribeToEvent(state.eventId);
       });
 
       if (state.eventId) {
-        console.log('🚀 Loading event:', state.eventId);
         await window.ensureSignedIn();
         window.subscribeToEvent(state.eventId);
-      } else {
-        console.log('ℹ️ No event ID, not subscribing');
       }
 
       // Store module fns on window for later use
@@ -698,22 +674,14 @@
   };
 
   window.subscribeToEvent = function subscribeToEvent(eventId) {
-    console.log('📡 subscribeToEvent called with:', eventId, 'db exists:', !!state.db);
-    if (state.unsub) {
-      try { state.unsub(); } catch (_) {}
-      state.unsub = null;
-    }
-    if (!state.db) {
-      console.log('❌ No database connection, cannot subscribe');
-      return;
-    }
+    if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
+
+    let isFirstEventSnapshot = true;
     const eventRef = window.__fb.doc(state.db, 'events', eventId);
     const partsRef = window.__fb.collection(state.db, 'events', eventId, 'participants');
 
     const unsubEvent = window.__fb.onSnapshot(eventRef, (snap) => {
-      console.log('📄 Event snapshot received:', snap.exists() ? 'exists' : 'missing');
       if (!snap.exists()) {
-        console.log('❌ Event not found:', eventId);
         showStatus('Error: Event not found or has been deleted.', true);
         return;
       }
@@ -726,6 +694,7 @@
         d.dayStart !== state.dayStart || d.dayEnd !== state.dayEnd ||
         d.slotMinutes !== state.slotMinutes || (Array.isArray(d.daysOfWeek) && d.daysOfWeek.length !== state.daysOfWeek.size) ||
         (typeof d.eventName === 'string' && d.eventName !== state.eventName);
+      
       state.eventName = d.eventName || state.eventName;
       if (els.eventName && d.eventName) els.eventName.value = d.eventName;
       if (els.pageTitle && d.eventName) els.pageTitle.textContent = d.eventName;
@@ -741,11 +710,14 @@
           syncDowButton(btn, state.daysOfWeek.has(dow));
         });
       }
-      if (metaChanged) {
+
+      // On first load, ALWAYS render the grid. On subsequent updates, only render if needed.
+      if (metaChanged || isFirstEventSnapshot) {
         if (typeof d.eventName === 'string' && els.pageTitle) els.pageTitle.textContent = d.eventName || 'Event';
         renderGrid(false);
       }
       updateControlsForRole();
+      isFirstEventSnapshot = false;
     });
 
     const unsubParts = window.__fb.onSnapshot(partsRef, (qs) => {

@@ -169,14 +169,6 @@
     <script src="assets/js/firebase-config.js"></script>
     <script src="assets/js/schedule.js"></script>
     <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
-    <!-- Firebase Debug Script -->
-    <script>
-        // Debug Firebase connection
-        window.addEventListener('load', () => {
-            console.log('🔍 Debug: Firebase config loaded:', !!window.FIREBASE_CONFIG);
-            console.log('🔍 Debug: Event ID from URL:', new URLSearchParams(window.location.search).get('event'));
-        });
-    </script>
 </body>
 <style>
 /* Inline minimal layout guards if main CSS hasn’t loaded yet */
