@@ -571,10 +571,15 @@
   }
 
   window.initFirebase = async function initFirebase() {
+    if (state.db) {
+      console.log('[Scheduler] Firebase already initialized.');
+      return; // Already initialized
+    }
     try {
       console.log('[Scheduler] Initializing Firebase...');
       if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
         console.warn('[Scheduler] Firebase init skipped: config missing.');
+        showStatus('Firebase configuration is missing. Live sharing unavailable.', true);
         return;
       }
       const { appMod, fsMod, auMod } = await firebaseModules();
