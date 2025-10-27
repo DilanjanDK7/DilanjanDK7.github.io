@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firebase Connection Test</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.gstatic.com; font-src 'self' data:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.googleapis.com; upgrade-insecure-requests">
     <style>
         body {
             font-family: system-ui, -apple-system, sans-serif;
@@ -44,6 +45,10 @@
         }
         button:hover { background: #1a5cd7; }
     </style>
+    <!-- Firebase compat SDKs for maximum compatibility -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <h1>🔥 Firebase Connection Test</h1>
@@ -83,28 +88,26 @@
     </div>
 
     <script src="assets/js/firebase-config.js"></script>
-    <script type="module">
+    <script>
         const log = [];
         const originalConsole = {
             log: console.log,
             error: console.error,
             warn: console.warn
         };
-
         function addLog(level, ...args) {
             const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ');
             log.push(`[${level}] ${msg}`);
             document.getElementById('consoleOutput').textContent = log.join('\n');
             originalConsole[level](...args);
         }
-
         console.log = (...args) => addLog('LOG', ...args);
         console.error = (...args) => addLog('ERROR', ...args);
         console.warn = (...args) => addLog('WARN', ...args);
 
-        let db, auth, app;
+        let app, db, auth;
 
-        // Test 1: Check Config
+        // Test 1: Config
         const configDiv = document.getElementById('configStatus');
         if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY') {
             configDiv.innerHTML = `<div class="status success">✅ Firebase config found</div>
@@ -115,39 +118,23 @@
             console.error('Config check failed');
         }
 
-        // Test 2: Initialize Firebase
+        // Test 2: Initialize (compat)
         const initDiv = document.getElementById('initStatus');
-        async function initFirebase() {
+        (function initFirebaseCompat(){
             try {
-                console.log('Starting Firebase initialization...');
-                const v = '10.13.2';
-                const [appMod, fsMod, auMod] = await Promise.all([
-                    import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`),
-                    import(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore.js`),
-                    import(`https://www.gstatic.com/firebasejs/${v}/firebase-auth.js`)
-                ]);
-
-                const { initializeApp } = appMod;
-                const { getFirestore, doc, getDoc, setDoc, collection, serverTimestamp } = fsMod;
-                const { getAuth, signInAnonymously } = auMod;
-
-                app = initializeApp(window.FIREBASE_CONFIG);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                window.testDb = db;
-                window.testAuth = auth;
-                window.testFunctions = { doc, getDoc, setDoc, collection, serverTimestamp, signInAnonymously };
-
+                console.log('Starting Firebase (compat) initialization...');
+                app = firebase.initializeApp(window.FIREBASE_CONFIG);
+                db = firebase.firestore();
+                auth = firebase.auth();
                 initDiv.innerHTML = `<div class="status success">✅ Firebase initialized successfully</div>
                     <pre>App name: ${app.name}\nProject ID: ${window.FIREBASE_CONFIG.projectId}</pre>`;
-                console.log('Firebase initialized successfully');
+                console.log('Firebase (compat) initialized successfully');
             } catch (error) {
                 initDiv.innerHTML = `<div class="status error">❌ Firebase initialization failed</div>
                     <pre>${error.message}\n${error.stack}</pre>`;
                 console.error('Firebase init error:', error);
             }
-        }
+        })();
 
         // Test 3: Authentication
         window.testAuth = async function() {
@@ -155,8 +142,7 @@
             try {
                 console.log('Testing anonymous authentication...');
                 authDiv.innerHTML = `<div class="status info">⏳ Signing in anonymously...</div>`;
-                
-                const result = await window.testFunctions.signInAnonymously(window.testAuth);
+                const result = await auth.signInAnonymously();
                 authDiv.innerHTML = `<div class="status success">✅ Authentication successful</div>
                     <pre>User ID: ${result.user.uid}</pre>`;
                 console.log('Auth successful:', result.user.uid);
@@ -171,20 +157,13 @@
         window.testRead = async function() {
             const readDiv = document.getElementById('readStatus');
             const eventId = document.getElementById('eventIdInput').value.trim();
-            
-            if (!eventId) {
-                readDiv.innerHTML = `<div class="status error">❌ Please enter an event ID</div>`;
-                return;
-            }
-
+            if (!eventId) { readDiv.innerHTML = `<div class="status error">❌ Please enter an event ID</div>`; return; }
             try {
                 console.log('Testing read for event:', eventId);
                 readDiv.innerHTML = `<div class="status info">⏳ Reading event ${eventId}...</div>`;
-                
-                const eventRef = window.testFunctions.doc(window.testDb, 'events', eventId);
-                const snap = await window.testFunctions.getDoc(eventRef);
-                
-                if (snap.exists()) {
+                const eventRef = db.doc(`events/${eventId}`);
+                const snap = await eventRef.get();
+                if (snap.exists) {
                     const data = snap.data();
                     readDiv.innerHTML = `<div class="status success">✅ Event found and readable</div>
                         <pre>${JSON.stringify(data, null, 2)}</pre>`;
@@ -207,14 +186,12 @@
             try {
                 console.log('Testing write operation...');
                 writeDiv.innerHTML = `<div class="status info">⏳ Creating test event...</div>`;
-                
                 const testId = 'test_' + Math.random().toString(36).substr(2, 9);
-                const eventRef = window.testFunctions.doc(window.testDb, 'events', testId);
-                
-                await window.testFunctions.setDoc(eventRef, {
+                const eventRef = db.doc(`events/${testId}`);
+                await eventRef.set({
                     eventName: 'Test Event',
-                    createdAt: window.testFunctions.serverTimestamp(),
-                    hostUid: window.testAuth.currentUser?.uid || null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    hostUid: auth.currentUser?.uid || null,
                     startDate: '2025-01-01',
                     endDate: '2025-01-07',
                     dayStart: '09:00',
@@ -222,7 +199,6 @@
                     slotMinutes: 30,
                     daysOfWeek: [1,2,3,4,5]
                 });
-                
                 writeDiv.innerHTML = `<div class="status success">✅ Write successful</div>
                     <pre>Created event: ${testId}\nURL: ${location.origin}/schedule.html?event=${testId}</pre>`;
                 console.log('Write successful:', testId);
@@ -233,9 +209,6 @@
                 console.error('Write error:', error);
             }
         };
-
-        // Auto-initialize
-        initFirebase();
     </script>
 </body>
 </html>
