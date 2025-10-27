@@ -575,41 +575,47 @@
       if (typeof draft.pwd === 'string') state.participantPassword = draft.pwd;
     } catch (_) {}
   }
-  // --- Firebase integration (uses window.FIREBASE_CONFIG) ---
-  async function firebaseModules() {
-    const v = '10.13.2';
-    const appMod = await import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`);
-    const fsMod = await import(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore.js`);
-    const auMod = await import(`https://www.gstatic.com/firebasejs/${v}/firebase-auth.js`);
-    return { appMod, fsMod, auMod };
-  }
-
+  // --- Firebase integration (uses window.FIREBASE_CONFIG and compat SDK) ---
   window.initFirebase = async function initFirebase() {
     if (state.db) {
       console.log('[Scheduler] Firebase already initialized.');
-      return; // Already initialized
+      return;
     }
     try {
-      console.log('[Scheduler] Initializing Firebase...');
+      console.log('[Scheduler] Initializing Firebase using compat SDK...');
       if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
         console.warn('[Scheduler] Firebase init skipped: config missing.');
         showStatus('Firebase configuration is missing. Live sharing unavailable.', true);
         return;
       }
-      const { appMod, fsMod, auMod } = await firebaseModules();
-      const { initializeApp } = appMod;
-      const { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, enableIndexedDbPersistence, serverTimestamp } = fsMod;
-      const { getAuth, signInAnonymously, onAuthStateChanged } = auMod;
 
-      const app = initializeApp(window.FIREBASE_CONFIG);
-      const db = getFirestore(app);
-      const auth = getAuth(app);
-      try { await enableIndexedDbPersistence(db); } catch (_) {}
+      // Wait for compat SDK to load
+      if (!window.firebase) {
+        console.log('[Scheduler] Waiting for Firebase compat SDK to load...');
+        await new Promise((resolve) => {
+          if (window.firebaseReady) {
+            resolve();
+          } else {
+            window.addEventListener('firebase-compat-ready', resolve, { once: true });
+            setTimeout(resolve, 10000);
+          }
+        });
+      }
+
+      if (!window.firebase) {
+        throw new Error('Firebase compat SDK failed to load');
+      }
+
+      console.log('[Scheduler] Firebase compat SDK is available, initializing app...');
+      const app = firebase.initializeApp(window.FIREBASE_CONFIG);
+      const db = firebase.firestore();
+      const auth = firebase.auth();
+
       state.db = db;
       state.auth = auth;
       console.log('[Scheduler] Firebase initialized successfully.');
 
-      onAuthStateChanged(auth, (u) => {
+      auth.onAuthStateChanged((u) => {
         if (u) {
           console.log(`[Scheduler] Auth state changed: Signed in as ${u.uid}`);
           if (state.eventId) {
@@ -628,11 +634,19 @@
         window.subscribeToEvent(state.eventId);
       }
 
-      // Store module fns on window for later use
-      window.__fb = { doc, setDoc, getDoc, collection, onSnapshot, serverTimestamp, signInAnonymously };
+      // Store compat API functions on window for later use
+      window.__fb = {
+        doc: (db, col, docId) => db.collection(col).doc(docId),
+        collection: (db, col) => db.collection(col),
+        setDoc: (ref, data, options) => ref.set(data, options),
+        getDoc: (ref) => ref.get(),
+        onSnapshot: (ref, callback, errorCallback) => ref.onSnapshot(callback, errorCallback),
+        serverTimestamp: () => firebase.firestore.FieldValue.serverTimestamp(),
+        signInAnonymously: (auth) => auth.signInAnonymously()
+      };
     } catch (e) {
-      console.error('Firebase init failed', e);
-      showStatus(`Live sharing failed to initialize. Check console for errors and verify your Firebase config, domain restrictions, and API key restrictions.`, true);
+      console.error('[Scheduler] Firebase init failed:', e);
+      showStatus(`Live sharing failed to initialize. Check console for errors.`, true);
     }
   };
 
