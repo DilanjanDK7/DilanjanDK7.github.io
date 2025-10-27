@@ -404,6 +404,7 @@
   function attachSlotHandlers(c, rowIdx) {
     c.addEventListener('mousedown', (e) => {
       e.preventDefault();
+      console.log('[Scheduler] Slot mousedown:', c.dataset.key);
       isDragging = true;
       const hasMe = slotHasMe(c.dataset.key);
       dragModeSelect = !hasMe; // if already selected, drag will remove
@@ -417,6 +418,7 @@
       paintSlot(c);
     });
     c.addEventListener('click', () => {
+      console.log('[Scheduler] Slot click:', c.dataset.key, 'Current meKey:', state.meKey);
       toggleMyAvailability(c.dataset.key, !slotHasMe(c.dataset.key));
       paintSlot(c);
     });
@@ -449,8 +451,15 @@
   }
 
   function toggleMyAvailability(timeKey, on) {
+    console.log('[Scheduler] toggleMyAvailability:', timeKey, 'on:', on, 'meKey:', state.meKey);
     const set = ensureSlot(timeKey, true, null, false);
-    if (on) set.add(state.meKey); else set.delete(state.meKey);
+    if (on) {
+      set.add(state.meKey);
+      console.log('[Scheduler] Added to set. Set size:', set.size, 'Contents:', Array.from(set));
+    } else {
+      set.delete(state.meKey);
+      console.log('[Scheduler] Removed from set. Set size:', set.size);
+    }
     persistDraft();
     // Persist to backend if joined an event
     if (typeof window.throttlePersist === 'function') window.throttlePersist();
@@ -462,8 +471,11 @@
     const set = state.availability.get(dateIso)?.get(key) || new Set();
     const count = set.size;
     const total = state.participantCount || count;
+    const hasMe = set.has(state.meKey);
     
-    cellEl.classList.toggle('me', set.has(state.meKey));
+    console.log('[Scheduler] paintSlot:', key, 'hasMe:', hasMe, 'count:', count, 'meKey:', state.meKey);
+    
+    cellEl.classList.toggle('me', hasMe);
     cellEl.setAttribute('data-count', String(count));
     cellEl.title = `${count} available: ${Array.from(set).join(', ')}`;
 
