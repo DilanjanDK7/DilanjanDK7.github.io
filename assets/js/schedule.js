@@ -162,6 +162,26 @@
       updateTZDisplay();
     });
 
+    // Auto-load participant's saved availability when they enter name/password on shared link
+    const autoLoadParticipantData = async () => {
+      if (!state.eventId || !state.db) return; // Only for shared events
+      const oldMeKey = state.meKey;
+      const oldPid = state.participantId;
+      
+      state.meKey = getMeKey();
+      state.participantPassword = getPassword();
+      await computeParticipantId();
+      
+      // If participant identity changed, load their saved data
+      if (state.participantId && state.participantId !== oldPid) {
+        console.log(`[Scheduler] Loading saved availability for participant: ${state.meKey}`);
+        await loadMyPreviousAvailability();
+      }
+    };
+
+    els.participantName?.addEventListener('blur', autoLoadParticipantData);
+    els.participantPassword?.addEventListener('blur', autoLoadParticipantData);
+
     const createEventBtn = document.getElementById('createEventBtn');
     const eventLink = document.getElementById('eventLink');
     const copyEventLink = document.getElementById('copyEventLink');
@@ -725,6 +745,49 @@
     state.persistTimer = setTimeout(() => { window.persistMyAvailability().catch(()=>{}); }, 600);
   };
 
+  async function loadMyPreviousAvailability() {
+    if (!state.db || !state.eventId || !state.participantId) {
+      console.warn('[Scheduler] Cannot load previous availability: missing db, eventId, or participantId');
+      return;
+    }
+    try {
+      const pref = window.__fb.doc(state.db, 'events', state.eventId, 'participants', state.participantId);
+      const snap = await window.__fb.getDoc(pref);
+      
+      if (snap.exists) {
+        const data = snap.data();
+        console.log('[Scheduler] Found previous availability:', data);
+        
+        // Clear current "me" availability
+        for (const [dateIso, dayMap] of state.availability.entries()) {
+          for (const [timeKey, participantSet] of dayMap.entries()) {
+            participantSet.delete(state.meKey);
+          }
+        }
+        
+        // Load saved slots
+        const slots = data.slots || {};
+        for (const [dateIso, timeArray] of Object.entries(slots)) {
+          if (!Array.isArray(timeArray)) continue;
+          for (const timeStr of timeArray) {
+            const key = `${dateIso} ${timeStr}`;
+            const set = ensureSlot(key, true, null, false);
+            set.add(state.meKey);
+          }
+        }
+        
+        // Re-render grid to show loaded data
+        els.grid?.querySelectorAll('.slot').forEach(paintSlot);
+        computeBest();
+        showToast(`Loaded your previous availability`);
+      } else {
+        console.log('[Scheduler] No previous availability found for this participant');
+      }
+    } catch (error) {
+      console.error('[Scheduler] Error loading previous availability:', error);
+    }
+  }
+
   window.subscribeToEvent = function subscribeToEvent(eventId) {
     if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
     console.log(`[Scheduler] Subscribing to event: ${eventId}`);
@@ -962,19 +1025,32 @@
       const isEnd = state.endDate && cur.toDateString() === state.endDate.toDateString();
       if (isStart || isEnd) el.classList.add('selected');
       el.addEventListener('click', () => {
+        // For shared events (eventId exists), calendar is for viewing only - don't allow changes
+        if (state.eventId && !state.isHost) {
+          console.log('[Scheduler] Calendar editing disabled for participants');
+          return;
+        }
+        
         const clickedDate = new Date(cur.getFullYear(), cur.getMonth(), cur.getDate());
         
-        if (!state.startDate || (state.startDate && state.endDate)) {
-          // This is the first click of a new selection, reset to a single day
+        // Check if we're clicking the same date as startDate
+        const clickedSameAsStart = state.startDate && clickedDate.toDateString() === state.startDate.toDateString();
+        
+        if (!state.startDate || clickedSameAsStart) {
+          // First click or clicking same date - set to single day
           state.startDate = clickedDate;
           state.endDate = clickedDate;
-        } else {
-          // This is the second click, completing a range
+        } else if (state.endDate && state.startDate.toDateString() === state.endDate.toDateString()) {
+          // We have a single day selected, this is the second click - create range
           let s = state.startDate;
           let e = clickedDate;
           if (e < s) { [s, e] = [e, s]; } // swap
           state.startDate = s;
           state.endDate = e;
+        } else {
+          // We already have a range, reset to single day
+          state.startDate = clickedDate;
+          state.endDate = clickedDate;
         }
 
         if (els.startDate) els.startDate.value = state.startDate ? formatISODate(state.startDate) : '';
