@@ -182,6 +182,60 @@
     els.participantName?.addEventListener('blur', autoLoadParticipantData);
     els.participantPassword?.addEventListener('blur', autoLoadParticipantData);
 
+    // Manual save button for explicit user action
+    const saveAvailabilityBtn = document.getElementById('saveAvailabilityBtn');
+    saveAvailabilityBtn?.addEventListener('click', async () => {
+      console.log('[Scheduler] Manual save triggered');
+      
+      // Update state from inputs
+      state.meKey = getMeKey();
+      state.participantPassword = getPassword();
+      
+      // If not in an event yet, must create one first
+      if (!state.eventId) {
+        showToast('⚠️ Please create an event link first (below in "Share" section)', 4000);
+        return;
+      }
+      
+      // Ensure Firebase is ready
+      if (!state.db || !state.auth) {
+        showToast('⚠️ Connection not ready. Please wait and try again.', 3000);
+        return;
+      }
+      
+      // Change button to show saving state
+      const originalText = saveAvailabilityBtn.textContent;
+      saveAvailabilityBtn.textContent = '💾 Saving...';
+      saveAvailabilityBtn.disabled = true;
+      
+      try {
+        // Compute participant ID if needed
+        if (!state.participantId) {
+          await computeParticipantId();
+        }
+        
+        // Persist to Firestore
+        if (typeof window.persistMyAvailability === 'function') {
+          await window.persistMyAvailability();
+          showToast('✅ Your availability has been saved!', 2000);
+          
+          // Visual feedback - temporarily change button text
+          saveAvailabilityBtn.textContent = '✅ Saved!';
+          setTimeout(() => {
+            saveAvailabilityBtn.textContent = originalText;
+            saveAvailabilityBtn.disabled = false;
+          }, 2000);
+        } else {
+          throw new Error('Save function not available');
+        }
+      } catch (err) {
+        console.error('[Scheduler] Manual save failed:', err);
+        showToast('❌ Failed to save. Check your connection.', 3000);
+        saveAvailabilityBtn.textContent = originalText;
+        saveAvailabilityBtn.disabled = false;
+      }
+    });
+
     const createEventBtn = document.getElementById('createEventBtn');
     const eventLink = document.getElementById('eventLink');
     const copyEventLink = document.getElementById('copyEventLink');
@@ -983,6 +1037,19 @@
     if (els.participantPassword) els.participantPassword.disabled = false;
     if (els.minAvailable) els.minAvailable.disabled = false;
     if (els.grid) els.grid.style.pointerEvents = 'auto';
+    
+    // Update save availability button text based on context
+    const saveBtn = document.getElementById('saveAvailabilityBtn');
+    if (saveBtn) {
+      saveBtn.disabled = false; // Always enabled
+      if (!isEvent) {
+        saveBtn.textContent = '💾 Save My Availability (Create event first)';
+        saveBtn.style.opacity = '0.6';
+      } else {
+        saveBtn.textContent = '💾 Save My Availability';
+        saveBtn.style.opacity = '1';
+      }
+    }
   }
 
   // --- Calendar rendering ---
