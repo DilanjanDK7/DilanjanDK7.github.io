@@ -262,45 +262,59 @@
   }
 
   function renderGrid(resetMyToggles = true) {
-    if (!els.grid || !state.startDate || !state.endDate) return;
-    clearGrid();
-    const startMin = timeStringToMinutes(state.dayStart);
-    const endMin = timeStringToMinutes(state.dayEnd);
-    const slot = Math.max(5, state.slotMinutes);
-    const timeKeys = [];
-    for (let m = startMin; m < endMin; m += slot) timeKeys.push(minutesToTimeString(m));
-
-    // Header row
-    const header = document.createElement('div');
-    header.className = 'grid-row header-row';
-    header.appendChild(cell('Time', 'time-col head'));
-    for (const day of dateRange(state.startDate, state.endDate)) {
-      if (!state.daysOfWeek.has(day.getDay())) continue;
-      header.appendChild(cell(day.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' }), 'day-col head'));
+    if (!els.grid || !state.startDate || !state.endDate) {
+      console.warn('[Scheduler] renderGrid skipped: missing grid element or dates', {
+        hasGrid: !!els.grid,
+        hasStartDate: !!state.startDate,
+        hasEndDate: !!state.endDate
+      });
+      return;
     }
-    els.grid.appendChild(header);
+    try {
+      console.log('[Scheduler] Rendering grid...');
+      clearGrid();
+      const startMin = timeStringToMinutes(state.dayStart);
+      const endMin = timeStringToMinutes(state.dayEnd);
+      const slot = Math.max(5, state.slotMinutes);
+      const timeKeys = [];
+      for (let m = startMin; m < endMin; m += slot) timeKeys.push(minutesToTimeString(m));
 
-    // Body rows
-    timeKeys.forEach((tk, rowIdx) => {
-      const row = document.createElement('div');
-      row.className = 'grid-row';
-      row.appendChild(cell(tk, 'time-col'));
+      // Header row
+      const header = document.createElement('div');
+      header.className = 'grid-row header-row';
+      header.appendChild(cell('Time', 'time-col head'));
       for (const day of dateRange(state.startDate, state.endDate)) {
         if (!state.daysOfWeek.has(day.getDay())) continue;
-        const iso = formatISODate(day);
-        const key = iso + ' ' + tk;
-        const c = cell('', 'slot');
-        c.setAttribute('role','gridcell');
-        c.dataset.key = key;
-        if (resetMyToggles) ensureSlot(key, false, state.meKey, false);
-        paintSlot(c);
-        attachSlotHandlers(c, rowIdx);
-        row.appendChild(c);
+        header.appendChild(cell(day.toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' }), 'day-col head'));
       }
-      els.grid.appendChild(row);
-    });
+      els.grid.appendChild(header);
 
-    computeBest();
+      // Body rows
+      timeKeys.forEach((tk, rowIdx) => {
+        const row = document.createElement('div');
+        row.className = 'grid-row';
+        row.appendChild(cell(tk, 'time-col'));
+        for (const day of dateRange(state.startDate, state.endDate)) {
+          if (!state.daysOfWeek.has(day.getDay())) continue;
+          const iso = formatISODate(day);
+          const key = iso + ' ' + tk;
+          const c = cell('', 'slot');
+          c.setAttribute('role','gridcell');
+          c.dataset.key = key;
+          if (resetMyToggles) ensureSlot(key, false, state.meKey, false);
+          paintSlot(c);
+          attachSlotHandlers(c, rowIdx);
+          row.appendChild(c);
+        }
+        els.grid.appendChild(row);
+      });
+
+      computeBest();
+      console.log('[Scheduler] Grid rendered successfully');
+    } catch (error) {
+      console.error('[Scheduler] Error rendering grid:', error);
+      showStatus(`Error rendering grid. Check console.`, true);
+    }
   }
 
   function cell(text, cls='') {
