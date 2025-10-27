@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Firebase Test - No Cache</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #2575fc;
+        }
+        .success { border-left-color: #28a745; background: #d4edda; }
+        .error { border-left-color: #dc3545; background: #f8d7da; }
+        .info { border-left-color: #17a2b8; background: #d1ecf1; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        button { 
+            background: #2575fc; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover { background: #1a5cd7; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        input { padding: 10px; font-size: 14px; width: 300px; border: 1px solid #ccc; border-radius: 4px; }
+        h1 { color: #333; }
+        h2 { color: #666; margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>🔥 Firebase Direct Test (No External Files)</h1>
+    <p>This page tests Firebase with the config embedded directly in the HTML, bypassing all cache issues.</p>
+    
+    <div id="step1" class="box">
+        <h2>Step 1: Load Firebase SDK</h2>
+        <div id="sdk-status">Loading Firebase SDKs...</div>
+    </div>
+
+    <div id="step2" class="box">
+        <h2>Step 2: Initialize Firebase</h2>
+        <div id="init-status">Waiting for SDKs...</div>
+    </div>
+
+    <div id="step3" class="box">
+        <h2>Step 3: Anonymous Sign-In</h2>
+        <button id="auth-btn" disabled>Test Sign-In</button>
+        <div id="auth-status"></div>
+    </div>
+
+    <div id="step4" class="box">
+        <h2>Step 4: Read Event Data</h2>
+        <input type="text" id="event-id" placeholder="Enter event ID (e.g., 34f6e10d30164582)" value="34f6e10d30164582">
+        <button id="read-btn" disabled>Read Event</button>
+        <div id="read-status"></div>
+    </div>
+
+    <div id="step5" class="box">
+        <h2>Step 5: Create New Event</h2>
+        <button id="write-btn" disabled>Create Test Event</button>
+        <div id="write-status"></div>
+    </div>
+
+    <div class="box">
+        <h2>Console Log</h2>
+        <pre id="log-output">Initializing...\n</pre>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Logging helper
+        const logEl = document.getElementById('log-output');
+        function log(msg) {
+            const timestamp = new Date().toLocaleTimeString();
+            logEl.textContent += `[${timestamp}] ${msg}\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+            console.log(msg);
+        }
+
+        // Firebase config embedded directly (no external file)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB5srCg2IxMzJPFChGfGbQ8b7QRlx_pOHQ",
+            authDomain: "dkwebsite-12f83.firebaseapp.com",
+            projectId: "dkwebsite-12f83",
+            storageBucket: "dkwebsite-12f83.firebasestorage.app",
+            messagingSenderId: "668179593495",
+            appId: "1:668179593495:web:0e9cc223693f9f87cb1f52",
+            measurementId: "G-NSWJLLH016"
+        };
+
+        let app, db, auth;
+
+        // Step 1: Check SDK loaded
+        if (typeof firebase !== 'undefined') {
+            document.getElementById('sdk-status').innerHTML = '<div class="success">✅ Firebase SDK loaded successfully</div>';
+            log('✅ Firebase SDK loaded');
+            initializeApp();
+        } else {
+            document.getElementById('sdk-status').innerHTML = '<div class="error">❌ Firebase SDK failed to load</div>';
+            log('❌ Firebase SDK failed to load');
+        }
+
+        // Step 2: Initialize
+        function initializeApp() {
+            try {
+                log('Initializing Firebase app...');
+                app = firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                auth = firebase.auth();
+                
+                document.getElementById('init-status').innerHTML = 
+                    `<div class="success">✅ Firebase initialized</div>
+                    <pre>Project: ${firebaseConfig.projectId}\nApp name: ${app.name}</pre>`;
+                log(`✅ Firebase initialized (${firebaseConfig.projectId})`);
+                
+                // Enable buttons
+                document.getElementById('auth-btn').disabled = false;
+                document.getElementById('read-btn').disabled = false;
+                document.getElementById('write-btn').disabled = false;
+                
+            } catch (error) {
+                document.getElementById('init-status').innerHTML = 
+                    `<div class="error">❌ Initialization failed</div><pre>${error.message}</pre>`;
+                log(`❌ Init error: ${error.message}`);
+            }
+        }
+
+        // Step 3: Authentication
+        document.getElementById('auth-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('auth-btn');
+            const statusEl = document.getElementById('auth-status');
+            btn.disabled = true;
+            statusEl.innerHTML = '<div class="info">⏳ Signing in anonymously...</div>';
+            log('Attempting anonymous sign-in...');
+            
+            try {
+                const result = await auth.signInAnonymously();
+                statusEl.innerHTML = 
+                    `<div class="success">✅ Signed in successfully</div>
+                    <pre>User ID: ${result.user.uid}</pre>`;
+                log(`✅ Signed in as ${result.user.uid}`);
+            } catch (error) {
+                statusEl.innerHTML = 
+                    `<div class="error">❌ Sign-in failed</div>
+                    <pre>Code: ${error.code}\nMessage: ${error.message}</pre>`;
+                log(`❌ Auth error: ${error.code} - ${error.message}`);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // Step 4: Read
+        document.getElementById('read-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('read-btn');
+            const statusEl = document.getElementById('read-status');
+            const eventId = document.getElementById('event-id').value.trim();
+            
+            if (!eventId) {
+                statusEl.innerHTML = '<div class="error">❌ Please enter an event ID</div>';
+                return;
+            }
+            
+            btn.disabled = true;
+            statusEl.innerHTML = `<div class="info">⏳ Reading event ${eventId}...</div>`;
+            log(`Reading event ${eventId}...`);
+            
+            try {
+                const docRef = db.collection('events').doc(eventId);
+                const docSnap = await docRef.get();
+                
+                if (docSnap.exists) {
+                    const data = docSnap.data();
+                    statusEl.innerHTML = 
+                        `<div class="success">✅ Event found</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    log(`✅ Event found: ${data.eventName || 'Untitled'}`);
+                } else {
+                    statusEl.innerHTML = 
+                        `<div class="error">❌ Event not found</div>
+                        <p>No event with ID "${eventId}" exists in the database.</p>`;
+                    log(`❌ Event ${eventId} not found`);
+                }
+            } catch (error) {
+                statusEl.innerHTML = 
+                    `<div class="error">❌ Read failed</div>
+                    <pre>Code: ${error.code}\nMessage: ${error.message}</pre>`;
+                log(`❌ Read error: ${error.code} - ${error.message}`);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // Step 5: Write
+        document.getElementById('write-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('write-btn');
+            const statusEl = document.getElementById('write-status');
+            btn.disabled = true;
+            statusEl.innerHTML = '<div class="info">⏳ Creating test event...</div>';
+            log('Creating test event...');
+            
+            try {
+                const testId = 'test_' + Math.random().toString(36).substr(2, 9);
+                const docRef = db.collection('events').doc(testId);
+                
+                await docRef.set({
+                    eventName: 'Test Event ' + new Date().toLocaleTimeString(),
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    hostUid: auth.currentUser?.uid || null,
+                    startDate: '2025-01-01',
+                    endDate: '2025-01-07',
+                    dayStart: '09:00',
+                    dayEnd: '18:00',
+                    slotMinutes: 30,
+                    daysOfWeek: [1,2,3,4,5]
+                });
+                
+                const url = `${location.origin}/schedule.html?event=${testId}`;
+                statusEl.innerHTML = 
+                    `<div class="success">✅ Event created</div>
+                    <pre>Event ID: ${testId}\nURL: <a href="${url}" target="_blank">${url}</a></pre>`;
+                log(`✅ Created event: ${testId}`);
+            } catch (error) {
+                statusEl.innerHTML = 
+                    `<div class="error">❌ Write failed</div>
+                    <pre>Code: ${error.code}\nMessage: ${error.message}</pre>
+                    <p><strong>Common causes:</strong><br>
+                    - Firestore security rules blocking write<br>
+                    - Anonymous auth not enabled<br>
+                    - User not signed in</p>`;
+                log(`❌ Write error: ${error.code} - ${error.message}`);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
+
