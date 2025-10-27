@@ -65,12 +65,15 @@
   init();
 
   function init() {
+    console.log('[Scheduler] Init started.');
     restoreFromURL();
     const isSharedEvent = !!state.eventId;
 
     if (isSharedEvent) {
+      console.log(`[Scheduler] Detected shared event ID: ${state.eventId}`);
       showStatus('Loading event...');
       if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
+        console.error('[Scheduler] Firebase config is missing or invalid.');
         showStatus('Live sharing is not configured. Cannot load event.', true);
         return;
       }
@@ -106,6 +109,7 @@
     // Initialize Firebase lazily after UI is ready
     if (typeof window.initFirebase === 'function') window.initFirebase();
     updateControlsForRole();
+    console.log('[Scheduler] Init finished.');
   }
 
   function getMeKey() {
@@ -568,7 +572,11 @@
 
   window.initFirebase = async function initFirebase() {
     try {
-      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") return;
+      console.log('[Scheduler] Initializing Firebase...');
+      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
+        console.warn('[Scheduler] Firebase init skipped: config missing.');
+        return;
+      }
       const { appMod, fsMod, auMod } = await firebaseModules();
       const { initializeApp } = appMod;
       const { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, enableIndexedDbPersistence, serverTimestamp } = fsMod;
@@ -580,9 +588,15 @@
       try { await enableIndexedDbPersistence(db); } catch (_) {}
       state.db = db;
       state.auth = auth;
+      console.log('[Scheduler] Firebase initialized successfully.');
 
       onAuthStateChanged(auth, (u) => {
-        if (u && state.eventId) window.subscribeToEvent(state.eventId);
+        if (u) {
+          console.log(`[Scheduler] Auth state changed: Signed in as ${u.uid}`);
+          if (state.eventId) window.subscribeToEvent(state.eventId);
+        } else {
+          console.log('[Scheduler] Auth state changed: Signed out.');
+        }
       });
 
       if (state.eventId) {
@@ -675,18 +689,28 @@
 
   window.subscribeToEvent = function subscribeToEvent(eventId) {
     if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
+    console.log(`[Scheduler] Subscribing to event: ${eventId}`);
 
     let isFirstEventSnapshot = true;
     const eventRef = window.__fb.doc(state.db, 'events', eventId);
     const partsRef = window.__fb.collection(state.db, 'events', eventId, 'participants');
 
     const unsubEvent = window.__fb.onSnapshot(eventRef, (snap) => {
+      console.log('[Scheduler] Received event snapshot.');
       if (!snap.exists()) {
+        console.error(`[Scheduler] Event document ${eventId} does not exist.`);
         showStatus('Error: Event not found or has been deleted.', true);
         return;
       }
-      hideStatus();
       const d = snap.data();
+      if (!d) {
+        console.error(`[Scheduler] Event document ${eventId} has no data.`);
+        showStatus('Error: Event data is empty or corrupted.', true);
+        return;
+      }
+      console.log('[Scheduler] Event data:', d);
+
+      hideStatus();
       state.isHost = !!(state.auth?.currentUser && d.hostUid === state.auth.currentUser.uid);
       
       const metaChanged =
@@ -731,6 +755,9 @@
       
       updateControlsForRole();
       isFirstEventSnapshot = false;
+    }, (error) => {
+      console.error(`[Scheduler] Error subscribing to event ${eventId}:`, error);
+      showStatus(`Error loading event. Check console for details. (Code: ${error.code})`, true);
     });
 
     const unsubParts = window.__fb.onSnapshot(partsRef, (qs) => {
