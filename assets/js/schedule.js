@@ -65,16 +65,22 @@
   init();
 
   function init() {
+    console.log('🚀 Page initializing...');
     restoreFromURL();
+    console.log('📋 Event ID from URL:', state.eventId);
     if (state.eventId) {
+      console.log('⏳ Loading event:', state.eventId);
       showStatus('Loading event...');
       // Don't disable entire form yet - let participants interact with grid immediately
       // Actual settings will be locked via updateControlsForRole() once event loads
       if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
+        console.log('❌ Firebase config missing');
         showStatus('Live sharing is not configured. Cannot load event.', true);
         return;
       }
+      console.log('✅ Firebase config found');
     } else {
+      console.log('ℹ️ No event ID, loading local draft');
       // Not loading a shared event, restore local draft
       restoreDraft();
     }
@@ -97,8 +103,11 @@
     if (typeof window.initCalendar === 'function') window.initCalendar();
     if (state.startDate && state.endDate) renderGrid();
     // Initialize Firebase lazily after UI is ready
+    console.log('🔥 Calling initFirebase...');
     if (typeof window.initFirebase === 'function') window.initFirebase();
+    console.log('🎛️ Updating controls for role...');
     updateControlsForRole();
+    console.log('✅ Init complete');
   }
 
   function getMeKey() {
@@ -561,26 +570,48 @@
 
   window.initFirebase = async function initFirebase() {
     try {
-      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") return;
+      console.log('🔥 initFirebase called');
+      if (!window.FIREBASE_CONFIG || window.FIREBASE_CONFIG.apiKey === "YOUR_API_KEY") {
+        console.log('❌ No Firebase config');
+        return;
+      }
+      console.log('📥 Loading Firebase modules...');
       const { appMod, fsMod, auMod } = await firebaseModules();
       const { initializeApp } = appMod;
       const { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, enableIndexedDbPersistence, serverTimestamp } = fsMod;
       const { getAuth, signInAnonymously, onAuthStateChanged } = auMod;
 
+      console.log('🔧 Initializing Firebase app...');
       const app = initializeApp(window.FIREBASE_CONFIG);
+      console.log('📊 Setting up Firestore...');
       const db = getFirestore(app);
+      console.log('🔐 Setting up Auth...');
       const auth = getAuth(app);
-      try { await enableIndexedDbPersistence(db); } catch (_) {}
+      try {
+        console.log('💾 Enabling offline persistence...');
+        await enableIndexedDbPersistence(db);
+        console.log('✅ Offline persistence enabled');
+      } catch (e) {
+        console.log('⚠️ Offline persistence failed:', e.message);
+      }
       state.db = db;
       state.auth = auth;
+      console.log('✅ Firebase initialized, db:', !!db, 'auth:', !!auth);
 
       onAuthStateChanged(auth, (u) => {
-        if (u && state.eventId) window.subscribeToEvent(state.eventId);
+        console.log('🔄 Auth state changed:', !!u, 'has eventId:', !!state.eventId);
+        if (u && state.eventId) {
+          console.log('🔗 Subscribing to event:', state.eventId);
+          window.subscribeToEvent(state.eventId);
+        }
       });
 
       if (state.eventId) {
+        console.log('🚀 Loading event:', state.eventId);
         await window.ensureSignedIn();
         window.subscribeToEvent(state.eventId);
+      } else {
+        console.log('ℹ️ No event ID, not subscribing');
       }
 
       // Store module fns on window for later use
@@ -667,12 +698,22 @@
   };
 
   window.subscribeToEvent = function subscribeToEvent(eventId) {
-    if (state.unsub) { try { state.unsub(); } catch (_) {} state.unsub = null; }
+    console.log('📡 subscribeToEvent called with:', eventId, 'db exists:', !!state.db);
+    if (state.unsub) {
+      try { state.unsub(); } catch (_) {}
+      state.unsub = null;
+    }
+    if (!state.db) {
+      console.log('❌ No database connection, cannot subscribe');
+      return;
+    }
     const eventRef = window.__fb.doc(state.db, 'events', eventId);
     const partsRef = window.__fb.collection(state.db, 'events', eventId, 'participants');
 
     const unsubEvent = window.__fb.onSnapshot(eventRef, (snap) => {
+      console.log('📄 Event snapshot received:', snap.exists() ? 'exists' : 'missing');
       if (!snap.exists()) {
+        console.log('❌ Event not found:', eventId);
         showStatus('Error: Event not found or has been deleted.', true);
         return;
       }
