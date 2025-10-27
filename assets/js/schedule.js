@@ -615,6 +615,17 @@
       state.auth = auth;
       console.log('[Scheduler] Firebase initialized successfully.');
 
+      // Store compat API functions on window for later use (BEFORE auth listeners)
+      window.__fb = {
+        doc: (db, col, docId) => db.collection(col).doc(docId),
+        collection: (db, col) => db.collection(col),
+        setDoc: (ref, data, options) => ref.set(data, options),
+        getDoc: (ref) => ref.get(),
+        onSnapshot: (ref, callback, errorCallback) => ref.onSnapshot(callback, errorCallback),
+        serverTimestamp: () => firebase.firestore.FieldValue.serverTimestamp(),
+        signInAnonymously: (auth) => auth.signInAnonymously()
+      };
+
       auth.onAuthStateChanged((u) => {
         if (u) {
           console.log(`[Scheduler] Auth state changed: Signed in as ${u.uid}`);
@@ -633,17 +644,6 @@
         console.log(`[Scheduler] Signed in, subscribing to event now...`);
         window.subscribeToEvent(state.eventId);
       }
-
-      // Store compat API functions on window for later use
-      window.__fb = {
-        doc: (db, col, docId) => db.collection(col).doc(docId),
-        collection: (db, col) => db.collection(col),
-        setDoc: (ref, data, options) => ref.set(data, options),
-        getDoc: (ref) => ref.get(),
-        onSnapshot: (ref, callback, errorCallback) => ref.onSnapshot(callback, errorCallback),
-        serverTimestamp: () => firebase.firestore.FieldValue.serverTimestamp(),
-        signInAnonymously: (auth) => auth.signInAnonymously()
-      };
     } catch (e) {
       console.error('[Scheduler] Firebase init failed:', e);
       showStatus(`Live sharing failed to initialize. Check console for errors.`, true);
