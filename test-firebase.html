@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Connection Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #2575fc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #1a5cd7; }
+    </style>
+</head>
+<body>
+    <h1>🔥 Firebase Connection Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Configuration Check</h2>
+        <div id="configStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Firebase Initialization</h2>
+        <div id="initStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Authentication Test</h2>
+        <button onclick="testAuth()">Test Anonymous Sign-In</button>
+        <div id="authStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Firestore Read Test</h2>
+        <input type="text" id="eventIdInput" placeholder="Enter event ID" style="padding: 8px; width: 300px;">
+        <button onclick="testRead()">Test Read Event</button>
+        <div id="readStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Firestore Write Test</h2>
+        <button onclick="testWrite()">Test Create Event</button>
+        <div id="writeStatus"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <pre id="consoleOutput"></pre>
+    </div>
+
+    <script src="assets/js/firebase-config.js"></script>
+    <script type="module">
+        const log = [];
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn
+        };
+
+        function addLog(level, ...args) {
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' ');
+            log.push(`[${level}] ${msg}`);
+            document.getElementById('consoleOutput').textContent = log.join('\n');
+            originalConsole[level](...args);
+        }
+
+        console.log = (...args) => addLog('LOG', ...args);
+        console.error = (...args) => addLog('ERROR', ...args);
+        console.warn = (...args) => addLog('WARN', ...args);
+
+        let db, auth, app;
+
+        // Test 1: Check Config
+        const configDiv = document.getElementById('configStatus');
+        if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY') {
+            configDiv.innerHTML = `<div class="status success">✅ Firebase config found</div>
+                <pre>${JSON.stringify(window.FIREBASE_CONFIG, null, 2)}</pre>`;
+            console.log('Config check passed');
+        } else {
+            configDiv.innerHTML = `<div class="status error">❌ Firebase config missing or invalid</div>`;
+            console.error('Config check failed');
+        }
+
+        // Test 2: Initialize Firebase
+        const initDiv = document.getElementById('initStatus');
+        async function initFirebase() {
+            try {
+                console.log('Starting Firebase initialization...');
+                const v = '10.13.2';
+                const [appMod, fsMod, auMod] = await Promise.all([
+                    import(`https://www.gstatic.com/firebasejs/${v}/firebase-app.js`),
+                    import(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore.js`),
+                    import(`https://www.gstatic.com/firebasejs/${v}/firebase-auth.js`)
+                ]);
+
+                const { initializeApp } = appMod;
+                const { getFirestore, doc, getDoc, setDoc, collection, serverTimestamp } = fsMod;
+                const { getAuth, signInAnonymously } = auMod;
+
+                app = initializeApp(window.FIREBASE_CONFIG);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                window.testDb = db;
+                window.testAuth = auth;
+                window.testFunctions = { doc, getDoc, setDoc, collection, serverTimestamp, signInAnonymously };
+
+                initDiv.innerHTML = `<div class="status success">✅ Firebase initialized successfully</div>
+                    <pre>App name: ${app.name}\nProject ID: ${window.FIREBASE_CONFIG.projectId}</pre>`;
+                console.log('Firebase initialized successfully');
+            } catch (error) {
+                initDiv.innerHTML = `<div class="status error">❌ Firebase initialization failed</div>
+                    <pre>${error.message}\n${error.stack}</pre>`;
+                console.error('Firebase init error:', error);
+            }
+        }
+
+        // Test 3: Authentication
+        window.testAuth = async function() {
+            const authDiv = document.getElementById('authStatus');
+            try {
+                console.log('Testing anonymous authentication...');
+                authDiv.innerHTML = `<div class="status info">⏳ Signing in anonymously...</div>`;
+                
+                const result = await window.testFunctions.signInAnonymously(window.testAuth);
+                authDiv.innerHTML = `<div class="status success">✅ Authentication successful</div>
+                    <pre>User ID: ${result.user.uid}</pre>`;
+                console.log('Auth successful:', result.user.uid);
+            } catch (error) {
+                authDiv.innerHTML = `<div class="status error">❌ Authentication failed</div>
+                    <pre>Error code: ${error.code}\nMessage: ${error.message}</pre>`;
+                console.error('Auth error:', error);
+            }
+        };
+
+        // Test 4: Read Event
+        window.testRead = async function() {
+            const readDiv = document.getElementById('readStatus');
+            const eventId = document.getElementById('eventIdInput').value.trim();
+            
+            if (!eventId) {
+                readDiv.innerHTML = `<div class="status error">❌ Please enter an event ID</div>`;
+                return;
+            }
+
+            try {
+                console.log('Testing read for event:', eventId);
+                readDiv.innerHTML = `<div class="status info">⏳ Reading event ${eventId}...</div>`;
+                
+                const eventRef = window.testFunctions.doc(window.testDb, 'events', eventId);
+                const snap = await window.testFunctions.getDoc(eventRef);
+                
+                if (snap.exists()) {
+                    const data = snap.data();
+                    readDiv.innerHTML = `<div class="status success">✅ Event found and readable</div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    console.log('Read successful:', data);
+                } else {
+                    readDiv.innerHTML = `<div class="status error">❌ Event not found</div>
+                        <p>The event ID "${eventId}" does not exist in the database.</p>`;
+                    console.error('Event not found:', eventId);
+                }
+            } catch (error) {
+                readDiv.innerHTML = `<div class="status error">❌ Read failed</div>
+                    <pre>Error code: ${error.code}\nMessage: ${error.message}</pre>`;
+                console.error('Read error:', error);
+            }
+        };
+
+        // Test 5: Write Event
+        window.testWrite = async function() {
+            const writeDiv = document.getElementById('writeStatus');
+            try {
+                console.log('Testing write operation...');
+                writeDiv.innerHTML = `<div class="status info">⏳ Creating test event...</div>`;
+                
+                const testId = 'test_' + Math.random().toString(36).substr(2, 9);
+                const eventRef = window.testFunctions.doc(window.testDb, 'events', testId);
+                
+                await window.testFunctions.setDoc(eventRef, {
+                    eventName: 'Test Event',
+                    createdAt: window.testFunctions.serverTimestamp(),
+                    hostUid: window.testAuth.currentUser?.uid || null,
+                    startDate: '2025-01-01',
+                    endDate: '2025-01-07',
+                    dayStart: '09:00',
+                    dayEnd: '18:00',
+                    slotMinutes: 30,
+                    daysOfWeek: [1,2,3,4,5]
+                });
+                
+                writeDiv.innerHTML = `<div class="status success">✅ Write successful</div>
+                    <pre>Created event: ${testId}\nURL: ${location.origin}/schedule.html?event=${testId}</pre>`;
+                console.log('Write successful:', testId);
+            } catch (error) {
+                writeDiv.innerHTML = `<div class="status error">❌ Write failed</div>
+                    <pre>Error code: ${error.code}\nMessage: ${error.message}</pre>
+                    <p><strong>This usually means your Firestore security rules need to be updated.</strong></p>`;
+                console.error('Write error:', error);
+            }
+        };
+
+        // Auto-initialize
+        initFirebase();
+    </script>
+</body>
+</html>
+
