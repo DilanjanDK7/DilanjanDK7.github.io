@@ -36,7 +36,7 @@
             <div class="scheduler-layout">
                 <aside class="scheduler-panel" aria-label="Event settings">
                     <h2 style="margin-top:0">Event</h2>
-                    <div class="form-grid">
+                    <form onsubmit="return false;" class="form-grid">
                         <label>
                             <span>Your name (optional)</span>
                             <input id="participantName" type="text" placeholder="Your name" autocomplete="name">
@@ -45,7 +45,7 @@
                             <span>Access password</span>
                             <input id="participantPassword" type="password" placeholder="Optional, for re-editing">
                         </label>
-                    </div>
+                    </form>
 
                     <h3 id="eventSettingsHeader">Event Settings</h3>
                     <fieldset id="eventSettings" style="border:0; padding:0; margin:0;">
