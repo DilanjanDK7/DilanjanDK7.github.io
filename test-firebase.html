@@ -87,7 +87,7 @@
         <pre id="consoleOutput"></pre>
     </div>
 
-    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/firebase-config.js?v=2"></script>
     <script>
         const log = [];
         const originalConsole = {
@@ -107,15 +107,32 @@
 
         let app, db, auth;
 
+        async function showConfigFileIfMissing() {
+            if (window.FIREBASE_CONFIG) return;
+            try {
+                const res = await fetch('assets/js/firebase-config.js?v=2', { cache: 'no-store' });
+                const text = await res.text();
+                document.getElementById('configStatus').innerHTML = `<div class=\"status error\">❌ Firebase config global not found</div>
+                    <p>Fetched <code>assets/js/firebase-config.js</code> content:</p>
+                    <pre>${text.replace(/</g,'&lt;')}</pre>`;
+                console.warn('Fetched firebase-config.js content for diagnostics');
+            } catch (e) {
+                document.getElementById('configStatus').innerHTML = `<div class=\"status error\">❌ Firebase config missing and file fetch failed</div>
+                    <pre>${e.message}</pre>`;
+                console.error('Failed to fetch firebase-config.js', e);
+            }
+        }
+
         // Test 1: Config
         const configDiv = document.getElementById('configStatus');
         if (window.FIREBASE_CONFIG && window.FIREBASE_CONFIG.apiKey !== 'YOUR_API_KEY') {
-            configDiv.innerHTML = `<div class="status success">✅ Firebase config found</div>
+            configDiv.innerHTML = `<div class=\"status success\">✅ Firebase config found</div>
                 <pre>${JSON.stringify(window.FIREBASE_CONFIG, null, 2)}</pre>`;
             console.log('Config check passed');
         } else {
-            configDiv.innerHTML = `<div class="status error">❌ Firebase config missing or invalid</div>`;
+            configDiv.innerHTML = `<div class=\"status error\">❌ Firebase config missing or invalid</div>`;
             console.error('Config check failed');
+            showConfigFileIfMissing();
         }
 
         // Test 2: Initialize (compat)
@@ -123,14 +140,14 @@
         (function initFirebaseCompat(){
             try {
                 console.log('Starting Firebase (compat) initialization...');
-                app = firebase.initializeApp(window.FIREBASE_CONFIG);
+                app = firebase.initializeApp(window.FIREBASE_CONFIG || {});
                 db = firebase.firestore();
                 auth = firebase.auth();
-                initDiv.innerHTML = `<div class="status success">✅ Firebase initialized successfully</div>
-                    <pre>App name: ${app.name}\nProject ID: ${window.FIREBASE_CONFIG.projectId}</pre>`;
+                initDiv.innerHTML = `<div class=\"status success\">✅ Firebase initialized successfully</div>
+                    <pre>App name: ${app.name}\nProject ID: ${(window.FIREBASE_CONFIG||{}).projectId || '(unknown)'}</pre>`;
                 console.log('Firebase (compat) initialized successfully');
             } catch (error) {
-                initDiv.innerHTML = `<div class="status error">❌ Firebase initialization failed</div>
+                initDiv.innerHTML = `<div class=\"status error\">❌ Firebase initialization failed</div>
                     <pre>${error.message}\n${error.stack}</pre>`;
                 console.error('Firebase init error:', error);
             }
