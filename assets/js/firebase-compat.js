@@ -23,6 +23,11 @@
     // Dispatch custom event so schedule.js knows Firebase is ready
     window.firebaseReady = true;
     window.dispatchEvent(new CustomEvent('firebase-compat-ready'));
+    // Also try to call initFirebase immediately if it exists
+    if (typeof window.initFirebase === 'function') {
+      console.log('[Firebase] Calling initFirebase immediately after SDK load');
+      window.initFirebase();
+    }
   }).catch((error) => {
     console.error('[Firebase] Failed to load compat SDKs:', error);
   });
