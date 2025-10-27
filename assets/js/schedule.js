@@ -653,7 +653,7 @@
   window.ensureSignedIn = async function ensureSignedIn() {
     if (!state.auth) return;
     if (state.auth.currentUser) return;
-    await window.__fb.signInAnonymously(state.auth);
+    await state.auth.signInAnonymously();
   };
 
   window.generateId = function generateId() {
