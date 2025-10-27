@@ -665,7 +665,7 @@
     const id = state.eventId || window.generateId();
     const ref = window.__fb.doc(state.db, 'events', id);
     const snap = await window.__fb.getDoc(ref);
-    if (!snap.exists()) {
+    if (!snap.exists) {
       await window.__fb.setDoc(ref, {
         createdAt: window.__fb.serverTimestamp(),
         hostUid: state.auth?.currentUser?.uid || null,
@@ -735,7 +735,7 @@
 
     const unsubEvent = window.__fb.onSnapshot(eventRef, (snap) => {
       console.log('[Scheduler] Received event snapshot.');
-      if (!snap.exists()) {
+      if (!snap.exists) {
         console.error(`[Scheduler] Event document ${eventId} does not exist.`);
         showStatus('Error: Event not found or has been deleted.', true);
         return;
