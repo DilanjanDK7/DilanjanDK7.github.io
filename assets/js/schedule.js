@@ -98,6 +98,7 @@
     }
 
     attachHandlers();
+    document.addEventListener('mouseup', () => { isDragging = false; }, { passive: true });
     // Calendar picker
     if (typeof window.initCalendar === 'function') window.initCalendar();
     
@@ -181,6 +182,8 @@
 
     els.participantName?.addEventListener('blur', autoLoadParticipantData);
     els.participantPassword?.addEventListener('blur', autoLoadParticipantData);
+
+    els.minAvailable?.addEventListener('change', () => computeBest());
 
     // Manual save button for explicit user action
     const saveAvailabilityBtn = document.getElementById('saveAvailabilityBtn');
@@ -309,7 +312,10 @@
   }
 
   function formatISODate(d) {
-    return d.toISOString().slice(0,10);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
 
   function timeStringToMinutes(t) {
@@ -400,25 +406,28 @@
 
   let isDragging = false;
   let dragModeSelect = true; // true => add, false => remove
+  let slotAlreadyToggledThisSession = false; // avoid double-toggle from mousedown + click
 
   function attachSlotHandlers(c, rowIdx) {
     c.addEventListener('mousedown', (e) => {
       e.preventDefault();
-      console.log('[Scheduler] Slot mousedown:', c.dataset.key);
       isDragging = true;
+      slotAlreadyToggledThisSession = true;
       const hasMe = slotHasMe(c.dataset.key);
-      dragModeSelect = !hasMe; // if already selected, drag will remove
+      dragModeSelect = !hasMe;
       toggleMyAvailability(c.dataset.key, dragModeSelect);
       paintSlot(c);
     });
-    document.addEventListener('mouseup', () => { isDragging = false; });
     c.addEventListener('mouseenter', () => {
       if (!isDragging) return;
       toggleMyAvailability(c.dataset.key, dragModeSelect);
       paintSlot(c);
     });
     c.addEventListener('click', () => {
-      console.log('[Scheduler] Slot click:', c.dataset.key, 'Current meKey:', state.meKey);
+      if (slotAlreadyToggledThisSession) {
+        slotAlreadyToggledThisSession = false;
+        return;
+      }
       toggleMyAvailability(c.dataset.key, !slotHasMe(c.dataset.key));
       paintSlot(c);
     });
@@ -450,19 +459,14 @@
     return !!set && set.has(state.meKey);
   }
 
-  function toggleMyAvailability(timeKey, on) {
-    console.log('[Scheduler] toggleMyAvailability:', timeKey, 'on:', on, 'meKey:', state.meKey);
+  function toggleMyAvailability(timeKey, on, skipPersist) {
     const set = ensureSlot(timeKey, true, null, false);
-    if (on) {
-      set.add(state.meKey);
-      console.log('[Scheduler] Added to set. Set size:', set.size, 'Contents:', Array.from(set));
-    } else {
-      set.delete(state.meKey);
-      console.log('[Scheduler] Removed from set. Set size:', set.size);
+    if (on) set.add(state.meKey);
+    else set.delete(state.meKey);
+    if (!skipPersist) {
+      persistDraft();
+      if (typeof window.throttlePersist === 'function') window.throttlePersist();
     }
-    persistDraft();
-    // Persist to backend if joined an event
-    if (typeof window.throttlePersist === 'function') window.throttlePersist();
   }
 
   function paintSlot(cellEl) {
@@ -498,11 +502,22 @@
 
   function computeBest() {
     if (!els.bestSlots) return;
+    const minReq = Number(els.minAvailable?.value || '1');
     const scores = [];
+    const startIso = state.startDate ? formatISODate(state.startDate) : null;
+    const endIso = state.endDate ? formatISODate(state.endDate) : null;
+    const dayStartMin = timeStringToMinutes(state.dayStart);
+    const dayEndMin = timeStringToMinutes(state.dayEnd);
     for (const [dateIso, dayMap] of state.availability.entries()) {
+      if (startIso && dateIso < startIso) continue;
+      if (endIso && dateIso > endIso) continue;
+      const d = parseDateInput(dateIso);
+      if (d && !state.daysOfWeek.has(d.getDay())) continue;
       for (const [timeKey, set] of dayMap.entries()) {
+        const timeStr = timeKey.slice(11);
+        const mins = timeStringToMinutes(timeStr);
+        if (mins < dayStartMin || mins >= dayEndMin) continue;
         const count = set.size;
-        const minReq = Number(els.minAvailable?.value || '1');
         if (count >= minReq) scores.push({ key: timeKey, count });
       }
     }
@@ -522,14 +537,14 @@
       for (let m = startMin; m < endMin; m += slot) {
         const tk = minutesToTimeString(m);
         const key = iso + ' ' + tk;
-        if (mode === 'all') toggleMyAvailability(key, true);
-        else if (mode === 'clear') toggleMyAvailability(key, false);
-        else if (mode === 'invert') toggleMyAvailability(key, !slotHasMe(key));
+        if (mode === 'all') toggleMyAvailability(key, true, true);
+        else if (mode === 'clear') toggleMyAvailability(key, false, true);
+        else if (mode === 'invert') toggleMyAvailability(key, !slotHasMe(key), true);
       }
     }
-    // repaint all
     els.grid?.querySelectorAll('.slot').forEach(paintSlot);
     computeBest();
+    persistDraft();
     if (typeof window.throttlePersist === 'function') window.throttlePersist();
   }
 
@@ -702,9 +717,21 @@
       console.log('[Scheduler] Firebase initialized successfully.');
 
       // Store compat API functions on window for later use (BEFORE auth listeners)
+      // doc(db, col, docId) or doc(db, col, docId, subCol, subDocId, ...) for nested paths
+      // collection(db, col, docId, subCol, ...) for subcollections (ends with collection name)
       window.__fb = {
-        doc: (db, col, docId) => db.collection(col).doc(docId),
-        collection: (db, col) => db.collection(col),
+        doc: (db, ...segments) => {
+          if (segments.length < 2 || segments.length % 2 !== 0) throw new Error('__fb.doc(db, col, docId[, subCol, subDocId, ...]) requires pairs of collection and doc id');
+          let ref = db;
+          for (let i = 0; i < segments.length; i += 2) ref = ref.collection(segments[i]).doc(segments[i + 1]);
+          return ref;
+        },
+        collection: (db, ...segments) => {
+          if (segments.length < 1) throw new Error('__fb.collection(db, col[, docId, subCol, ...]) requires at least collection name');
+          let ref = db;
+          for (let i = 0; i < segments.length - 1; i += 2) ref = ref.collection(segments[i]).doc(segments[i + 1]);
+          return ref.collection(segments[segments.length - 1]);
+        },
         setDoc: (ref, data, options) => ref.set(data, options),
         getDoc: (ref) => ref.get(),
         onSnapshot: (ref, callback, errorCallback) => ref.onSnapshot(callback, errorCallback),

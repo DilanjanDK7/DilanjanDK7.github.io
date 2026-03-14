@@ -42,6 +42,9 @@ Setup (optional, for sharing without JSON):
    - Enable Firestore (Production mode)
 
 2. Security Rules (Firestore)
+
+   Participant documents are keyed by a hash of `eventId|name|password`, not by `request.auth.uid`. Use rules that allow any signed-in user to read/write participant docs (identity is enforced by the shared link and name+password known to the participant):
+
 ```
 rules_version = '2';
 service cloud.firestore {
@@ -52,9 +55,9 @@ service cloud.firestore {
       allow update: if request.auth != null && request.resource.data.hostUid == resource.data.hostUid; // only host updates event meta
       allow delete: if false;
 
-      match /participants/{uid} {
+      match /participants/{participantId} {
         allow read: if true;
-        allow write: if request.auth != null && request.auth.uid == uid; // each user writes only their own availability
+        allow write: if request.auth != null; // participant doc id is hash(eventId|name|password), not uid
       }
     }
   }
