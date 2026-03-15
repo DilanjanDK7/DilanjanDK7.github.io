@@ -156,6 +156,39 @@ header.hero button:hover {
     background: #2575fc;
     color: #fff;
 }
+.hero-mission {
+    font-size: 1rem;
+    opacity: 0.95;
+    max-width: 42ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+.featured-research-section {
+    padding: 2.5rem 1rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.featured-research-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+.research-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.research-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+.research-list li:last-child { border-bottom: 0; }
+.research-list a {
+    color: var(--primary);
+    text-decoration: none;
+}
+.research-list a:hover { text-decoration: underline; }
 .projects-section {
     padding: 3rem 1rem;
     background: var(--surface);
@@ -201,6 +234,23 @@ header.hero button:hover {
 }
 .project-card:hover::before {
     opacity: 1;
+}
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.5rem 0 0.75rem 0;
+    position: relative;
+    z-index: 2;
+}
+.project-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: color-mix(in hsl, var(--primary) 18%, var(--surface));
+    color: var(--primary);
+    border: 1px solid color-mix(in hsl, var(--primary) 35%, transparent);
 }
 .project-link {
     display: inline-block;
@@ -310,6 +360,24 @@ footer {
     font-size: 1rem;
     margin-top: 2rem;
     letter-spacing: 0.5px;
+}
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+}
+.footer-social a {
+    color: #fff;
+    opacity: 0.9;
+}
+.footer-social a:hover { opacity: 1; }
+.footer-social .icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+.nav-cv {
+    font-weight: 600;
 }
 
 /* Scheduler */

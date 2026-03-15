@@ -6,9 +6,11 @@ Personal portfolio for Dilanjan DK (ddiyabal@uwo.ca). Built as a static site and
 
 - `index.html`: Home page
 - `projects/`: Project detail pages
+  - `epiflow.html` (EpiFlow — epilepsy fMRI pipeline)
   - `feature_extraction_container.html`
-  - `fmri_processing_pipeline_epilepsy.html`
   - `qm_fft_feature_package.html`
+  - `brainviz_dk.html`
+- `reading.html`: Reading list
 - `assets/`
   - `css/style.css`: Global styles (light/dark, components)
   - `js/main.js`: Behavior (theme, modal, accessibility, interactions)

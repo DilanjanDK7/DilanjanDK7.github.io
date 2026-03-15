@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feature Extraction Container | Dilanjan DK</title>
-    <meta name="description" content="Dockerized Snakemake pipeline for fMRI feature extraction: ALFF, fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis.">
+    <title>EpiFlow | Dilanjan DK</title>
+    <meta name="description" content="EpiFlow: epilepsy research pipeline — DICOM→BIDS, fMRIPrep preprocessing, and feature extraction for fMRI.">
     <meta name="author" content="Dilanjan DK">
     <meta name="theme-color" content="#2575fc">
-    <link rel="canonical" href="https://dilanjandk7.github.io/projects/feature_extraction_container.html">
-    <meta property="og:title" content="Feature Extraction Container">
-    <meta property="og:description" content="Containerized workflow for advanced fMRI feature extraction and analysis.">
+    <link rel="canonical" href="https://dilanjandk7.github.io/projects/epiflow.html">
+    <meta property="og:title" content="EpiFlow">
+    <meta property="og:description" content="Epilepsy research pipeline: preprocessing and feature extraction for fMRI.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dilanjandk7.github.io/projects/feature_extraction_container.html">
+    <meta property="og:url" content="https://dilanjandk7.github.io/projects/epiflow.html">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://raw.githubusercontent.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self'; upgrade-insecure-requests">
     <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="../assets/manifest.webmanifest">
@@ -35,29 +35,27 @@
         </div>
     </nav>
     <header class="hero">
-        <h1>fMRI Feature Extraction Container</h1>
-        <p>Containerized workflow for advanced fMRI feature extraction and analysis.</p>
+        <h1>EpiFlow</h1>
+        <p>Epilepsy research pipeline: preprocessing and feature extraction for fMRI.</p>
         <a href="../index.html" class="back-link">&larr; Back to Home</a>
     </header>
     <main id="main">
         <section class="project-detail-section">
             <h2>Overview</h2>
-            <p>This project provides a Docker-based pipeline for extracting analytical features from resting-state fMRI data, including ALFF, fALFF, ReHo, Hurst exponent, fractal dimension, QM-FFT, and RSN analysis. The workflow uses Snakemake for management and is designed for reproducibility and scalability.</p>
+            <p>EpiFlow is a combined pipeline for processing fMRI data for epilepsy research, integrating fMRIPrep for preprocessing and a custom suite for feature extraction. Developed by Dilanjan DK at Western University.</p>
             <h3>Key Features</h3>
             <ul>
-                <li>ALFF, fALFF, ReHo, Hurst, Fractal Dimension, QM-FFT, RSN analysis</li>
-                <li>Snakemake workflow management</li>
-                <li>Docker containerization for reproducibility</li>
-                <li>Flexible configuration and modular feature selection</li>
-                <li>Comprehensive documentation and user guides</li>
+                <li>Automated DICOM to BIDS conversion (optional)</li>
+                <li>Preprocessing with fMRIPrep (Docker-based)</li>
+                <li>Feature extraction: ALFF, ReHo, Hurst, Fractal Dimension, QM-FFT, RSN</li>
+                <li>Flexible configuration and modular execution</li>
+                <li>Comprehensive documentation and troubleshooting guides</li>
             </ul>
             <h3>Documentation & Usage</h3>
             <ul>
-                <li><a href="https://github.com/DilanjanDK7/Feature_extraction_Container" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-                <li><a href="https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/USER_GUIDE.md" target="_blank" rel="noopener noreferrer">User Guide</a></li>
-                <li><a href="https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/QUICK_REFERENCE.md" target="_blank" rel="noopener noreferrer">Quick Reference</a></li>
-                <li><a href="https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/RSN_GUIDE.md" target="_blank" rel="noopener noreferrer">RSN Guide</a></li>
-                <li><a href="https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/VISUALIZATION_GUIDE.md" target="_blank" rel="noopener noreferrer">Visualization Guide</a></li>
+                <li><a href="https://github.com/DilanjanDK7/EpiFlow" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                <li><a href="https://github.com/DilanjanDK7/EpiFlow/blob/main/docs/pipeline_details.md" target="_blank" rel="noopener noreferrer">Pipeline Documentation</a></li>
+                <li><a href="https://github.com/DilanjanDK7/EpiFlow/blob/main/Feature_extraction_Container/docs/USER_GUIDE.md" target="_blank" rel="noopener noreferrer">Feature Extraction User Guide</a></li>
             </ul>
             <h3>Contact</h3>
             <p>For questions or collaboration, contact Dilanjan DK at <a href="mailto:ddiyabal@uwo.ca">ddiyabal@uwo.ca</a>.</p>
@@ -74,5 +72,3 @@
     <script src="../assets/js/main.js"></script>
 </body>
 </html>
-
-

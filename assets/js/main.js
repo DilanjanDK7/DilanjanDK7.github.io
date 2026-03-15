@@ -90,10 +90,10 @@
       description: 'Dockerized, Snakemake-managed pipeline for ALFF/fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis with robust docs.',
       link: 'projects/feature_extraction_container.html'
     },
-    fmri_pipeline: {
-      title: 'fMRI Processing Pipeline for Epilepsy',
-      description: 'Automated end-to-end pipeline: DICOM→BIDS (optional), fMRIPrep preprocessing, and advanced feature extraction for epilepsy research.',
-      link: 'projects/fmri_processing_pipeline_epilepsy.html'
+    epiflow: {
+      title: 'EpiFlow',
+      description: 'Epilepsy research pipeline: DICOM→BIDS (optional), fMRIPrep preprocessing, and advanced feature extraction for fMRI.',
+      link: 'projects/epiflow.html'
     }
   };
 

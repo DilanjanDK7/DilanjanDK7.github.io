@@ -3,38 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects | Dilanjan DK</title>
-  <meta name="description" content="Projects by Dilanjan DK in neuroimaging, fMRI processing, and feature extraction.">
+  <title>Reading List | Dilanjan DK</title>
+  <meta name="description" content="Papers and resources I recommend — neuroimaging, computational neuroscience, and open science.">
   <meta name="author" content="Dilanjan DK">
   <meta name="theme-color" content="#2575fc">
-  <link rel="canonical" href="https://dilanjandk7.github.io/projects/">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://raw.githubusercontent.com data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src https://app.diagrams.net; connect-src 'self'; upgrade-insecure-requests">
-  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
-  <link rel="manifest" href="../assets/manifest.webmanifest">
-  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="canonical" href="https://dilanjandk7.github.io/reading.html">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="assets/manifest.webmanifest">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; connect-src 'self'; upgrade-insecure-requests">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <nav class="site-nav" aria-label="Primary">
     <div class="nav-inner">
-      <a class="brand" href="../index.html" aria-label="Home">DDK</a>
+      <a class="brand" href="index.html" aria-label="Home">DDK</a>
       <div class="nav-links">
-        <a href="../about.html">About</a>
-        <a href="../projects/">Projects</a>
-        <a href="../schedule.html">Schedule</a>
-        <a href="../reading.html">Reading</a>
-        <a href="../contact.html">Contact</a>
-        <a href="../assets/documents/cv.pdf" download class="nav-cv">CV</a>
+        <a href="about.html">About</a>
+        <a href="projects/">Projects</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="reading.html" aria-current="page">Reading</a>
+        <a href="contact.html">Contact</a>
+        <a href="assets/documents/cv.pdf" download class="nav-cv">CV</a>
         <button id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false" title="Toggle theme">🌙</button>
       </div>
     </div>
   </nav>
   <header class="hero">
-    <h1>Projects</h1>
-    <p>Selected research, pipelines, and tools.</p>
+    <h1>Reading List</h1>
+    <p>Papers and resources I recommend — neuroimaging, computational neuroscience, and open science.</p>
   </header>
-  <main id="main" class="projects-section">
-    <div class="projects-grid" id="projectsGrid"></div>
+  <main id="main" class="projects-section" style="max-width: 720px; margin: 0 auto; padding: 2rem 1rem;">
+    <p>A curated list of papers, tutorials, and tools that have shaped my work. I’ll add more over time.</p>
+    <ul class="research-list" style="margin-top: 1.5rem;">
+      <li><strong>BIDS</strong> — Brain Imaging Data Structure specification. <a href="https://bids-specification.readthedocs.io/" target="_blank" rel="noopener noreferrer">Specification</a></li>
+      <li><strong>fMRIPrep</strong> — Robust fMRI preprocessing pipeline. <a href="https://fmriprep.org/" target="_blank" rel="noopener noreferrer">Documentation</a></li>
+      <li><strong>Nilearn</strong> — Machine learning for neuroimaging in Python. <a href="https://nilearn.github.io/" target="_blank" rel="noopener noreferrer">Docs</a></li>
+    </ul>
   </main>
   <footer>
     <p>&copy; 2026 Dilanjan DK. All rights reserved.</p>
@@ -44,32 +49,6 @@
       <a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener noreferrer" aria-label="ORCID"><svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm-2 16.326H7.044V7.674H10v8.652zm4 0h-2.956V7.674H14v8.652zm-2-9.674a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg></a>
     </div>
   </footer>
-  <script src="../assets/js/main.js"></script>
-  <script>
-    fetch('../assets/data/projects.json')
-      .then(r => r.json())
-      .then(items => {
-        const grid = document.getElementById('projectsGrid');
-        grid.innerHTML = items.map(p => `
-          <div class="project-card" data-project="${p.key}">
-            <img src="${p.image}" loading="lazy" alt="${p.title}" class="project-img" />
-            <h3>${p.title}</h3>
-            ${(p.tags && p.tags.length) ? `<div class="project-tags">${p.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}</div>` : ''}
-            <p>${p.description}</p>
-            <a href="${p.link}" class="project-link">Learn More</a>
-          </div>
-        `).join('');
-      });
-  </script>
+  <script src="assets/js/main.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
