@@ -12,6 +12,7 @@ const navLinks = [
 <nav class="site-nav sticky top-0 z-[100] bg-white/5 dark:bg-black/30 backdrop-blur-xl border-b border-white/10" aria-label="Primary">
   <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
     <a class="brand text-lg font-extrabold tracking-wide text-foreground hover:text-primary transition-colors" href="/" aria-label="Home">DDK</a>
+    <a class="brand text-lg font-extrabold tracking-wide text-foreground hover:text-primary transition-colors" href="/" aria-label="Home">Dilanjan Diyabalanage</a>
     <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 md:gap-6">
       {navLinks.map(({ href, label }) => {
         const isActive = path === href || (href !== '/' && path.startsWith(href));
