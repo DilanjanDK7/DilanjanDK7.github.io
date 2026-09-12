@@ -17,6 +17,7 @@ Thumbs.db
 
 # Astro build output (at repo root when building from site/)
 dist/
+site/.astro/
 
 # Site (Astro) node modules
 site/node_modules/

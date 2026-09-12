@@ -6,7 +6,7 @@ Personal portfolio for Dilanjan DK (ddiyabal@uwo.ca). Deployable via GitHub Page
 
 The live site is built from the **Astro + Tailwind** app in the `site/` folder and deployed via **GitHub Actions**.
 
-- **Build:** From repo root, run `cd site && npm install && npm run build`. Output goes to `dist/`.
+- **Build:** From repo root, run `cd site && npm ci && npm run check && npm run build`. Output goes to `dist/`.
 - **Deploy:** Push to `main`; the workflow builds and deploys `dist/` to GitHub Pages. In repository Settings → Pages, set Source to **GitHub Actions**.
 - **Local dev:** `cd site && npm run dev` then open http://localhost:4321
 

@@ -10,8 +10,8 @@ import Layout from '../layouts/Layout.astro';
     <h1 id="pageTitle" class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Plan a Time Together</h1>
     <p class="mt-2 text-muted">Create an event, mark your availability, and find the best overlap.</p>
   </header>
-  <main class="py-8 px-4" id="main">
-    <section class="scheduler max-w-6xl mx-auto" aria-label="Scheduling tool">
+  <section class="py-8 px-4" aria-label="Scheduling tool">
+    <div class="scheduler max-w-6xl mx-auto">
       <div class="scheduler-layout">
         <aside class="scheduler-panel" aria-label="Event settings">
           <h2 class="text-xl font-semibold text-foreground mt-0">Event</h2>
@@ -134,10 +134,10 @@ import Layout from '../layouts/Layout.astro';
           </div>
         </section>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
-  <script src="/assets/js/firebase-config.js"></script>
-  <script src="/assets/js/firebase-compat.js"></script>
-  <script src="/assets/js/schedule.js"></script>
+  <script is:inline src="/assets/js/firebase-config.js"></script>
+  <script is:inline src="/assets/js/firebase-compat.js"></script>
+  <script is:inline src="/assets/js/schedule.js"></script>
 </Layout>

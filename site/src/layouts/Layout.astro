@@ -13,7 +13,9 @@ interface Props {
 }
 const { title, description, canonicalPath, extraHead, ogImage } = Astro.props;
 const site = 'https://dilanjandk7.github.io';
-const canonical = canonicalPath ? `${site}${canonicalPath}` : `${site}${Astro.url.pathname}`;
+const path = canonicalPath || Astro.url.pathname;
+const normalizedPath = path === '/' ? path : `/${path.replace(/^\/+|\/+$/g, '')}/`;
+const canonical = `${site}${normalizedPath}`;
 const image = ogImage ? (ogImage.startsWith('http') ? ogImage : `${site}${ogImage}`) : null;
 ---
 <!DOCTYPE html>
@@ -30,6 +32,7 @@ const image = ogImage ? (ogImage.startsWith('http') ? ogImage : `${site}${ogImag
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Dilanjan DK" />
     {image && <meta property="og:image" content={image} />}
     {image && <meta property="og:image:width" content="1200" />}
     {image && <meta property="og:image:height" content="630" />}

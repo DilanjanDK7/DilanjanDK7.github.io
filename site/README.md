@@ -6,7 +6,7 @@ This folder contains the Astro + Tailwind build for the Dilanjan DK portfolio. T
 
 ```bash
 cd site
-npm install
+npm ci
 ```
 
 ## Development
@@ -21,6 +21,12 @@ Open http://localhost:4321
 
 ```bash
 npm run build
+```
+
+## Validation
+
+```bash
+npm run check
 ```
 
 Output is written to `../dist` (repo root). The GitHub Actions workflow runs this and deploys `dist/` to GitHub Pages.
