@@ -14,6 +14,7 @@
     // availability map: isoDate -> { timeKey -> Set(participantName) }
     availability: new Map(),
     meKey: null,
+    anonymousToken: null,
     participantId: null,
     eventId: null,
     db: null,
@@ -114,8 +115,29 @@
   }
 
   function getMeKey() {
-    const name = (els.participantName?.value || '').trim() || 'Me';
-    return name;
+    const name = (els.participantName?.value || '').trim();
+    if (name) return name;
+    return `Guest-${getAnonymousToken()}`;
+  }
+
+  function getAnonymousToken() {
+    if (state.anonymousToken) return state.anonymousToken;
+    const storageKey = 'scheduleParticipantToken';
+    try {
+      const existing = localStorage.getItem(storageKey);
+      if (existing && /^[a-z0-9]{8}$/i.test(existing)) {
+        state.anonymousToken = existing;
+        return existing;
+      }
+      const bytes = crypto.getRandomValues(new Uint8Array(4));
+      const token = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+      localStorage.setItem(storageKey, token);
+      state.anonymousToken = token;
+      return token;
+    } catch (_) {
+      state.anonymousToken = Math.random().toString(16).slice(2, 10);
+      return state.anonymousToken;
+    }
   }
 
   function getPassword() {
@@ -1204,4 +1226,3 @@
 
 // Firebase helpers
  
-
