@@ -53,6 +53,20 @@ const focusAreas = [
   'EEG source reconstruction and dynamical features',
   'Reproducible scientific software and open research tools',
 ];
+
+const industryStrengths = [
+  ['Scientific software', 'Python-based tools and packages for neuroimaging, signal analysis, visualization, and research automation.'],
+  ['Production workflows', 'Containerized and workflow-managed systems using Docker and Snakemake for repeatable analysis.'],
+  ['Data-intensive analysis', 'fMRI, EEG, HDF5, 3D data, feature extraction, and interpretable computational methods.'],
+  ['Technical communication', 'Documentation, user guides, troubleshooting, and clear translation of complex research systems.'],
+];
+
+const industryProjects = [
+  { name: 'EpiFlow', detail: 'An epilepsy fMRI pipeline spanning optional DICOM-to-BIDS conversion, fMRIPrep preprocessing, and advanced feature extraction.' },
+  { name: 'Feature Extraction Container', detail: 'A Dockerized, Snakemake-managed workflow for ALFF/fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis.' },
+  { name: 'BrainViz DK', detail: 'A brain visualization toolkit for interactive 3D rendering and neuroimaging data exploration.' },
+  { name: 'QM FFT Feature Package', detail: 'A high-performance Python package for NUFFT-based 3D analysis, spectral metrics, HDF5 I/O, and visualization.' },
+];
 ---
 
 <Layout
@@ -84,6 +98,12 @@ const focusAreas = [
       </aside>
 
       <div class="space-y-16">
+        <div class="rounded-[1.25rem] border border-border bg-card p-2 flex flex-wrap gap-2" role="tablist" aria-label="CV versions">
+          <button id="academicTab" type="button" role="tab" aria-selected="true" aria-controls="academicPanel" class="cv-tab rounded-full px-4 py-2 text-sm font-semibold bg-primary text-white">Academic CV</button>
+          <button id="industryTab" type="button" role="tab" aria-selected="false" aria-controls="industryPanel" class="cv-tab rounded-full px-4 py-2 text-sm font-semibold text-muted hover:text-foreground">Industry CV</button>
+        </div>
+
+        <div id="academicPanel" role="tabpanel" aria-labelledby="academicTab" class="cv-panel space-y-16">
         <section aria-labelledby="education-title">
           <p class="section-kicker">01 / Education</p>
           <h2 id="education-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Education</h2>
@@ -125,7 +145,67 @@ const focusAreas = [
           <p class="mt-3 max-w-2xl text-muted leading-relaxed">For research, collaboration, or scientific software conversations, email me or connect through LinkedIn.</p>
           <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Get in touch <span aria-hidden="true">↗</span></a>
         </section>
+        </div>
+
+        <div id="industryPanel" role="tabpanel" aria-labelledby="industryTab" class="cv-panel hidden space-y-16">
+          <section aria-labelledby="industry-strengths-title">
+            <p class="section-kicker">01 / Capabilities</p>
+            <h2 id="industry-strengths-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Research engineering, made useful.</h2>
+            <div class="mt-6 grid sm:grid-cols-2 gap-4">
+              {industryStrengths.map(([title, detail]) => (
+                <article class="rounded-[1.25rem] border border-border bg-card p-5">
+                  <h3 class="text-xl font-semibold text-foreground">{title}</h3>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{detail}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section aria-labelledby="industry-projects-title">
+            <p class="section-kicker">02 / Selected systems</p>
+            <h2 id="industry-projects-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Tools built for real workflows.</h2>
+            <div class="mt-6 border-y border-border divide-y divide-border">
+              {industryProjects.map((project) => (
+                <article class="py-6">
+                  <h3 class="text-xl font-semibold text-foreground">{project.name}</h3>
+                  <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{project.detail}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Industry contact invitation">
+            <p class="section-kicker">03 / Connect</p>
+            <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Building a research product or pipeline?</h2>
+            <p class="mt-3 max-w-2xl text-muted leading-relaxed">I am interested in collaborations where rigorous scientific thinking meets reliable implementation.</p>
+            <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Start a conversation <span aria-hidden="true">↗</span></a>
+          </section>
+        </div>
       </div>
     </div>
   </div>
 </Layout>
+
+<script>
+  const academicTab = document.getElementById('academicTab');
+  const industryTab = document.getElementById('industryTab');
+  const academicPanel = document.getElementById('academicPanel');
+  const industryPanel = document.getElementById('industryPanel');
+
+  function setCvMode(mode: 'academic' | 'industry') {
+    const academic = mode === 'academic';
+    academicPanel?.classList.toggle('hidden', !academic);
+    industryPanel?.classList.toggle('hidden', academic);
+    academicTab?.setAttribute('aria-selected', String(academic));
+    industryTab?.setAttribute('aria-selected', String(!academic));
+    academicTab?.classList.toggle('bg-primary', academic);
+    academicTab?.classList.toggle('text-white', academic);
+    academicTab?.classList.toggle('text-muted', !academic);
+    industryTab?.classList.toggle('bg-primary', !academic);
+    industryTab?.classList.toggle('text-white', !academic);
+    industryTab?.classList.toggle('text-muted', academic);
+  }
+
+  academicTab?.addEventListener('click', () => setCvMode('academic'));
+  industryTab?.addEventListener('click', () => setCvMode('industry'));
+</script>
