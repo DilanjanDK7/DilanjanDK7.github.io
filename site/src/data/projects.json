@@ -30,5 +30,13 @@
     "link": "/projects/brainviz_dk",
     "image": "/assets/images/projects/brainviz-dk.png",
     "tags": ["Python", "3D", "Neuroimaging", "Open Source"]
+  },
+  {
+    "key": "live_market_analyzer",
+    "title": "Live Market Analyzer",
+    "description": "Planned research and analytics workspace for exploring live market data, signals, and interpretable visual summaries.",
+    "link": "/projects/live-market-analyzer",
+    "image": "/assets/images/projects/neuroimaging-system.jpg",
+    "tags": ["Planned", "Python", "Data", "Analytics"]
   }
 ]
