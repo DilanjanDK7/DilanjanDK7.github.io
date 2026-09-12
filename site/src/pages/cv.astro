@@ -1,0 +1,131 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const education = [
+  {
+    period: '2022 - Present',
+    degree: 'PhD Candidate in Physics',
+    institution: 'University of Western Ontario',
+    detail: 'Collaborative Specialization in Machine Learning in Health and Biomedical Sciences.',
+  },
+  {
+    period: '2021 - 2022',
+    degree: 'MSc in Physics',
+    institution: 'University of Western Ontario',
+    detail: 'Graduate research in computational physics and brain-data analysis.',
+  },
+  {
+    period: '2016 - 2020',
+    degree: 'BSc (Hons.) in Physics',
+    institution: 'University of Colombo, Sri Lanka',
+    detail: 'Special degree, Second Upper Division. GPA: 3.59.',
+  },
+];
+
+const research = [
+  {
+    period: '2022 - Present',
+    role: 'PhD Research Assistant',
+    institution: 'University of Western Ontario',
+    project: 'Enhancing Neuroimaging Analysis through Physics-based Models and Deep Learning',
+    detail: 'Developing computational models and machine learning methods to interpret complex neuroimaging data.',
+  },
+  {
+    period: '2021 - 2022',
+    role: "Master's Research Assistant",
+    institution: 'University of Western Ontario',
+    project: 'Analysis of Source Reconstructed EEG Data by a Model Inspired by Quantum Mechanics',
+    detail: 'Modeling and reconstructing EEG data to extract dynamical features and relate them to spatial information.',
+  },
+  {
+    period: '2019 - 2022',
+    role: 'Undergraduate Research Assistant',
+    institution: 'Department of Physics, University of Colombo',
+    project: 'Investigating Sonoluminescence Bubble Dynamics in Ionic Solutions',
+    detail: 'Undergraduate research in experimental and computational physics.',
+  },
+];
+
+const focusAreas = [
+  'Clinical neuroimaging and fMRI analysis',
+  'Physics-informed neural networks',
+  'Machine learning for health and biomedical sciences',
+  'EEG source reconstruction and dynamical features',
+  'Reproducible scientific software and open research tools',
+];
+---
+
+<Layout
+  title="Curriculum Vitae | Dilanjan Diyabalanage"
+  description="Academic and research profile of Dilanjan Diyabalanage, a computational neuroscientist and PhD candidate in Physics at Western University."
+  ogImage="/assets/images/Epiflow.png"
+>
+  <header class="hero-shell px-4 py-16 md:py-24">
+    <div class="max-w-6xl mx-auto">
+      <p class="eyebrow">Academic profile / research CV</p>
+      <h1 class="mt-5 max-w-4xl text-5xl md:text-7xl font-bold leading-[0.95] tracking-[-0.03em] text-foreground">Dilanjan Diyabalanage</h1>
+      <p class="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-foreground/75">Computational neuroscientist and PhD candidate working at the intersection of physics, machine learning, and neuroimaging.</p>
+      <div class="mt-8 flex flex-wrap gap-3 text-sm text-muted">
+        <a href="mailto:ddiyabal@uwo.ca" class="rounded-full border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors">ddiyabal@uwo.ca</a>
+        <a href="https://www.linkedin.com/in/dilanjandk" target="_blank" rel="noopener noreferrer" class="rounded-full border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors">LinkedIn ↗</a>
+        <a href="https://orcid.org/0009-0004-6672-2636" target="_blank" rel="noopener noreferrer" class="rounded-full border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors">ORCID ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+    <div class="grid lg:grid-cols-[0.65fr_1.35fr] gap-12">
+      <aside class="lg:sticky lg:top-24 self-start">
+        <p class="section-kicker">At a glance</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Research that connects models to meaning.</h2>
+        <ul class="mt-6 space-y-3 text-sm leading-relaxed text-muted">
+          {focusAreas.map((area) => <li class="flex gap-3"><span class="text-primary" aria-hidden="true">/</span><span>{area}</span></li>)}
+        </ul>
+      </aside>
+
+      <div class="space-y-16">
+        <section aria-labelledby="education-title">
+          <p class="section-kicker">01 / Education</p>
+          <h2 id="education-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Education</h2>
+          <div class="mt-6 border-y border-border divide-y divide-border">
+            {education.map((item) => (
+              <article class="py-6 grid md:grid-cols-[9rem_1fr] gap-4">
+                <p class="text-sm font-semibold text-primary">{item.period}</p>
+                <div>
+                  <h3 class="text-xl font-semibold text-foreground">{item.degree}</h3>
+                  <p class="mt-1 text-foreground/80">{item.institution}</p>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="research-title">
+          <p class="section-kicker">02 / Experience</p>
+          <h2 id="research-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Research experience</h2>
+          <div class="mt-6 border-y border-border divide-y divide-border">
+            {research.map((item) => (
+              <article class="py-6 grid md:grid-cols-[9rem_1fr] gap-4">
+                <p class="text-sm font-semibold text-primary">{item.period}</p>
+                <div>
+                  <h3 class="text-xl font-semibold text-foreground">{item.role}</h3>
+                  <p class="mt-1 text-foreground/80">{item.institution}</p>
+                  <p class="mt-3 text-sm font-semibold text-accent">{item.project}</p>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Contact invitation">
+          <p class="section-kicker">03 / Connect</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Interested in the work?</h2>
+          <p class="mt-3 max-w-2xl text-muted leading-relaxed">For research, collaboration, or scientific software conversations, email me or connect through LinkedIn.</p>
+          <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Get in touch <span aria-hidden="true">↗</span></a>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>
