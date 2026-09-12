@@ -56,7 +56,7 @@ const structuredData = {
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
-    <script type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https://raw.githubusercontent.com https://avatars.githubusercontent.com; connect-src 'self' https://formspree.io https://api.netlify.com https://api.netlify.app https://www.gstatic.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.googleapis.com; frame-src https://app.diagrams.net; upgrade-insecure-requests" />
     <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/assets/manifest.webmanifest" />
