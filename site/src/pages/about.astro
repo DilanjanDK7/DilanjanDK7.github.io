@@ -12,7 +12,10 @@ import Layout from '../layouts/Layout.astro';
   <div class="max-w-6xl mx-auto px-4 py-16 md:py-20">
     <div class="grid lg:grid-cols-[0.7fr_1.3fr] gap-12 items-start">
       <div class="lg:sticky lg:top-24">
-        <img src="/assets/images/avatar.svg" alt="Portrait illustration of Dilanjan Diyabalanage" class="w-48 h-48 rounded-[1.5rem] object-cover border border-border image-frame rotate-[-3deg]" width="220" height="220" />
+        <figure class="image-frame overflow-hidden rounded-[1.5rem] border border-border bg-card rotate-[-2deg]">
+          <img src="/assets/images/about-neuroimaging.jpg" alt="Scientific visualization of a brain and MRI data streams" class="w-full aspect-[16/10] object-cover" width="1024" height="576" loading="eager" />
+          <figcaption class="px-4 py-3 text-xs uppercase tracking-[0.12em] text-muted">Neuroimaging / computation / signal</figcaption>
+        </figure>
         <p class="section-kicker mt-10">What I work on</p>
         <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">From brain data to dependable tools.</h2>
       </div>
