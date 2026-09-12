@@ -67,6 +67,69 @@ const workExperience = [
   },
 ];
 
+const presentations = [
+  {
+    period: '2026',
+    title: 'MT-WAN: Implicit Window Supervision for Phase-Aware EEG Pain Decoding via Multi-Task Learning',
+    event: 'IEEE EMBC 2026, Toronto, Canada',
+    type: 'Poster presentation',
+    href: 'https://cmsworkshops.com/EMBC2026/view_paper.php?PaperNum=4043&SessionID=1153',
+  },
+  {
+    period: '2026',
+    title: 'Quasi-Instantaneous Neural Excitability (QINe): A Multiscale fMRI Framework Applied to Healthy, Anesthesia, and Epilepsy Cohorts',
+    event: 'Western Epilepsy Research Day 2026',
+    type: 'Research talk',
+    href: 'https://www.schulich.uwo.ca/werg/events/Long-Agenda_WERD2026.pdf',
+  },
+  {
+    period: '2026',
+    title: 'A Containerized, Tissue-Resolved Pipeline for Reproducible Biomarker Extraction in Resting-State fMRI for Epilepsy',
+    event: 'Western Epilepsy Research Day 2026',
+    type: 'Poster presentation',
+    href: 'https://www.schulich.uwo.ca/werg/events/Long-Agenda_WERD2026.pdf',
+  },
+  {
+    period: '2026',
+    title: 'EEG and Integrated Information',
+    event: 'OHBM 2026, Bordeaux, France',
+    type: 'Poster presentation',
+  },
+  {
+    period: '2024',
+    title: 'A Physics-Inspired Probabilistic Model of Neuroimaging Data Analysis and Modelling',
+    event: 'CAP Congress 2024, Western University',
+    type: 'Poster presentation',
+    href: 'https://indico.global/event/440/contributions/10847/',
+  },
+  {
+    period: '2024',
+    title: 'Quantifying Consciousness and Inhibitory Control: An Integrated Information Theory Approach to Neural Dynamics in Go/NoGo Tasks',
+    event: 'CAP Congress 2024, Western University',
+    type: 'Poster presentation',
+    href: 'https://indico.global/event/440/contributions/10637/',
+  },
+  {
+    period: '2023',
+    title: 'Physics-Informed Probabilistic Approach to Analyzing and Modeling Neuroimaging Data',
+    event: 'Centre de recherches mathématiques (CRM), Montreal',
+    type: 'Invited presentation',
+    href: 'https://www.crmath.ca/page-calendrier/resumes-etudiants-2023-inferring/',
+  },
+];
+
+const academicService = [
+  ['SOGS Councillor', 'Department of Physics representative on the Society of Graduate Students’ Council, 2023–May 2024.'],
+  ['Physics & Astronomy Graduate Council', 'Active member, 2022–May 2024.'],
+  ['SOGS committees', 'Member of the International Graduate Student Issues, Sustainability, and Orientation & Socials committees, 2023–May 2024.'],
+  ['BrainHack', 'Participant in BrainHack 2022, 2023, 2025, and 2026.'],
+  ['Science Rendezvous', 'Volunteer in 2022, 2023, and 2024.'],
+  ['Western–Fields School', 'Participant in the Networks and Neuroscience school, September 2022.'],
+  ['Future Prof Series', 'Participant in “Networking at a Conference,” January 2024.'],
+  ['Research outreach', 'Hosted and presented at Fusion Pizza during Summer 2023.'],
+  ['CRAIA 2026', 'Attendee at the Toronto meeting focused on deep brain stimulation and neuroimaging.'],
+];
+
 const focusAreas = [
   'Clinical neuroimaging and fMRI analysis',
   'Physics-informed neural networks',
@@ -160,8 +223,38 @@ const industryProjects = [
           </div>
         </section>
 
+        <section aria-labelledby="presentations-title">
+          <p class="section-kicker">03 / Conferences & presentations</p>
+          <h2 id="presentations-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Conferences & presentations</h2>
+          <div class="mt-6 border-y border-border divide-y divide-border">
+            {presentations.map((item) => (
+              <article class="py-6 grid md:grid-cols-[6rem_1fr] gap-4">
+                <p class="text-sm font-semibold text-primary">{item.period}</p>
+                <div>
+                  <h3 class="text-lg font-semibold text-foreground">{item.title}</h3>
+                  <p class="mt-1 text-foreground/80">{item.event}</p>
+                  <p class="mt-2 text-sm text-muted">{item.type}{item.href && <> · <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Event details ↗</a></>}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="service-title">
+          <p class="section-kicker">04 / Leadership & service</p>
+          <h2 id="service-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Academic engagement</h2>
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            {academicService.map(([title, detail]) => (
+              <article class="rounded-[1.25rem] border border-border bg-card p-5">
+                <h3 class="text-lg font-semibold text-foreground">{title}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-muted">{detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section aria-labelledby="work-title">
-          <p class="section-kicker">03 / Professional work</p>
+          <p class="section-kicker">05 / Professional work</p>
           <h2 id="work-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Professional experience</h2>
           <div class="mt-6 border-y border-border divide-y divide-border">
             {workExperience.map((item) => (
@@ -178,7 +271,7 @@ const industryProjects = [
         </section>
 
         <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Contact invitation">
-          <p class="section-kicker">04 / Connect</p>
+          <p class="section-kicker">06 / Connect</p>
           <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Interested in the work?</h2>
           <p class="mt-3 max-w-2xl text-muted leading-relaxed">For research, collaboration, or scientific software conversations, email me or connect through LinkedIn.</p>
           <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Get in touch <span aria-hidden="true">↗</span></a>
