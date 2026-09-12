@@ -21,6 +21,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: astro
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
