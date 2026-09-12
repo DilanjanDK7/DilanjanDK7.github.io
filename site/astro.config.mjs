@@ -3,7 +3,7 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://dilanjandk7.github.io',
+  site: 'https://www.dilanjandk.com',
   base: '/',
   output: 'static',
   outDir: '../dist',
