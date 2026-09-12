@@ -66,9 +66,13 @@ const structuredData = {
     {extraHead ? <Fragment set:html={extraHead} /> : null}
   </head>
   <body class="min-h-screen bg-background text-foreground font-sans antialiased">
+    <video class="site-background-video" autoplay muted loop playsinline preload="metadata" poster="/assets/images/about-neuroimaging.jpg" aria-hidden="true">
+      <source src="/assets/video/site-background.mp4" type="video/mp4" />
+    </video>
+    <div class="site-background-wash" aria-hidden="true"></div>
     <a href="#main" class="skip-link fixed left-4 top-4 -translate-y-[200%] focus:translate-y-0 z-[200] px-4 py-2 bg-primary text-white rounded-lg">Skip to content</a>
     <Nav />
-    <main id="main">
+    <main id="main" class="relative z-10">
       <slot />
     </main>
     <Footer />

@@ -32,6 +32,8 @@ body {
     var(--bg);
   background-attachment: fixed;
 }
+.site-background-video { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.08; filter: saturate(0.7) contrast(1.05); pointer-events: none; z-index: 0; }
+.site-background-wash { position: fixed; inset: 0; background: color-mix(in srgb, var(--bg) 88%, transparent); pointer-events: none; z-index: 1; }
 
 ::selection { background: var(--primary); color: #fff; }
 
