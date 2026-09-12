@@ -261,7 +261,7 @@
       state.meKey = getMeKey();
       state.participantPassword = getPassword();
       await computeParticipantId();
-      const url = new URL(location.href);
+      const url = new URL('/schedule/', location.origin);
       url.searchParams.set('event', eventId);
       eventLink.value = url.toString();
       try { await navigator.clipboard.writeText(eventLink.value); } catch (_) {}
@@ -1204,5 +1204,4 @@
 
 // Firebase helpers
  
-
 
