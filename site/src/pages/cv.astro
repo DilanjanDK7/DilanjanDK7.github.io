@@ -91,9 +91,9 @@ const presentations = [
   },
   {
     period: '2026',
-    title: 'EEG and Integrated Information',
-    event: 'OHBM 2026, Bordeaux, France',
-    type: 'Poster presentation',
+    title: 'Neural Information Integration Reflects Individual Differences in Inhibitory Control',
+    event: 'OHBM 2026 Annual Meeting, June 14–18, Bordeaux, France',
+    type: 'Accepted poster presentation · Palais 2 l’Atlantique',
   },
   {
     period: '2024',
@@ -143,6 +143,7 @@ const industryStrengths = [
   ['Production workflows', 'Containerized and workflow-managed systems using Docker and Snakemake for repeatable analysis.'],
   ['Data-intensive analysis', 'fMRI, EEG, HDF5, 3D data, feature extraction, and interpretable computational methods.'],
   ['Technical communication', 'Documentation, user guides, troubleshooting, and clear translation of complex research systems.'],
+  ['Research communication', 'Communicating computational neuroscience findings through conference abstracts, invited presentations, and poster sessions.'],
 ];
 
 const industryProjects = [
@@ -150,6 +151,30 @@ const industryProjects = [
   { name: 'Feature Extraction Container', detail: 'A Dockerized, Snakemake-managed workflow for ALFF/fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis.' },
   { name: 'BrainViz DK', detail: 'A brain visualization toolkit for interactive 3D rendering and neuroimaging data exploration.' },
   { name: 'QM FFT Feature Package', detail: 'A high-performance Python package for NUFFT-based 3D analysis, spectral metrics, HDF5 I/O, and visualization.' },
+  { name: 'Conference research communication', detail: 'Presented and communicated computational neuroscience work across invited talks and poster sessions, including an accepted OHBM 2026 poster on neural information integration and inhibitory control.' },
+];
+
+const technicalToolkit = [
+  {
+    category: 'Languages & development',
+    tools: 'Python, JavaScript, HTML, CSS, SQL, Bash, Git, GitHub',
+    detail: 'Building research software, responsive web interfaces, command-line workflows, and version-controlled projects.',
+  },
+  {
+    category: 'Scientific Python',
+    tools: 'NumPy, SciPy, pandas, scikit-learn, NiBabel, Nilearn, FINUFFT, h5py, Plotly',
+    detail: 'Working with numerical analysis, machine learning, EEG/fMRI data, non-uniform Fourier transforms, HDF5, and interactive visualization.',
+  },
+  {
+    category: 'Neuroimaging workflows',
+    tools: 'BIDS, fMRIPrep, ALFF/fALFF, ReHo, Hurst analysis, fractal dimension, RSN analysis',
+    detail: 'Designing reproducible preprocessing and feature-extraction pipelines for clinical and research neuroimaging.',
+  },
+  {
+    category: 'Workflow & environments',
+    tools: 'Docker, Snakemake, Linux, command-line research environments, Python packaging',
+    detail: 'Packaging tools and workflows so that analyses are portable, repeatable, documented, and easier to run across systems.',
+  },
 ];
 ---
 
@@ -305,8 +330,22 @@ const industryProjects = [
             </div>
           </section>
 
+          <section aria-labelledby="toolkit-title">
+            <p class="section-kicker">03 / Technical toolkit</p>
+            <h2 id="toolkit-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Packages and environments I use.</h2>
+            <div class="mt-6 grid sm:grid-cols-2 gap-4">
+              {technicalToolkit.map((item) => (
+                <article class="rounded-[1.25rem] border border-border bg-card p-5">
+                  <h3 class="text-lg font-semibold text-foreground">{item.category}</h3>
+                  <p class="mt-2 text-sm font-semibold leading-relaxed text-accent">{item.tools}</p>
+                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
           <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Industry contact invitation">
-            <p class="section-kicker">03 / Connect</p>
+            <p class="section-kicker">04 / Connect</p>
             <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Building a research product or pipeline?</h2>
             <p class="mt-3 max-w-2xl text-muted leading-relaxed">I am interested in collaborations where rigorous scientific thinking meets reliable implementation.</p>
             <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Start a conversation <span aria-hidden="true">↗</span></a>
