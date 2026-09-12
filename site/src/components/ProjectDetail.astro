@@ -5,8 +5,10 @@ interface Props {
   overview: string;
   features: string[];
   docLinks: { label: string; href: string }[];
+  image?: string;
+  imageAlt?: string;
 }
-const { title, subtitle, overview, features, docLinks } = Astro.props;
+const { title, subtitle, overview, features, docLinks, image, imageAlt = `${title} project visual` } = Astro.props;
 ---
 <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
   <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">{title}</h1>
@@ -14,6 +16,7 @@ const { title, subtitle, overview, features, docLinks } = Astro.props;
   <a href="/" class="inline-block mt-4 text-sm text-primary hover:underline">&larr; Back to Home</a>
 </header>
 <div class="max-w-3xl mx-auto px-4 py-12 space-y-8">
+  {image && <img src={image} alt={imageAlt} class="w-full aspect-video object-cover rounded-[1.25rem] border border-border" width="1536" height="864" loading="eager" />}
   <section>
     <h2 class="text-xl font-semibold text-foreground mb-3">Overview</h2>
     <p class="text-foreground/90">{overview}</p>
