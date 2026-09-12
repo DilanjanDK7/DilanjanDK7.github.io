@@ -9,9 +9,9 @@ interface Props {
 }
 const { title, description, image, link, tags } = Astro.props;
 ---
-<a href={link} class="group block rounded-2xl overflow-hidden border border-border bg-card transition-transform hover:scale-[1.02] hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
-  <div class="aspect-video relative bg-surface" style={`background-image: url('${image}'); background-size: cover; background-position: center;`}>
-    <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+<a href={link} class="group block rounded-[1.25rem] overflow-hidden border border-border bg-card transition-all hover:-translate-y-1 hover:border-primary/60 hover:shadow-xl hover:shadow-black/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">
+  <div class="aspect-video relative bg-surface overflow-hidden" style={`background-image: url('${image}'); background-size: cover; background-position: center;`}>
+    <div class="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent opacity-60 group-hover:opacity-35 transition-opacity" />
   </div>
   <div class="p-4 md:p-5">
     <h3 class="text-lg font-semibold text-foreground">{title}</h3>
@@ -19,6 +19,6 @@ const { title, description, image, link, tags } = Astro.props;
       <ProjectTags tags={tags} />
     </div>
     <p class="mt-3 text-sm text-muted line-clamp-2">{description}</p>
-    <span class="inline-block mt-3 text-sm font-medium text-primary group-hover:underline">Learn more →</span>
+    <span class="inline-flex items-center gap-2 mt-3 text-sm font-medium text-primary group-hover:underline">Learn more <span aria-hidden="true">↗</span></span>
   </div>
 </a>

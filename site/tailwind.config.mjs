@@ -5,16 +5,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#0a0a0a',
-        surface: '#111111',
-        card: '#18181b',
-        primary: '#6aa2ff',
-        muted: '#a1a1aa',
-        border: '#27272a',
-        foreground: '#fafafa',
+        background: 'var(--bg)',
+        surface: 'var(--surface)',
+        card: 'var(--card)',
+        primary: 'var(--primary)',
+        muted: 'var(--muted)',
+        border: 'var(--border)',
+        foreground: 'var(--text)',
+        accent: 'var(--accent)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Space Grotesk', 'system-ui', 'sans-serif'],
       },
     },
   },

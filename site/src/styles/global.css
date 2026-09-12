@@ -3,23 +3,63 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0a0a0a;
-  --text: #fafafa;
-  --surface: #111;
-  --card: #18181b;
-  --primary: #6aa2ff;
-  --border: #27272a;
-  --muted: #a1a1aa;
-  --shadow-rgb: 106, 162, 255;
+  --bg: #f4f1eb;
+  --text: #18232c;
+  --surface: #fbfaf7;
+  --card: #ffffff;
+  --primary: #d85d45;
+  --border: #d8d3ca;
+  --muted: #65717a;
+  --accent: #3f9e9a;
+  --shadow-rgb: 24, 35, 44;
 }
 .dark {
-  --bg: #0a0a0a;
-  --text: #fafafa;
-  --surface: #111;
-  --card: #18181b;
-  --primary: #6aa2ff;
-  --border: #27272a;
-  --muted: #a1a1aa;
+  --bg: #101a22;
+  --text: #f5f1e8;
+  --surface: #172630;
+  --card: #1d303b;
+  --primary: #f07b61;
+  --border: #30434d;
+  --muted: #aebcc0;
+  --accent: #62c7bd;
+  --shadow-rgb: 0, 0, 0;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 28rem),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+::selection { background: var(--primary); color: #fff; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@layer components {
+  .hero-shell { position: relative; isolation: isolate; overflow: hidden; }
+  .hero-shell::after {
+    content: '';
+    position: absolute;
+    width: 28rem;
+    height: 28rem;
+    right: -12rem;
+    top: -12rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    border-radius: 999px;
+    box-shadow: 0 0 0 4rem color-mix(in srgb, var(--accent) 5%, transparent), 0 0 0 8rem color-mix(in srgb, var(--accent) 3%, transparent);
+    z-index: -1;
+  }
+  .hero-copy { animation: rise-in 700ms ease-out both; }
+  .hero-visual { animation: rise-in 800ms 120ms ease-out both; }
+  .eyebrow { color: var(--accent); font: 600 0.72rem/1.2 'IBM Plex Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .section-kicker { color: var(--accent); font: 600 0.72rem/1.2 'IBM Plex Mono', monospace; letter-spacing: 0.08em; text-transform: uppercase; }
+  .image-frame { box-shadow: 0 24px 70px rgba(var(--shadow-rgb), 0.22); }
+  .surface-band { background: color-mix(in srgb, var(--surface) 78%, transparent); border-block: 1px solid var(--border); }
 }
 
 @layer base {
