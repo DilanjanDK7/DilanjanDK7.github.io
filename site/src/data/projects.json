@@ -4,7 +4,7 @@
     "title": "QM FFT Feature Package",
     "description": "High-performance NUFFT-based 3D analysis: k-space masking, gradient mapping, spectral metrics, batch HDF5 IO, and interactive 3D visualizations.",
     "link": "/projects/qm_fft_feature_package",
-    "image": "/assets/images/projects/qm-fft-feature-package.png",
+    "image": "/assets/images/projects/epiflow-system.png",
     "tags": ["Python", "NUFFT", "HDF5", "3D Visualization"]
   },
   {
@@ -20,7 +20,7 @@
     "title": "EpiFlow",
     "description": "Epilepsy research pipeline: DICOM→BIDS (optional), fMRIPrep preprocessing, and advanced feature extraction for fMRI.",
     "link": "/projects/epiflow",
-    "image": "/assets/images/projects/epiflow-system.png",
+    "image": "/assets/images/projects/qm-fft-feature-package.png",
     "tags": ["Python", "Docker", "BIDS", "Nilearn", "fMRIPrep"]
   },
   {
