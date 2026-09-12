@@ -1,0 +1,143 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Schedule | Dilanjan DK"
+  description="Plan availability and find the best time to meet with an interactive availability grid and shareable settings."
+  extraHead='<link rel="stylesheet" href="/assets/css/scheduler.css" />'
+>
+  <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
+    <h1 id="pageTitle" class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Plan a Time Together</h1>
+    <p class="mt-2 text-muted">Create an event, mark your availability, and find the best overlap.</p>
+  </header>
+  <main class="py-8 px-4" id="main">
+    <section class="scheduler max-w-6xl mx-auto" aria-label="Scheduling tool">
+      <div class="scheduler-layout">
+        <aside class="scheduler-panel" aria-label="Event settings">
+          <h2 class="text-xl font-semibold text-foreground mt-0">Event</h2>
+          <form onsubmit="return false;" class="form-grid">
+            <label>
+              <span class="text-foreground/90">Your name (optional)</span>
+              <input id="participantName" type="text" placeholder="Your name" autocomplete="name" />
+            </label>
+            <label>
+              <span class="text-foreground/90">Access password</span>
+              <input id="participantPassword" type="password" placeholder="Optional, for re-editing" />
+            </label>
+            <div class="actions" style="grid-column: 1 / -1;">
+              <button id="saveAvailabilityBtn" type="button" class="btn primary" style="width: 100%;">💾 Save My Availability</button>
+            </div>
+          </form>
+          <h3 id="eventSettingsHeader" class="text-lg font-semibold text-foreground">Event Settings</h3>
+          <fieldset id="eventSettings" style="border:0; padding:0; margin:0;">
+            <div class="form-grid">
+              <label id="eventNameRow">
+                <span class="text-foreground/90">Event name</span>
+                <input id="eventName" type="text" placeholder="Study group / Standup / Coffee" autocomplete="off" />
+              </label>
+              <label>
+                <span class="text-foreground/90">Start date</span>
+                <input id="startDate" type="date" />
+              </label>
+              <label>
+                <span class="text-foreground/90">End date</span>
+                <input id="endDate" type="date" />
+              </label>
+              <label>
+                <span class="text-foreground/90">Days of week</span>
+                <div class="dow-picker" role="group" aria-label="Days of week">
+                  <button data-dow="1" type="button">Mon</button>
+                  <button data-dow="2" type="button">Tue</button>
+                  <button data-dow="3" type="button">Wed</button>
+                  <button data-dow="4" type="button">Thu</button>
+                  <button data-dow="5" type="button">Fri</button>
+                  <button data-dow="6" type="button">Sat</button>
+                  <button data-dow="0" type="button">Sun</button>
+                </div>
+              </label>
+              <label>
+                <span class="text-foreground/90">Daily start</span>
+                <input id="dayStart" type="time" value="09:00" />
+              </label>
+              <label>
+                <span class="text-foreground/90">Daily end</span>
+                <input id="dayEnd" type="time" value="18:00" />
+              </label>
+              <label>
+                <span class="text-foreground/90">Slot length</span>
+                <select id="slotMinutes">
+                  <option value="15">15 min</option>
+                  <option value="30" selected>30 min</option>
+                  <option value="60">60 min</option>
+                </select>
+              </label>
+              <div class="tz-row">
+                <div>
+                  <div class="font-semibold text-sm mb-1 text-foreground">Time zone</div>
+                  <div id="tzDisplay" class="text-sm text-muted">Detecting…</div>
+                </div>
+                <button id="toggleLocalTZ" type="button" class="btn">Use local</button>
+              </div>
+              <div class="actions">
+                <button id="applySettings" type="button" class="btn primary">Apply settings</button>
+              </div>
+            </div>
+          </fieldset>
+          <h3 class="text-lg font-semibold text-foreground">View</h3>
+          <div class="form-grid">
+            <label>
+              <span class="text-foreground/90">Minimum people</span>
+              <select id="minAvailable">
+                <option value="1" selected>1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+              </select>
+            </label>
+          </div>
+          <h3 class="text-lg font-semibold text-foreground">Share</h3>
+          <div class="share-grid">
+            <button id="createEventBtn" type="button" class="btn primary">Create / Update event link</button>
+            <div style="display:grid; grid-template-columns: 1fr auto; gap: 0.5rem;">
+              <input id="eventLink" type="text" readonly placeholder="Shareable event link will appear here" />
+              <button id="copyEventLink" type="button" class="btn">Copy</button>
+            </div>
+          </div>
+          <h3 class="text-lg font-semibold text-foreground">Participants <span id="liveBadge" class="live-badge" aria-hidden="true">Live</span></h3>
+          <ul id="participantsList" class="participants-list" aria-live="polite"></ul>
+          <h3 class="text-lg font-semibold text-foreground">Calendar</h3>
+          <div class="calendar" id="calendar" aria-label="Calendar date picker"></div>
+          <h3 class="text-lg font-semibold text-foreground">Quick select</h3>
+          <div class="quick-grid">
+            <button id="selectAll" type="button" class="btn">Select all</button>
+            <button id="clearAll" type="button" class="btn">Clear</button>
+            <button id="invertSel" type="button" class="btn">Invert</button>
+            <button id="copyPrevDay" type="button" class="btn">Copy previous day</button>
+          </div>
+        </aside>
+        <section class="scheduler-main" aria-label="Availability grid">
+          <div id="statusDisplay" class="status-display" hidden></div>
+          <div class="grid-header">
+            <div class="grid-title">Availability</div>
+            <div class="grid-legend" aria-hidden="true">
+              <span class="legend-swatch swatch-0"></span><span class="legend-label">0</span>
+              <span class="legend-swatch swatch-1"></span><span class="legend-label">1</span>
+              <span class="legend-swatch swatch-2"></span><span class="legend-label">2</span>
+              <span class="legend-swatch swatch-3"></span><span class="legend-label">3+</span>
+            </div>
+          </div>
+          <div id="availabilityGrid" class="availability-grid" role="grid" aria-label="Time slots"></div>
+          <div class="best-times">
+            <h3 class="text-lg font-semibold text-foreground">Best times</h3>
+            <ol id="bestSlots"></ol>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+  <script src="/assets/js/firebase-config.js"></script>
+  <script src="/assets/js/firebase-compat.js"></script>
+  <script src="/assets/js/schedule.js"></script>
+</Layout>

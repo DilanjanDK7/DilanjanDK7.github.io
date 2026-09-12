@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0a0a0a;
+  --text: #fafafa;
+  --surface: #111;
+  --card: #18181b;
+  --primary: #6aa2ff;
+  --border: #27272a;
+  --muted: #a1a1aa;
+  --shadow-rgb: 106, 162, 255;
+}
+.dark {
+  --bg: #0a0a0a;
+  --text: #fafafa;
+  --surface: #111;
+  --card: #18181b;
+  --primary: #6aa2ff;
+  --border: #27272a;
+  --muted: #a1a1aa;
+}
+
+@layer base {
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

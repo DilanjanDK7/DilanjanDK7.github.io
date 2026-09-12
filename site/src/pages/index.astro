@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BentoFeatured from '../components/BentoFeatured.astro';
+import BentoCard from '../components/BentoCard.astro';
+import projects from '../data/projects.json';
+
+const epiflow = projects.find((p) => p.key === 'epiflow')!;
+const secondary = projects.filter((p) => p.key !== 'epiflow');
+---
+
+<Layout
+  title="Dilanjan DK | Computational Neuroscience Portfolio"
+  description="Bridging the gap between theoretical physics and clinical neuroimaging through reproducible, high-performance pipelines. EpiFlow, BrainViz DK, and research in LQC and EEG pain decoding."
+  ogImage="/assets/images/og-card.png"
+>
+  <section class="hero py-20 md:py-28 px-4 text-center bg-gradient-to-b from-surface to-background">
+    <div class="max-w-3xl mx-auto">
+      <img src="https://avatars.githubusercontent.com/u/96403575?v=4" alt="Dilanjan DK" class="w-24 h-24 rounded-full mx-auto mb-6 border-2 border-border" width="96" height="96" />
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-foreground">Dilanjan Diyabalanage</h1>
+      <p class="mt-3 text-xl text-muted">Computational Neuroscientist | Western University</p>
+      <p class="mt-4 text-base md:text-lg text-foreground/90 max-w-2xl mx-auto">Bridging the gap between theoretical physics and clinical neuroimaging through reproducible, high-performance pipelines.</p>
+      <a href="#projects" class="inline-block mt-8 px-6 py-3 rounded-xl bg-primary text-white font-medium hover:opacity-90 transition-opacity">See my projects</a>
+    </div>
+  </section>
+
+  <section id="featured-research" class="py-16 px-4 max-w-3xl mx-auto">
+    <h2 class="text-2xl font-bold tracking-tight text-foreground mb-6">Featured Research</h2>
+    <ul class="space-y-4 divide-y divide-border">
+      <li class="pt-4 first:pt-0 first:border-0">
+        <strong class="text-foreground">Loop Quantum Cosmology</strong>
+        <span class="text-muted"> — Thesis work on cosmological applications of loop quantum gravity. </span>
+        <a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">ORCID</a>
+      </li>
+      <li class="pt-4">
+        <strong class="text-foreground">MT-WAN: EEG pain decoding</strong>
+        <span class="text-muted"> — Multimodal approach to pain decoding from EEG. </span>
+        <a href="https://arxiv.org/abs/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Preprint</a>
+      </li>
+    </ul>
+  </section>
+
+  <section id="about" class="py-16 px-4 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold tracking-tight text-foreground mb-6">About Me</h2>
+    <div class="flex flex-col md:flex-row gap-8 items-start">
+      <div class="flex-1 prose prose-invert max-w-none">
+        <p class="text-foreground/90">I'm Dilanjan Diyabalanage, a computational neuroscientist and researcher at Western University. My work spans theoretical physics (Loop Quantum Cosmology), clinical neuroimaging (EpiFlow, MT-WAN EEG pain decoding), and open-source pipelines for fMRI and brain data. I focus on scalable, reproducible methods and translating complex techniques into practical tools for the community.</p>
+        <p class="mt-4 text-foreground/80">Contact: <a href="mailto:ddiyabal@uwo.ca" class="text-primary hover:underline">ddiyabal@uwo.ca</a> | <a href="https://github.com/DilanjanDK7" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">GitHub</a> | <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Google Scholar</a> | <a href="https://orcid.org/0000-0000-0000-0000" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">ORCID</a></p>
+      </div>
+      <div class="shrink-0">
+        <img src="/assets/images/avatar.svg" alt="Brain data visualization" class="w-52 h-52 rounded-xl object-cover border border-border" width="208" height="208" />
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="py-16 px-4 max-w-6xl mx-auto">
+    <h2 class="text-2xl font-bold tracking-tight text-foreground mb-8">Projects</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 lg:row-span-1">
+        <BentoFeatured
+          title={epiflow.title}
+          description="Advanced fMRI processing pipeline for epilepsy research."
+          imageUrl={epiflow.image}
+          href={epiflow.link}
+          ctaLabel="View on GitHub"
+        />
+      </div>
+      {secondary.map((p) => (
+        <BentoCard title={p.title} description={p.description} image={p.image} link={p.link} tags={p.tags} />
+      ))}
+    </div>
+  </section>
+
+  <section id="contact" class="py-16 px-4 max-w-xl mx-auto">
+    <h2 class="text-2xl font-bold tracking-tight text-foreground mb-6">Contact</h2>
+    <form id="contactForm" action="https://formspree.io/f/mwkggdjb" method="POST" class="space-y-4">
+      <input type="text" name="name" placeholder="Your name" required autocomplete="name" class="w-full px-4 py-3 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary" />
+      <input type="email" name="email" placeholder="Your email" required autocomplete="email" class="w-full px-4 py-3 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary" />
+      <textarea name="message" placeholder="Your message" required rows={4} class="w-full px-4 py-3 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary resize-y" />
+      <button type="submit" class="w-full py-3 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">Send</button>
+    </form>
+    <div id="formMessage" role="status" aria-live="polite" class="mt-4 text-sm text-muted"></div>
+  </section>
+</Layout>

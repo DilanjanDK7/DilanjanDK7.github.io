@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="Feature Extraction Container | Dilanjan DK"
+  description="Docker-based pipeline for ALFF, ReHo, Hurst, QM-FFT, RSN and more. Snakemake workflow."
+>
+  <ProjectDetail
+    title="Feature Extraction Container"
+    subtitle="Containerized workflow for advanced fMRI feature extraction and analysis."
+    overview="This project provides a Docker-based pipeline for extracting analytical features from resting-state fMRI data, including ALFF, fALFF, ReHo, Hurst exponent, fractal dimension, QM-FFT, and RSN analysis. The workflow uses Snakemake for management and is designed for reproducibility and scalability."
+    features={[
+      'ALFF, fALFF, ReHo, Hurst, Fractal Dimension, QM-FFT, RSN analysis',
+      'Snakemake workflow management',
+      'Docker containerization for reproducibility',
+      'Flexible configuration and modular feature selection',
+      'Comprehensive documentation and user guides',
+    ]}
+    docLinks={[
+      { label: 'GitHub Repository', href: 'https://github.com/DilanjanDK7/Feature_extraction_Container' },
+      { label: 'User Guide', href: 'https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/USER_GUIDE.md' },
+      { label: 'Quick Reference', href: 'https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/QUICK_REFERENCE.md' },
+      { label: 'RSN Guide', href: 'https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/RSN_GUIDE.md' },
+      { label: 'Visualization Guide', href: 'https://github.com/DilanjanDK7/Feature_extraction_Container/blob/main/docs/VISUALIZATION_GUIDE.md' },
+    ]}
+  />
+</Layout>

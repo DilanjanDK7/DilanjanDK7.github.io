@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="QM FFT Feature Package | Dilanjan DK"
+  description="NUFFT-powered 3D k-space analysis library with gradient mapping, spectral metrics, HDF5 IO, and interactive visualizations."
+>
+  <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">QM FFT Feature Package</h1>
+    <p class="mt-2 text-muted">Advanced 3D k-space analysis for neuroimaging and spatial data.</p>
+    <a href="/" class="inline-block mt-4 text-sm text-primary hover:underline">&larr; Back to Home</a>
+  </header>
+  <div class="max-w-3xl mx-auto px-4 py-12 space-y-8">
+    <section>
+      <h2 class="text-xl font-semibold text-foreground mb-3">Overview</h2>
+      <p class="text-foreground/90">This Python package, developed by Dilanjan DK, provides tools for analyzing 3D data (such as quantum mechanical properties or neuroimaging fields) using Non-Uniform Fast Fourier Transforms (NUFFT) via the FINUFFT library. It is designed for high-performance, scalable analysis of large datasets, with advanced features for gradient mapping, spectral metrics, and more.</p>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Key Features</h3>
+      <ul class="list-disc list-inside space-y-1 text-foreground/90">
+        <li>NUFFT implementation for efficient transformation between non-uniform and uniform grids</li>
+        <li>Map building and k-space masking</li>
+        <li>Analytical and interpolated gradient calculation</li>
+        <li>Batch processing and HDF5 output structure</li>
+        <li>Enhanced features: spectral slope, entropy, anisotropy, higher-order moments, HRF deconvolution</li>
+        <li>Interactive 3D visualization with Plotly</li>
+        <li>Comprehensive documentation and usage guides</li>
+      </ul>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Performance</h3>
+      <p class="text-foreground/90">Tested on datasets up to 50,000+ points and 100+ time points, with up to 9x speedup for large-scale gradient calculations using skip-interpolation mode. Efficient memory usage and HDF5 compression are supported.</p>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Documentation & Usage</h3>
+      <ul class="space-y-2">
+        <li><a href="https://github.com/DilanjanDK7/QM_FFT_Feature_Package" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">GitHub Repository</a></li>
+        <li><a href="https://github.com/DilanjanDK7/QM_FFT_Feature_Package/blob/main/HOW-TO.md" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">HOW-TO Guide</a></li>
+        <li><a href="https://github.com/DilanjanDK7/QM_FFT_Feature_Package/blob/main/docs/technical_reference.md" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Technical Reference</a></li>
+        <li><a href="https://github.com/DilanjanDK7/QM_FFT_Feature_Package/blob/main/docs/enhanced_features_guide.md" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Enhanced Features Guide</a></li>
+      </ul>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Contact</h3>
+      <p class="text-foreground/90">For questions or collaboration, contact Dilanjan DK at <a href="mailto:ddiyabal@uwo.ca" class="text-primary hover:underline">ddiyabal@uwo.ca</a>.</p>
+    </section>
+  </div>
+</Layout>

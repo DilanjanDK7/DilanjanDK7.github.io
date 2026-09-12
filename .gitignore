@@ -15,3 +15,9 @@ Thumbs.db
 # Logs
 *.log
 
+# Astro build output (at repo root when building from site/)
+dist/
+
+# Site (Astro) node modules
+site/node_modules/
+

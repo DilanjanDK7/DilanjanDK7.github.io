@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Reading List | Dilanjan DK"
+  description="Papers and resources I recommend — neuroimaging, computational neuroscience, and open science."
+>
+  <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Reading List</h1>
+    <p class="mt-2 text-muted">Papers and resources I recommend — neuroimaging, computational neuroscience, and open science.</p>
+  </header>
+  <div class="max-w-2xl mx-auto px-4 py-12">
+    <p class="text-foreground/90 mb-8">A curated list of papers, tutorials, and tools that have shaped my work. I'll add more over time.</p>
+    <ul class="space-y-4 divide-y divide-border">
+      <li class="pt-4 first:pt-0">
+        <strong class="text-foreground">BIDS</strong>
+        <span class="text-muted"> — Brain Imaging Data Structure specification. </span>
+        <a href="https://bids-specification.readthedocs.io/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Specification</a>
+      </li>
+      <li class="pt-4">
+        <strong class="text-foreground">fMRIPrep</strong>
+        <span class="text-muted"> — Robust fMRI preprocessing pipeline. </span>
+        <a href="https://fmriprep.org/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Documentation</a>
+      </li>
+      <li class="pt-4">
+        <strong class="text-foreground">Nilearn</strong>
+        <span class="text-muted"> — Machine learning for neuroimaging in Python. </span>
+        <a href="https://nilearn.github.io/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Docs</a>
+      </li>
+    </ul>
+  </div>
+</Layout>

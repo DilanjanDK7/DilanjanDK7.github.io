@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="EpiFlow | Dilanjan DK"
+  description="EpiFlow: epilepsy research pipeline — DICOM→BIDS, fMRIPrep preprocessing, and feature extraction for fMRI."
+>
+  <ProjectDetail
+    title="EpiFlow"
+    subtitle="Epilepsy research pipeline: preprocessing and feature extraction for fMRI."
+    overview="EpiFlow is a combined pipeline for processing fMRI data for epilepsy research, integrating fMRIPrep for preprocessing and a custom suite for feature extraction. Developed by Dilanjan DK at Western University."
+    features={[
+      'Automated DICOM to BIDS conversion (optional)',
+      'Preprocessing with fMRIPrep (Docker-based)',
+      'Feature extraction: ALFF, ReHo, Hurst, Fractal Dimension, QM-FFT, RSN',
+      'Flexible configuration and modular execution',
+      'Comprehensive documentation and troubleshooting guides',
+    ]}
+    docLinks={[
+      { label: 'GitHub Repository', href: 'https://github.com/DilanjanDK7/EpiFlow' },
+      { label: 'Pipeline Documentation', href: 'https://github.com/DilanjanDK7/EpiFlow/blob/main/docs/pipeline_details.md' },
+      { label: 'Feature Extraction User Guide', href: 'https://github.com/DilanjanDK7/EpiFlow/blob/main/Feature_extraction_Container/docs/USER_GUIDE.md' },
+    ]}
+  />
+</Layout>

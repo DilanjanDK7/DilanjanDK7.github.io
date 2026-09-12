@@ -1,0 +1,47 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout
+  title="BrainViz DK | Dilanjan DK"
+  description="Advanced brain visualization toolkit for neuroimaging data analysis, featuring interactive 3D brain rendering."
+>
+  <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">BrainViz DK</h1>
+    <p class="mt-2 text-muted">Advanced brain visualization toolkit for neuroimaging data analysis with interactive 3D rendering.</p>
+    <a href="/" class="inline-block mt-4 text-sm text-primary hover:underline">&larr; Back to Home</a>
+  </header>
+  <div class="max-w-3xl mx-auto px-4 py-12 space-y-8">
+    <section>
+      <h2 class="text-xl font-semibold text-foreground mb-3">Overview</h2>
+      <p class="text-foreground/90">BrainViz DK is a comprehensive brain visualization toolkit developed by Dilanjan DK, designed to provide advanced visualization capabilities for neuroimaging data analysis. This toolkit offers interactive 3D brain rendering, comprehensive visualization tools, and seamless integration with popular neuroimaging analysis workflows.</p>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Key Features</h3>
+      <ul class="list-disc list-inside space-y-1 text-foreground/90">
+        <li>3D interactive rendering with Plotly integration</li>
+        <li>Multi-format support: NIfTI, CIFTI, GIFTI</li>
+        <li>Advanced surface and volume rendering</li>
+        <li>Quality presets from draft to print</li>
+        <li>TemplateFlow support</li>
+        <li>CLI for batch processing</li>
+      </ul>
+    </section>
+    <section id="installation">
+      <h3 class="text-lg font-semibold text-foreground mb-2">Installation</h3>
+      <p class="text-foreground/90 mb-2">Install from PyPI (Python 3.8+):</p>
+      <pre class="p-4 rounded-lg bg-surface border border-border text-foreground text-sm overflow-x-auto"><code>pip install brainviz-dk</code></pre>
+      <p class="text-foreground/80 text-sm mt-2">See the <a href="https://brainviz-dk.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">documentation</a> for from-source and development install.</p>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Documentation & Usage</h3>
+      <ul class="space-y-2">
+        <li><a href="https://github.com/DilanjanDK7/brainviz_dk" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">GitHub Repository</a></li>
+        <li><a href="https://brainviz-dk.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Documentation</a></li>
+      </ul>
+    </section>
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Contact</h3>
+      <p class="text-foreground/90">For questions, collaboration, or feature requests, contact Dilanjan DK at <a href="mailto:ddiyabal@uwo.ca" class="text-primary hover:underline">ddiyabal@uwo.ca</a>.</p>
+    </section>
+  </div>
+</Layout>

@@ -1,0 +1,31 @@
+---
+const path = Astro.url.pathname;
+const navLinks = [
+  { href: '/about', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/schedule', label: 'Schedule' },
+  { href: '/reading', label: 'Reading' },
+  { href: '/contact', label: 'Contact' },
+];
+---
+<nav class="site-nav sticky top-0 z-[100] bg-white/5 dark:bg-black/30 backdrop-blur-xl border-b border-white/10" aria-label="Primary">
+  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a class="brand text-lg font-extrabold tracking-wide text-foreground hover:text-primary transition-colors" href="/" aria-label="Home">DDK</a>
+    <div class="flex items-center gap-6">
+      {navLinks.map(({ href, label }) => {
+        const isActive = path === href || (href !== '/' && path.startsWith(href));
+        return (
+          <a
+            href={href}
+            class:list={['text-foreground/90 hover:text-primary transition-colors', isActive && 'font-semibold']}
+            aria-current={isActive ? 'page' : undefined}
+          >
+            {label}
+          </a>
+        );
+      })}
+      <a href="/assets/documents/cv.pdf" download class="nav-cv font-semibold text-foreground/90 hover:text-primary transition-colors">CV</a>
+      <button id="themeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="true" title="Toggle theme" class="p-1.5 rounded-lg border border-border bg-surface text-foreground hover:bg-card transition-colors">🌙</button>
+    </div>
+  </div>
+</nav>

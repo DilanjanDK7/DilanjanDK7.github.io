@@ -1,0 +1,21 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BentoCard from '../../components/BentoCard.astro';
+import projects from '../../data/projects.json';
+---
+<Layout
+  title="Projects | Dilanjan DK"
+  description="Projects by Dilanjan DK in neuroimaging, fMRI processing, and feature extraction."
+>
+  <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Projects</h1>
+    <p class="mt-2 text-muted">Selected research, pipelines, and tools.</p>
+  </header>
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {projects.map((p) => (
+        <BentoCard title={p.title} description={p.description} image={p.image} link={p.link} tags={p.tags} />
+      ))}
+    </div>
+  </div>
+</Layout>

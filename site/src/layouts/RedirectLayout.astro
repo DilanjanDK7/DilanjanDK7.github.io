@@ -1,0 +1,21 @@
+---
+interface Props {
+  headContent?: string;
+}
+const { headContent = '' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting to EpiFlow | Dilanjan DK</title>
+    <meta http-equiv="refresh" content="2;url=/projects/epiflow/" />
+    <link rel="canonical" href="https://dilanjandk7.github.io/projects/epiflow/" />
+    {headContent ? <Fragment set:html={headContent} /> : null}
+  </head>
+  <body style="font-family:system-ui; max-width:600px; margin:4rem auto; padding:2rem; text-align:center;">
+    <slot />
+    <script is:inline>window.location.replace("/projects/epiflow/");</script>
+  </body>
+</html>
