@@ -140,15 +140,7 @@
 
   function attachHandlers() {
     els.applySettings?.addEventListener('click', () => {
-      state.eventName = (els.eventName?.value || '').trim();
-      state.participantName = (els.participantName?.value || '').trim();
-      state.participantPassword = getPassword();
-      state.meKey = getMeKey();
-      state.startDate = parseDateInput(els.startDate?.value);
-      state.endDate = parseDateInput(els.endDate?.value);
-      state.dayStart = els.dayStart?.value || '09:00';
-      state.dayEnd = els.dayEnd?.value || '18:00';
-      state.slotMinutes = Number(els.slotMinutes?.value || 30);
+      if (!readSettingsFromForm()) return;
       persistDraft();
       renderGrid();
       if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
@@ -259,8 +251,8 @@
         await window.initFirebase();
       }
       if (!state.db) { alert('Live sharing is still initializing. Please try again in a moment.'); return; }
-      // Capture latest event name from input before creating/updating
-      state.eventName = (els.eventName?.value || '').trim();
+      // Always read the complete form before creating/updating an event.
+      if (!readSettingsFromForm()) return;
       if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
       if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
       const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
@@ -283,6 +275,41 @@
     els.clearAll?.addEventListener('click', () => bulkSelect('clear'));
     els.invertSel?.addEventListener('click', () => bulkSelect('invert'));
     els.copyPrevDay?.addEventListener('click', () => copyPreviousDay());
+  }
+
+  function readSettingsFromForm() {
+    const startDate = parseDateInput(els.startDate?.value);
+    const endDate = parseDateInput(els.endDate?.value);
+    const startMinutes = timeStringToMinutes(els.dayStart?.value || '09:00');
+    const endMinutes = timeStringToMinutes(els.dayEnd?.value || '18:00');
+
+    if (!startDate || !endDate) {
+      showToast('Choose a start and end date first.');
+      return false;
+    }
+    if (endDate < startDate) {
+      showToast('End date must be on or after the start date.');
+      return false;
+    }
+    if (startMinutes >= endMinutes) {
+      showToast('Daily end time must be later than daily start time.');
+      return false;
+    }
+    if (!state.daysOfWeek.size) {
+      showToast('Select at least one day of the week.');
+      return false;
+    }
+
+    state.eventName = (els.eventName?.value || '').trim();
+    state.participantName = (els.participantName?.value || '').trim();
+    state.participantPassword = getPassword();
+    state.meKey = getMeKey();
+    state.startDate = startDate;
+    state.endDate = endDate;
+    state.dayStart = els.dayStart?.value || '09:00';
+    state.dayEnd = els.dayEnd?.value || '18:00';
+    state.slotMinutes = Number(els.slotMinutes?.value || 30);
+    return true;
   }
 
   function updateTZDisplay() {
@@ -1177,6 +1204,5 @@
 
 // Firebase helpers
  
-
 
 
