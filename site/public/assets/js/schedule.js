@@ -43,11 +43,11 @@
     dowPicker: document.querySelector('.dow-picker'),
     grid: document.getElementById('availabilityGrid'),
     bestSlots: document.getElementById('bestSlots'),
-    makeShareLink: document.getElementById('makeShareLink'),
-    shareLink: document.getElementById('shareLink'),
-    copyMyAvailability: document.getElementById('copyMyAvailability'),
-    importText: document.getElementById('importText'),
-    importAvailability: document.getElementById('importAvailability'),
+    makeShareLink: null,  // removed: element doesn't exist in current HTML
+    shareLink: null,       // removed: element doesn't exist in current HTML (use eventLink)
+    copyMyAvailability: null, // removed
+    importText: null,         // removed
+    importAvailability: null, // removed
     selectAll: document.getElementById('selectAll'),
     clearAll: document.getElementById('clearAll'),
     invertSel: document.getElementById('invertSel'),
@@ -107,6 +107,9 @@
     if (!isSharedEvent && state.startDate && state.endDate) {
         renderGrid();
     }
+
+    // Ensure live badge starts hidden (CSS default: none, but guard here too)
+    setLive(false);
     
     // Initialize Firebase lazily after UI is ready
     if (typeof window.initFirebase === 'function') window.initFirebase();
@@ -165,7 +168,7 @@
       if (!readSettingsFromForm()) return;
       persistDraft();
       renderGrid();
-      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
+      if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
       computeBest();
       // If bound to an event, persist settings
       if (typeof window.persistEventMeta === 'function') window.persistEventMeta();
@@ -179,10 +182,25 @@
 
     // Auto-load participant's saved availability when they enter name/password on shared link
     const autoLoadParticipantData = async () => {
-      if (!state.eventId || !state.db) return; // Only for shared events
-      const oldMeKey = state.meKey;
+      if (!state.eventId) return; // Only for shared events
+
+      // If Firebase not ready yet, retry a few times
+      if (!state.db) {
+        let attempts = 0;
+        const retry = setInterval(async () => {
+          attempts++;
+          if (state.db) {
+            clearInterval(retry);
+            await autoLoadParticipantData();
+          } else if (attempts >= 6) { // ~3s
+            clearInterval(retry);
+            console.warn('[Scheduler] autoLoad: Firebase never became ready.');
+          }
+        }, 500);
+        return;
+      }
+
       const oldPid = state.participantId;
-      
       state.meKey = getMeKey();
       state.participantPassword = getPassword();
       await computeParticipantId();
@@ -275,7 +293,7 @@
       if (!state.db) { alert('Live sharing is still initializing. Please try again in a moment.'); return; }
       // Always read the complete form before creating/updating an event.
       if (!readSettingsFromForm()) return;
-      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
+      if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
       if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
       const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
       state.eventId = eventId;
@@ -698,7 +716,7 @@
     }
     // fill UI
     if (els.eventName) els.eventName.value = state.eventName;
-    if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
+    if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
     if (els.startDate) els.startDate.value = state.startDate ? formatISODate(state.startDate) : '';
     if (els.endDate) els.endDate.value = state.endDate ? formatISODate(state.endDate) : '';
     if (els.dayStart) els.dayStart.value = state.dayStart;
@@ -710,7 +728,8 @@
     try {
       const draft = serializeState();
       draft.me = state.meKey;
-      draft.pwd = state.participantPassword || '';
+      // Never store raw password — store only the hashed participantId
+      if (state.participantId) draft.participantId = state.participantId;
       localStorage.setItem('scheduleDraft', JSON.stringify(draft));
     } catch (_) {}
   }
@@ -722,7 +741,13 @@
       const draft = JSON.parse(raw);
       applyRestoredData(draft);
       if (draft.me) state.meKey = draft.me;
-      if (typeof draft.pwd === 'string') state.participantPassword = draft.pwd;
+      // Restore hashed participantId; never restore raw password
+      if (typeof draft.participantId === 'string') state.participantId = draft.participantId;
+      // Clean up any legacy raw password from old drafts
+      if (draft.pwd !== undefined) {
+        delete draft.pwd;
+        try { localStorage.setItem('scheduleDraft', JSON.stringify(draft)); } catch (_) {}
+      }
     } catch (_) {}
   }
   // --- Firebase integration (uses window.FIREBASE_CONFIG and compat SDK) ---
@@ -935,6 +960,9 @@
     console.log(`[Scheduler] Subscribing to event: ${eventId}`);
 
     let isFirstEventSnapshot = true;
+    // Bug 5 fix: gate computeBest until event metadata (dates/times) has arrived
+    let eventMetaReady = false;
+
     const eventRef = window.__fb.doc(state.db, 'events', eventId);
     const partsRef = window.__fb.collection(state.db, 'events', eventId, 'participants');
 
@@ -976,7 +1004,7 @@
       
       // Update UI from new state
       if (els.eventName) els.eventName.value = state.eventName;
-      if (els.pageTitle) els.pageTitle.textContent = state.eventName;
+      if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
       if (els.startDate && state.startDate) els.startDate.value = formatISODate(state.startDate);
       if (els.endDate && state.endDate) els.endDate.value = formatISODate(state.endDate);
       if (els.dayStart) els.dayStart.value = state.dayStart;
@@ -997,6 +1025,8 @@
       }
       
       updateControlsForRole();
+      // Bug 5 fix: mark event metadata as ready so participants snapshot can compute best times
+      eventMetaReady = true;
       isFirstEventSnapshot = false;
     }, (error) => {
       console.error(`[Scheduler] Error subscribing to event ${eventId}:`, error);
@@ -1024,10 +1054,38 @@
           }
         }
       });
+
+      // Bug 7 fix: before replacing state.availability, snapshot any unsaved local slots
+      // for the current user so they survive live updates from other participants.
+      const localUnsavedSlots = [];
+      if (state.meKey) {
+        for (const [dateIso, dayMap] of state.availability.entries()) {
+          for (const [timeKey, set] of dayMap.entries()) {
+            if (set.has(state.meKey)) {
+              // Check if this slot is already represented in newAvail for meKey
+              const newDay = newAvail.get(dateIso);
+              const newSet = newDay?.get(timeKey);
+              if (!newSet?.has(state.meKey)) {
+                localUnsavedSlots.push(timeKey);
+              }
+            }
+          }
+        }
+      }
+
       state.availability = newAvail;
       state.participantCount = names.length;
+
+      // Re-inject any unsaved local slots that weren't yet in Firestore
+      for (const timeKey of localUnsavedSlots) {
+        const [dateIso] = timeKey.split(' ');
+        const set = ensureSlot(timeKey, true, null, false);
+        set.add(state.meKey);
+      }
+
       els.grid?.querySelectorAll('.slot').forEach(paintSlot);
-      computeBest();
+      // Bug 5 fix: only compute best times once event metadata is ready
+      if (eventMetaReady) computeBest();
       renderParticipants(names);
       setLive(true);
     });
@@ -1050,13 +1108,13 @@
     return String(s).replace(/[&<>"{}]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','{':'&#123;','}':'&#125;'}[c]); });
   }
 
-  function showToast(text) {
+  function showToast(text, ms = 1800) {
     const t = document.getElementById('toast');
     if (!t) return;
     t.textContent = text;
     t.hidden = false;
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => { t.hidden = true; }, 1800);
+    t._timer = setTimeout(() => { t.hidden = true; }, ms);
   }
 
   function showStatus(text, isError = false) {
