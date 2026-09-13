@@ -35,6 +35,10 @@
   <main id="main" class="contact-section" style="max-width: 800px; margin: 0 auto;">
     <h2 style="text-align:center">Get in touch</h2>
     <form id="contactForm" action="https://formspree.io/f/mwkggdjb" method="POST">
+      <!-- Honeypot field: hidden from real users, bots fill it in → Formspree discards submission -->
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+      <!-- Label emails clearly in your inbox -->
+      <input type="hidden" name="_subject" value="New message from dilanjandk7.github.io">
       <input type="text" name="name" placeholder="Your Name" autocomplete="name" required>
       <input type="email" name="email" placeholder="Your Email" autocomplete="email" required>
       <textarea name="message" placeholder="Your Message" required></textarea>

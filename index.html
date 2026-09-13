@@ -123,6 +123,8 @@
         <section id="contact" class="contact-section">
             <h2>Contact</h2>
             <form id="contactForm" autocomplete="on">
+                <!-- Honeypot: hidden from real users, bots fill it → submission discarded -->
+                <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
                 <input type="text" name="name" placeholder="Your Name" autocomplete="name" required>
                 <input type="email" name="email" placeholder="Your Email" autocomplete="email" required>
                 <textarea name="message" placeholder="Your Message" required></textarea>
