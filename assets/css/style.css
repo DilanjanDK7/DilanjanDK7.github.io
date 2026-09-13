@@ -1446,4 +1446,14 @@ footer {
     }
 }
 
-
+/* Scheduler layout guards (moved from inline <style> in schedule.html) */
+.scheduler-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+}
+@media (max-width: 1000px) {
+    .scheduler-layout {
+        grid-template-columns: 1fr;
+    }
+}

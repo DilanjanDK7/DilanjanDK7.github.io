@@ -106,11 +106,27 @@
     if (!modal || !modalContent) return;
     const data = projectData[projectKey];
     if (!data) return;
-    modalContent.innerHTML = `
-      <h3 id="projectDetailsTitle">${data.title}</h3>
-      <p>${data.description}</p>
-      <p><a class="project-link" href="${data.link}">View project</a></p>
-    `;
+
+    // Safe DOM construction — no innerHTML with dynamic data
+    modalContent.innerHTML = '';
+    const h3 = document.createElement('h3');
+    h3.id = 'projectDetailsTitle';
+    h3.textContent = data.title;
+
+    const desc = document.createElement('p');
+    desc.textContent = data.description;
+
+    const linkPara = document.createElement('p');
+    const a = document.createElement('a');
+    a.className = 'project-link';
+    a.href = data.link;
+    a.textContent = 'View project';
+    linkPara.appendChild(a);
+
+    modalContent.appendChild(h3);
+    modalContent.appendChild(desc);
+    modalContent.appendChild(linkPara);
+
     lastFocused = document.activeElement;
     modal.classList.remove('hidden');
     modal.setAttribute('aria-hidden', 'false');

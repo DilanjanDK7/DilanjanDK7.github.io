@@ -661,7 +661,8 @@
     try {
       const draft = serializeState();
       draft.me = state.meKey;
-      draft.pwd = state.participantPassword || '';
+      // Store the hashed participantId only — never store raw password in localStorage
+      if (state.participantId) draft.participantId = state.participantId;
       localStorage.setItem('scheduleDraft', JSON.stringify(draft));
     } catch (_) {}
   }
@@ -673,7 +674,13 @@
       const draft = JSON.parse(raw);
       applyRestoredData(draft);
       if (draft.me) state.meKey = draft.me;
-      if (typeof draft.pwd === 'string') state.participantPassword = draft.pwd;
+      // Restore hashed participantId if available; never restore raw password
+      if (typeof draft.participantId === 'string') state.participantId = draft.participantId;
+      // Clean up any legacy raw password stored in old drafts
+      if (draft.pwd !== undefined) {
+        delete draft.pwd;
+        try { localStorage.setItem('scheduleDraft', JSON.stringify(draft)); } catch (_) {}
+      }
     } catch (_) {}
   }
   // --- Firebase integration (uses window.FIREBASE_CONFIG and compat SDK) ---

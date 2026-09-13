@@ -1,5 +1,7 @@
 # Firebase config (contains secrets)
 # assets/js/firebase-config.js
+# Firebase config (contains API key - gitignored, deploy via CI secret or keep locally)
+assets/js/firebase-config.js
 
 # Node modules (if added later)
 node_modules/
