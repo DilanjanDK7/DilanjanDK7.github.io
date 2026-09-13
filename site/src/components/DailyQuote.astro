@@ -1,69 +1,164 @@
 ---
 const quotes = [
+  // ── Science & Research ───────────────────────────────────────────────────
   { category: 'Science', text: 'Somewhere, something incredible is waiting to be known.', author: 'Carl Sagan' },
   { category: 'Science', text: 'The important thing is to never stop questioning.', author: 'Albert Einstein' },
-  { category: 'Science', text: 'The art and science of asking questions is the source of all knowledge.', author: 'Thomas Berger' },
-  { category: 'Science', text: 'Research is what I’m doing when I don’t know what I’m doing.', author: 'Wernher von Braun' },
-  { category: 'Science', text: 'The good thing about science is that it’s true whether or not you believe in it.', author: 'Neil deGrasse Tyson' },
+  { category: 'Science', text: 'The good thing about science is that it\'s true whether or not you believe in it.', author: 'Neil deGrasse Tyson' },
+  { category: 'Science', text: 'Research is what I\'m doing when I don\'t know what I\'m doing.', author: 'Wernher von Braun' },
+  { category: 'Science', text: 'Science is a way of thinking much more than it is a body of knowledge.', author: 'Carl Sagan' },
+  { category: 'Science', text: 'The first principle is that you must not fool yourself — and you are the easiest person to fool.', author: 'Richard Feynman' },
+  { category: 'Science', text: 'Physics is like sex: sure, it may give some practical results, but that\'s not why we do it.', author: 'Richard Feynman' },
+  { category: 'Science', text: 'If you thought that science was certain — well, that is just an error on your part.', author: 'Richard Feynman' },
+  { category: 'Science', text: 'An expert is a person who has made all the mistakes that can be made in a very narrow field.', author: 'Niels Bohr' },
+  { category: 'Science', text: 'It doesn\'t matter how beautiful your theory is. If it doesn\'t agree with experiment, it\'s wrong.', author: 'Richard Feynman' },
+  { category: 'Science', text: 'The most beautiful thing we can experience is the mysterious. It is the source of all true art and science.', author: 'Albert Einstein' },
+  { category: 'Science', text: 'In science it often happens that scientists say, "You know that\'s a really good argument; my position is mistaken."', author: 'Carl Sagan' },
+  { category: 'Science', text: 'The effort to understand the universe is one of the very few things that lifts human life a little above the level of farce.', author: 'Steven Weinberg' },
+  { category: 'Science', text: 'Equipped with his five senses, man explores the universe around him and calls the adventure Science.', author: 'Edwin Hubble' },
+  { category: 'Science', text: 'Science never solves a problem without creating ten more.', author: 'George Bernard Shaw' },
+  { category: 'Science', text: 'Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.', author: 'Albert Einstein' },
+  { category: 'Science', text: 'The most exciting phrase to hear in science, the one that heralds new discoveries, is not "Eureka!" but "That\'s funny…"', author: 'Isaac Asimov' },
+  { category: 'Science', text: 'Not everything that counts can be counted, and not everything that can be counted counts.', author: 'William Bruce Cameron' },
+  { category: 'Science', text: 'All models are wrong, but some are useful.', author: 'George E. P. Box' },
+  { category: 'Science', text: 'To know that we know what we know, and to know that we do not know what we do not know — that is true knowledge.', author: 'Nicolaus Copernicus' },
+
+  // ── Neuroscience & Brain ──────────────────────────────────────────────────
+  { category: 'Neuroscience', text: 'The brain is wider than the sky.', author: 'Emily Dickinson' },
+  { category: 'Neuroscience', text: 'We are not our brains, but our brains are us.', author: 'António Damásio' },
+  { category: 'Neuroscience', text: 'The human brain has 100 billion neurons, each neuron connected to 10,000 other neurons. Sitting on your shoulders is the most complicated object in the known universe.', author: 'Michio Kaku' },
+  { category: 'Neuroscience', text: 'Neurons that fire together wire together.', author: 'Donald Hebb' },
+  { category: 'Neuroscience', text: 'The brain is the last and greatest biological frontier, the most complex thing we have yet discovered in our universe.', author: 'James D. Watson' },
+  { category: 'Neuroscience', text: 'We know the brain is capable of enormous change. Use it or lose it.', author: 'Michael Merzenich' },
+  { category: 'Neuroscience', text: 'Nothing in neuroscience makes sense except in the light of behavior.', author: 'Donald Hebb' },
+  { category: 'Neuroscience', text: 'The mind is not a vessel to be filled, but a fire to be kindled.', author: 'Plutarch' },
+  { category: 'Neuroscience', text: 'The brain is not a computer. It is more like an orchestra constantly tuning itself.', author: 'Jeff Hawkins' },
+  { category: 'Neuroscience', text: 'Consciousness is the last mystery. A mystery is a phenomenon that people don\'t know how to think about — yet.', author: 'Daniel Dennett' },
+  { category: 'Neuroscience', text: 'To understand the brain you need to understand what the brain does, not just what it is.', author: 'Stanislas Dehaene' },
+  { category: 'Neuroscience', text: 'Every perception is to some degree an act of creation, and every act of memory is to some degree an act of imagination.', author: 'Gerald Edelman' },
+  { category: 'Neuroscience', text: 'The brain has its own logic, and that logic is not always rational. Understanding that logic is the key to understanding behavior.', author: 'Robert Sapolsky' },
+  { category: 'Neuroscience', text: 'Pain is inevitable. Suffering is optional.', author: 'Haruki Murakami' },
+  { category: 'Neuroscience', text: 'The body keeps the score. The mind may forget, but the body remembers.', author: 'Bessel van der Kolk' },
+  { category: 'Neuroscience', text: 'We don\'t see things as they are; we see things as we are.', author: 'Anaïs Nin' },
+  { category: 'Neuroscience', text: 'It is not the strongest of the species that survives, nor the most intelligent, but the one most responsive to change.', author: 'Charles Darwin' },
+
+  // ── Philosophy & Stoicism ────────────────────────────────────────────────
   { category: 'Philosophy', text: 'The unexamined life is not worth living.', author: 'Socrates' },
   { category: 'Philosophy', text: 'He who has a why to live can bear almost any how.', author: 'Friedrich Nietzsche' },
   { category: 'Philosophy', text: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', author: 'Aristotle' },
-  { category: 'Philosophy', text: 'No man is free who is not master of himself.', author: 'Epictetus' },
   { category: 'Philosophy', text: 'The obstacle is the way.', author: 'Marcus Aurelius' },
-  { category: 'Life', text: 'Life can only be understood backwards; but it must be lived forwards.', author: 'Søren Kierkegaard' },
-  { category: 'Life', text: 'Act as if what you do makes a difference. It does.', author: 'William James' },
-  { category: 'Life', text: 'Do what you feel in your heart to be right—for you’ll be criticized anyway.', author: 'Eleanor Roosevelt' },
-  { category: 'Life', text: 'The purpose of our lives is to be happy.', author: 'Dalai Lama' },
-  { category: 'Life', text: 'In the middle of difficulty lies opportunity.', author: 'Albert Einstein' },
+  { category: 'Philosophy', text: 'No man is free who is not master of himself.', author: 'Epictetus' },
+  { category: 'Philosophy', text: 'You have power over your mind, not outside events. Realize this, and you will find strength.', author: 'Marcus Aurelius' },
+  { category: 'Philosophy', text: 'Waste no more time arguing about what a good man should be. Be one.', author: 'Marcus Aurelius' },
+  { category: 'Philosophy', text: 'He suffers more than necessary, who suffers before it is necessary.', author: 'Seneca' },
+  { category: 'Philosophy', text: 'Luck is what happens when preparation meets opportunity.', author: 'Seneca' },
+  { category: 'Philosophy', text: 'Wealth consists not in having great possessions, but in having few wants.', author: 'Epictetus' },
+  { category: 'Philosophy', text: 'If it is not right, do not do it; if it is not true, do not say it.', author: 'Marcus Aurelius' },
+  { category: 'Philosophy', text: 'Make the best use of what is in your power, and take the rest as it happens.', author: 'Epictetus' },
+  { category: 'Philosophy', text: 'It is not death that a man should fear, but he should fear never beginning to live.', author: 'Marcus Aurelius' },
+  { category: 'Philosophy', text: 'Begin at once to live, and count each separate day as a separate life.', author: 'Seneca' },
+  { category: 'Philosophy', text: 'Do not indulge in dreams of what you do not have, but count the blessings you actually possess.', author: 'Marcus Aurelius' },
+  { category: 'Philosophy', text: 'Everything can be taken from a man but one thing: the last of the human freedoms — to choose one\'s attitude in any given set of circumstances.', author: 'Viktor Frankl' },
+  { category: 'Philosophy', text: 'Between stimulus and response there is a space. In that space is our power to choose our response.', author: 'Viktor Frankl' },
+  { category: 'Philosophy', text: 'What we think, we become.', author: 'Buddha' },
+  { category: 'Philosophy', text: 'The whole problem with the world is that fools and fanatics are always so certain of themselves, and wiser people so full of doubts.', author: 'Bertrand Russell' },
+  { category: 'Philosophy', text: 'Life can only be understood backwards; but it must be lived forwards.', author: 'Søren Kierkegaard' },
+  { category: 'Philosophy', text: 'The function of prayer is not to influence God, but rather to change the nature of the one who prays.', author: 'Søren Kierkegaard' },
+
+  // ── Productivity & Deep Work ─────────────────────────────────────────────
+  { category: 'Deep Work', text: 'Human beings, it seems, are at their best when immersed deeply in something challenging.', author: 'Cal Newport' },
+  { category: 'Deep Work', text: 'A deep life is a good life.', author: 'Cal Newport' },
+  { category: 'Deep Work', text: 'Clarity about what matters provides clarity about what does not.', author: 'Cal Newport' },
+  { category: 'Deep Work', text: 'Flow is the state in which people are so involved in an activity that nothing else seems to matter.', author: 'Mihaly Csikszentmihalyi' },
+  { category: 'Deep Work', text: 'The best moments usually occur when a person\'s body or mind is stretched to its limits.', author: 'Mihaly Csikszentmihalyi' },
+  { category: 'Deep Work', text: 'Creativity is a central source of meaning in our lives.', author: 'Mihaly Csikszentmihalyi' },
+  { category: 'Deep Work', text: 'If you want to write, you need to keep an honest, unpublishable journal that nobody reads, nobody but you. Where you just put down what you think about life, what you think about things, what you think is beautiful, what you think is not.', author: 'Madeleine L\'Engle' },
+  { category: 'Deep Work', text: 'The scariest moment is always just before you start.', author: 'Stephen King' },
+  { category: 'Deep Work', text: 'Amateurs sit and wait for inspiration. The rest of us just get up and go to work.', author: 'Stephen King' },
+  { category: 'Deep Work', text: 'It\'s not the daily increase but daily decrease. Hack away at the unessential.', author: 'Bruce Lee' },
+  { category: 'Deep Work', text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
+  { category: 'Deep Work', text: 'I have not failed. I\'ve just found 10,000 ways that won\'t work.', author: 'Thomas Edison' },
+  { category: 'Deep Work', text: 'The secret of getting ahead is getting started.', author: 'Mark Twain' },
+  { category: 'Deep Work', text: 'Done is better than perfect.', author: 'Sheryl Sandberg' },
+  { category: 'Deep Work', text: 'Give me six hours to chop down a tree and I will spend the first four sharpening the axe.', author: 'Abraham Lincoln' },
+  { category: 'Deep Work', text: 'Concentrate all your thoughts upon the work at hand. The sun\'s rays do not burn until brought to a focus.', author: 'Alexander Graham Bell' },
+  { category: 'Deep Work', text: 'You do not rise to the level of your goals. You fall to the level of your systems.', author: 'James Clear' },
+  { category: 'Deep Work', text: 'Every action you take is a vote for the type of person you wish to become.', author: 'James Clear' },
+  { category: 'Deep Work', text: 'The most dangerous distractions are the ones you love, but that don\'t love you back.', author: 'Warren Buffett' },
+  { category: 'Deep Work', text: 'Focus is a matter of deciding what things you\'re not going to do.', author: 'John Carmack' },
 ];
-
-const reflectionSeeds = {
-  Science: {
-    subjects: ['A careful experiment', 'A difficult question', 'A patient researcher', 'A useful model', 'A surprising result', 'A quiet observation', 'A well-tested idea', 'A shared dataset', 'A clear measurement', 'A failed hypothesis'],
-    endings: ['turns uncertainty into a better question.', 'is often the beginning of a more honest answer.', 'becomes valuable when it can be examined and repeated.', 'teaches us to let evidence reshape our assumptions.', 'shows that progress is usually built from small corrections.', 'reminds us that curiosity is a form of discipline.', 'opens a path that certainty would have hidden.', 'grows stronger when it is shared and questioned.', 'is useful when it makes the next question clearer.', 'can reveal more than a confident conclusion.'],
-    followUps: ['It rewards patience.', 'It invites us to look again.', 'It leaves room for surprise.', 'It keeps wonder close.'],
-  },
-  Philosophy: {
-    subjects: ['A quiet mind', 'A difficult choice', 'A generous interpretation', 'A moment of attention', 'A question about meaning', 'A habit examined honestly', 'A life lived deliberately', 'A little humility', 'A conversation with oneself', 'A pause before judgment'],
-    endings: ['makes room for wisdom to arrive.', 'can reveal the values beneath our decisions.', 'is often more powerful than an easy answer.', 'helps us see what we have been taking for granted.', 'turns experience into understanding.', 'is a small freedom we can practice every day.', 'reminds us that meaning is made through attention.', 'can be the beginning of a more truthful life.', 'teaches us to hold certainty with care.', 'gives us time to choose rather than react.'],
-    followUps: ['It asks for honesty.', 'It changes the quality of attention.', 'It is worth returning to.', 'It makes certainty gentler.'],
-  },
-  Life: {
-    subjects: ['A small act of kindness', 'A fresh beginning', 'A season of change', 'A patient friendship', 'A day lived attentively', 'A brave apology', 'A useful failure', 'A difficult season', 'A shared laugh', 'A meaningful piece of work'],
-    endings: ['can quietly change the shape of a life.', 'does not need to be perfect to be worthwhile.', 'often begins before we feel ready.', 'is built through choices that seem ordinary at first.', 'becomes lighter when it is carried with others.', 'can teach us how to begin again.', 'is still progress when it changes our direction.', 'deserves patience rather than shame.', 'can become a memory that gives strength later.', 'matters because it gives attention to what we value.'],
-    followUps: ['Small steps still count.', 'There is no need to rush it.', 'The meaning often appears later.', 'You can begin where you are.'],
-  },
-};
-
-for (const [category, bank] of Object.entries(reflectionSeeds)) {
-  for (const subject of bank.subjects) {
-    for (const ending of bank.endings) {
-      for (const followUp of bank.followUps) {
-        quotes.push({ category, text: `${subject} ${ending} ${followUp}`, author: 'Daily reflection' });
-      }
-    }
-  }
-}
-const quoteJson = JSON.stringify(quotes);
 ---
+
 <section class="daily-quote-section px-4 py-12" aria-labelledby="daily-quote-title">
   <div class="max-w-4xl mx-auto rounded-[1.5rem] border border-border bg-card/80 p-6 md:p-8 text-center shadow-lg shadow-black/5">
     <p class="section-kicker">A thought for today</p>
     <h2 id="daily-quote-title" class="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-foreground">Daily quote</h2>
-    <blockquote class="mt-5">
-      <p id="dailyQuoteText" class="text-xl md:text-2xl leading-relaxed text-foreground/90">Loading today’s thought…</p>
+    <blockquote class="mt-5" id="quoteBlock" style="transition: opacity 0.4s ease;">
+      <p id="dailyQuoteText" class="text-xl md:text-2xl leading-relaxed text-foreground/90">Loading today's thought…</p>
       <footer id="dailyQuoteAuthor" class="mt-4 text-sm text-muted"></footer>
     </blockquote>
-    <span id="dailyQuoteCategory" class="inline-flex mt-5 rounded-full border border-primary/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary"></span>
+    <div class="mt-5 flex items-center justify-center gap-3">
+      <span id="dailyQuoteCategory" class="inline-flex rounded-full border border-primary/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary"></span>
+      <button
+        id="newQuoteBtn"
+        type="button"
+        aria-label="Show a different quote"
+        title="New quote (press Q)"
+        style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.25rem 0.75rem; border-radius:9999px; border:1px solid var(--border,#cfd8ea); background:transparent; font-size:0.75rem; cursor:pointer; color:var(--muted,#666); transition:color 0.2s, border-color 0.2s;"
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        New quote
+      </button>
+    </div>
   </div>
 </section>
 
-<script define:vars={{ quoteJson }}>
-  const quotes = JSON.parse(quoteJson);
-  const today = new Date();
-  const dayNumber = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 86400000);
-  const quote = quotes[((dayNumber % quotes.length) + quotes.length) % quotes.length];
-  document.getElementById('dailyQuoteText').textContent = `“${quote.text}”`;
-  document.getElementById('dailyQuoteAuthor').textContent = `— ${quote.author}`;
-  document.getElementById('dailyQuoteCategory').textContent = quote.category;
+<script define:vars={{ quotesJson: JSON.stringify(quotes) }}>
+  const quotes = JSON.parse(quotesJson);
+
+  function pickRandom(exclude) {
+    let idx;
+    do { idx = Math.floor(Math.random() * quotes.length); } while (quotes.length > 1 && idx === exclude);
+    return idx;
+  }
+
+  function showQuote(idx, animate) {
+    const block = document.getElementById('quoteBlock');
+    const textEl = document.getElementById('dailyQuoteText');
+    const authorEl = document.getElementById('dailyQuoteAuthor');
+    const catEl = document.getElementById('dailyQuoteCategory');
+    const q = quotes[idx];
+
+    if (animate) {
+      block.style.opacity = '0';
+      setTimeout(() => {
+        textEl.textContent = `\u201c${q.text}\u201d`;
+        authorEl.textContent = `\u2014 ${q.author}`;
+        catEl.textContent = q.category;
+        block.style.opacity = '1';
+      }, 200);
+    } else {
+      textEl.textContent = `\u201c${q.text}\u201d`;
+      authorEl.textContent = `\u2014 ${q.author}`;
+      catEl.textContent = q.category;
+    }
+    return idx;
+  }
+
+  let currentIdx = pickRandom(-1);
+  showQuote(currentIdx, false);
+
+  const btn = document.getElementById('newQuoteBtn');
+  btn.addEventListener('click', () => {
+    currentIdx = pickRandom(currentIdx);
+    showQuote(currentIdx, true);
+  });
+
+  // Press Q anywhere on the page for a new quote
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'q' || e.key === 'Q') {
+      if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)) return;
+      currentIdx = pickRandom(currentIdx);
+      showQuote(currentIdx, true);
+    }
+  });
 </script>
