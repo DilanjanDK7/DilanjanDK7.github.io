@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import BentoFeatured from '../components/BentoFeatured.astro';
 import BentoCard from '../components/BentoCard.astro';
+import DailyQuote from '../components/DailyQuote.astro';
 import projects from '../data/projects.json';
 
 const epiflow = projects.find((p) => p.key === 'epiflow')!;
@@ -63,6 +64,8 @@ const secondary = projects.filter((p) => p.key !== 'epiflow');
       </ul>
     </div>
   </section>
+
+  <DailyQuote />
 
   <section id="about" class="py-20 px-4 max-w-6xl mx-auto">
     <div class="max-w-4xl grid md:grid-cols-[0.8fr_1.2fr] gap-10 items-center">

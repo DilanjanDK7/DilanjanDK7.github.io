@@ -1,0 +1,69 @@
+---
+const quotes = [
+  { category: 'Science', text: 'Somewhere, something incredible is waiting to be known.', author: 'Carl Sagan' },
+  { category: 'Science', text: 'The important thing is to never stop questioning.', author: 'Albert Einstein' },
+  { category: 'Science', text: 'The art and science of asking questions is the source of all knowledge.', author: 'Thomas Berger' },
+  { category: 'Science', text: 'Research is what I’m doing when I don’t know what I’m doing.', author: 'Wernher von Braun' },
+  { category: 'Science', text: 'The good thing about science is that it’s true whether or not you believe in it.', author: 'Neil deGrasse Tyson' },
+  { category: 'Philosophy', text: 'The unexamined life is not worth living.', author: 'Socrates' },
+  { category: 'Philosophy', text: 'He who has a why to live can bear almost any how.', author: 'Friedrich Nietzsche' },
+  { category: 'Philosophy', text: 'We are what we repeatedly do. Excellence, then, is not an act, but a habit.', author: 'Aristotle' },
+  { category: 'Philosophy', text: 'No man is free who is not master of himself.', author: 'Epictetus' },
+  { category: 'Philosophy', text: 'The obstacle is the way.', author: 'Marcus Aurelius' },
+  { category: 'Life', text: 'Life can only be understood backwards; but it must be lived forwards.', author: 'Søren Kierkegaard' },
+  { category: 'Life', text: 'Act as if what you do makes a difference. It does.', author: 'William James' },
+  { category: 'Life', text: 'Do what you feel in your heart to be right—for you’ll be criticized anyway.', author: 'Eleanor Roosevelt' },
+  { category: 'Life', text: 'The purpose of our lives is to be happy.', author: 'Dalai Lama' },
+  { category: 'Life', text: 'In the middle of difficulty lies opportunity.', author: 'Albert Einstein' },
+];
+
+const reflectionSeeds = {
+  Science: {
+    subjects: ['A careful experiment', 'A difficult question', 'A patient researcher', 'A useful model', 'A surprising result', 'A quiet observation', 'A well-tested idea', 'A shared dataset', 'A clear measurement', 'A failed hypothesis'],
+    endings: ['turns uncertainty into a better question.', 'is often the beginning of a more honest answer.', 'becomes valuable when it can be examined and repeated.', 'teaches us to let evidence reshape our assumptions.', 'shows that progress is usually built from small corrections.', 'reminds us that curiosity is a form of discipline.', 'opens a path that certainty would have hidden.', 'grows stronger when it is shared and questioned.', 'is useful when it makes the next question clearer.', 'can reveal more than a confident conclusion.'],
+    followUps: ['It rewards patience.', 'It invites us to look again.', 'It leaves room for surprise.', 'It keeps wonder close.'],
+  },
+  Philosophy: {
+    subjects: ['A quiet mind', 'A difficult choice', 'A generous interpretation', 'A moment of attention', 'A question about meaning', 'A habit examined honestly', 'A life lived deliberately', 'A little humility', 'A conversation with oneself', 'A pause before judgment'],
+    endings: ['makes room for wisdom to arrive.', 'can reveal the values beneath our decisions.', 'is often more powerful than an easy answer.', 'helps us see what we have been taking for granted.', 'turns experience into understanding.', 'is a small freedom we can practice every day.', 'reminds us that meaning is made through attention.', 'can be the beginning of a more truthful life.', 'teaches us to hold certainty with care.', 'gives us time to choose rather than react.'],
+    followUps: ['It asks for honesty.', 'It changes the quality of attention.', 'It is worth returning to.', 'It makes certainty gentler.'],
+  },
+  Life: {
+    subjects: ['A small act of kindness', 'A fresh beginning', 'A season of change', 'A patient friendship', 'A day lived attentively', 'A brave apology', 'A useful failure', 'A difficult season', 'A shared laugh', 'A meaningful piece of work'],
+    endings: ['can quietly change the shape of a life.', 'does not need to be perfect to be worthwhile.', 'often begins before we feel ready.', 'is built through choices that seem ordinary at first.', 'becomes lighter when it is carried with others.', 'can teach us how to begin again.', 'is still progress when it changes our direction.', 'deserves patience rather than shame.', 'can become a memory that gives strength later.', 'matters because it gives attention to what we value.'],
+    followUps: ['Small steps still count.', 'There is no need to rush it.', 'The meaning often appears later.', 'You can begin where you are.'],
+  },
+};
+
+for (const [category, bank] of Object.entries(reflectionSeeds)) {
+  for (const subject of bank.subjects) {
+    for (const ending of bank.endings) {
+      for (const followUp of bank.followUps) {
+        quotes.push({ category, text: `${subject} ${ending} ${followUp}`, author: 'Daily reflection' });
+      }
+    }
+  }
+}
+const quoteJson = JSON.stringify(quotes);
+---
+<section class="daily-quote-section px-4 py-12" aria-labelledby="daily-quote-title">
+  <div class="max-w-4xl mx-auto rounded-[1.5rem] border border-border bg-card/80 p-6 md:p-8 text-center shadow-lg shadow-black/5">
+    <p class="section-kicker">A thought for today</p>
+    <h2 id="daily-quote-title" class="mt-3 text-2xl md:text-3xl font-bold tracking-tight text-foreground">Daily quote</h2>
+    <blockquote class="mt-5">
+      <p id="dailyQuoteText" class="text-xl md:text-2xl leading-relaxed text-foreground/90">Loading today’s thought…</p>
+      <footer id="dailyQuoteAuthor" class="mt-4 text-sm text-muted"></footer>
+    </blockquote>
+    <span id="dailyQuoteCategory" class="inline-flex mt-5 rounded-full border border-primary/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary"></span>
+  </div>
+</section>
+
+<script define:vars={{ quoteJson }}>
+  const quotes = JSON.parse(quoteJson);
+  const today = new Date();
+  const dayNumber = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 86400000);
+  const quote = quotes[((dayNumber % quotes.length) + quotes.length) % quotes.length];
+  document.getElementById('dailyQuoteText').textContent = `“${quote.text}”`;
+  document.getElementById('dailyQuoteAuthor').textContent = `— ${quote.author}`;
+  document.getElementById('dailyQuoteCategory').textContent = quote.category;
+</script>
