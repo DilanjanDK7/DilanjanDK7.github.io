@@ -43,6 +43,11 @@
     dowPicker: document.querySelector('.dow-picker'),
     grid: document.getElementById('availabilityGrid'),
     bestSlots: document.getElementById('bestSlots'),
+    makeShareLink: document.getElementById('makeShareLink'),
+    shareLink: document.getElementById('shareLink'),
+    copyMyAvailability: document.getElementById('copyMyAvailability'),
+    importText: document.getElementById('importText'),
+    importAvailability: document.getElementById('importAvailability'),
     makeShareLink: null,  // removed: element doesn't exist in current HTML
     shareLink: null,       // removed: element doesn't exist in current HTML (use eventLink)
     copyMyAvailability: null, // removed
@@ -168,6 +173,7 @@
       if (!readSettingsFromForm()) return;
       persistDraft();
       renderGrid();
+      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
       if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
       computeBest();
       // If bound to an event, persist settings
@@ -182,6 +188,8 @@
 
     // Auto-load participant's saved availability when they enter name/password on shared link
     const autoLoadParticipantData = async () => {
+      if (!state.eventId || !state.db) return; // Only for shared events
+      const oldMeKey = state.meKey;
       if (!state.eventId) return; // Only for shared events
 
       // If Firebase not ready yet, retry a few times
@@ -201,6 +209,7 @@
       }
 
       const oldPid = state.participantId;
+      
       state.meKey = getMeKey();
       state.participantPassword = getPassword();
       await computeParticipantId();
@@ -293,6 +302,7 @@
       if (!state.db) { alert('Live sharing is still initializing. Please try again in a moment.'); return; }
       // Always read the complete form before creating/updating an event.
       if (!readSettingsFromForm()) return;
+      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
       if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
       if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
       const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
@@ -716,6 +726,7 @@
     }
     // fill UI
     if (els.eventName) els.eventName.value = state.eventName;
+    if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
     if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
     if (els.startDate) els.startDate.value = state.startDate ? formatISODate(state.startDate) : '';
     if (els.endDate) els.endDate.value = state.endDate ? formatISODate(state.endDate) : '';
@@ -728,6 +739,7 @@
     try {
       const draft = serializeState();
       draft.me = state.meKey;
+      draft.pwd = state.participantPassword || '';
       // Never store raw password — store only the hashed participantId
       if (state.participantId) draft.participantId = state.participantId;
       localStorage.setItem('scheduleDraft', JSON.stringify(draft));
@@ -741,6 +753,7 @@
       const draft = JSON.parse(raw);
       applyRestoredData(draft);
       if (draft.me) state.meKey = draft.me;
+      if (typeof draft.pwd === 'string') state.participantPassword = draft.pwd;
       // Restore hashed participantId; never restore raw password
       if (typeof draft.participantId === 'string') state.participantId = draft.participantId;
       // Clean up any legacy raw password from old drafts
@@ -1004,6 +1017,7 @@
       
       // Update UI from new state
       if (els.eventName) els.eventName.value = state.eventName;
+      if (els.pageTitle) els.pageTitle.textContent = state.eventName;
       if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
       if (els.startDate && state.startDate) els.startDate.value = formatISODate(state.startDate);
       if (els.endDate && state.endDate) els.endDate.value = formatISODate(state.endDate);
@@ -1084,6 +1098,7 @@
       }
 
       els.grid?.querySelectorAll('.slot').forEach(paintSlot);
+      computeBest();
       // Bug 5 fix: only compute best times once event metadata is ready
       if (eventMetaReady) computeBest();
       renderParticipants(names);
@@ -1108,12 +1123,14 @@
     return String(s).replace(/[&<>"{}]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','{':'&#123;','}':'&#125;'}[c]); });
   }
 
+  function showToast(text) {
   function showToast(text, ms = 1800) {
     const t = document.getElementById('toast');
     if (!t) return;
     t.textContent = text;
     t.hidden = false;
     clearTimeout(t._timer);
+    t._timer = setTimeout(() => { t.hidden = true; }, 1800);
     t._timer = setTimeout(() => { t.hidden = true; }, ms);
   }
 
