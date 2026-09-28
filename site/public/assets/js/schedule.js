@@ -161,8 +161,11 @@
   async function computeParticipantId() {
     if (!state.eventId) return null;
     const name = (state.meKey || '').trim().toLowerCase();
-    const pwd = (state.participantPassword || '').trim();
-    const key = `${state.eventId}|${name}|${pwd}`;
+    // A password enables the same named participant to recover their entry on
+    // another device. Without one, a private browser token prevents two people
+    // with the same display name from overwriting one another's availability.
+    const credential = (state.participantPassword || '').trim() || `browser:${getAnonymousToken()}`;
+    const key = `${state.eventId}|${name}|${credential}`;
     const pid = await sha256Hex(key);
     state.participantId = pid;
     return pid;
@@ -857,7 +860,7 @@
   };
 
   window.generateId = function generateId() {
-    const bytes = crypto.getRandomValues(new Uint8Array(8));
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
     return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
   };
 
@@ -1123,14 +1126,12 @@
     return String(s).replace(/[&<>"{}]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','{':'&#123;','}':'&#125;'}[c]); });
   }
 
-  function showToast(text) {
   function showToast(text, ms = 1800) {
     const t = document.getElementById('toast');
     if (!t) return;
     t.textContent = text;
     t.hidden = false;
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => { t.hidden = true; }, 1800);
     t._timer = setTimeout(() => { t.hidden = true; }, ms);
   }
 

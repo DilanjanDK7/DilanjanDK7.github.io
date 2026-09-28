@@ -6,7 +6,7 @@ interface Props {
   href: string;
   ctaLabel?: string;
 }
-const { title, description, imageUrl, href, ctaLabel = 'View on GitHub' } = Astro.props;
+const { title, description, imageUrl, href, ctaLabel = 'View project' } = Astro.props;
 ---
 <a href={href} class="bento-featured group block rounded-[1.25rem] overflow-hidden border border-border bg-card transition-transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background" style={`background-image: url('${imageUrl}'); background-size: cover; background-position: center;`}>
   <div class="relative min-h-[300px] md:min-h-[360px] flex flex-col justify-end p-6 md:p-8 bg-gradient-to-t from-black/85 via-black/45 to-transparent">

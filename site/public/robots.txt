@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dilanjandk7.github.io/sitemap.xml
+Sitemap: https://www.dilanjandk.com/sitemap.xml

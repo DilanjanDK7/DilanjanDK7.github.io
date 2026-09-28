@@ -1,4 +1,4 @@
-﻿---
+---
 const path = Astro.url.pathname;
 const navLinks = [
   { href: '/about', label: 'About' },
@@ -9,23 +9,39 @@ const navLinks = [
   { href: '/cv', label: 'CV' },
 ];
 ---
-<nav class="site-nav sticky top-0 z-[100] bg-white/5 dark:bg-black/30 backdrop-blur-xl border-b border-white/10" aria-label="Primary">
-  <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-    <a class="brand text-lg font-extrabold tracking-wide text-foreground hover:text-primary transition-colors" href="/" aria-label="Home">Dilanjan Diyabalanage</a>
-    <div class="flex flex-wrap items-center justify-end gap-x-4 gap-y-2 md:gap-6">
-      {navLinks.map(({ href, label }) => {
-        const isActive = path === href || (href !== '/' && path.startsWith(href));
-        return (
-          <a
-            href={href}
-            class:list={['text-sm md:text-base text-foreground/90 hover:text-primary transition-colors', isActive && 'font-semibold']}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            {label}
-          </a>
-        );
-      })}
-      <button id="themeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="true" title="Toggle theme" class="p-1.5 rounded-lg border border-border bg-surface text-foreground hover:bg-card transition-colors">ðŸŒ™</button>
+<nav class="site-nav sticky top-0 z-[100] border-b border-white/10 bg-white/5 backdrop-blur-xl dark:bg-black/30" aria-label="Primary">
+  <div class="max-w-5xl mx-auto px-4 py-3">
+    <div class="flex items-center justify-between gap-4">
+      <a class="brand text-base sm:text-lg font-extrabold tracking-wide text-foreground hover:text-primary transition-colors" href="/" aria-label="Home">Dilanjan Diyabalanage</a>
+      <div class="hidden md:flex items-center justify-end gap-5 lg:gap-6">
+        {navLinks.map(({ href, label }) => {
+          const isActive = path === href || (href !== '/' && path.startsWith(href));
+          return <a href={href} class:list={['text-sm text-foreground/90 hover:text-primary transition-colors', isActive && 'font-semibold']} aria-current={isActive ? 'page' : undefined}>{label}</a>;
+        })}
+        <button id="themeToggle" type="button" aria-label="Toggle dark mode" aria-pressed="true" title="Toggle theme" class="p-1.5 rounded-lg border border-border bg-surface text-foreground hover:bg-card transition-colors">&#127769;</button>
+      </div>
+      <div class="flex md:hidden items-center gap-2">
+        <button id="themeToggleMobile" type="button" aria-label="Toggle dark mode" aria-pressed="true" title="Toggle theme" class="p-1.5 rounded-lg border border-border bg-surface text-foreground hover:bg-card transition-colors">&#127769;</button>
+        <button id="navMenuButton" type="button" aria-expanded="false" aria-controls="mobileNavMenu" class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold text-foreground">Menu <span aria-hidden="true">&#9776;</span></button>
+      </div>
+    </div>
+    <div id="mobileNavMenu" class="hidden md:hidden pt-3" aria-label="Mobile navigation">
+      <div class="grid grid-cols-2 gap-2 rounded-xl border border-border bg-surface/95 p-2 shadow-lg">
+        {navLinks.map(({ href, label }) => {
+          const isActive = path === href || (href !== '/' && path.startsWith(href));
+          return <a href={href} class:list={['rounded-lg px-3 py-2 text-sm text-foreground hover:bg-card hover:text-primary transition-colors', isActive && 'bg-card font-semibold text-primary']} aria-current={isActive ? 'page' : undefined}>{label}</a>;
+        })}
+      </div>
     </div>
   </div>
 </nav>
+
+<script>
+  const menuButton = document.getElementById('navMenuButton');
+  const menu = document.getElementById('mobileNavMenu');
+  menuButton?.addEventListener('click', () => {
+    const open = menuButton.getAttribute('aria-expanded') === 'true';
+    menuButton.setAttribute('aria-expanded', String(!open));
+    menu?.classList.toggle('hidden', open);
+  });
+</script>

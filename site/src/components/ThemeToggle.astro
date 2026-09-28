@@ -1,31 +1,29 @@
 ---
-// Inline script runs before paint to avoid flash; default dark
+// Apply the stored preference before the first paint.
 ---
 <script is:inline>
-  (function() {
+  (() => {
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const dark = stored === 'light' ? false : (stored === 'dark' || (!stored && prefersDark));
-    document.documentElement.classList.toggle('dark', dark);
+    document.documentElement.classList.toggle('dark', stored === 'dark' || (!stored && prefersDark));
   })();
 </script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const button = document.getElementById('themeToggle');
-    if (!(button instanceof HTMLButtonElement)) return;
-    const themeButton = button as HTMLButtonElement;
     const root = document.documentElement;
-    function updateButton() {
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('#themeToggle, #themeToggleMobile'));
+    const updateButtons = () => {
       const isDark = root.classList.contains('dark');
-      themeButton.setAttribute('aria-pressed', String(isDark));
-      themeButton.textContent = isDark ? '☀️' : '🌙';
-    }
-    themeButton.addEventListener('click', () => {
-      const isDark = root.classList.contains('dark');
-      root.classList.toggle('dark', !isDark);
-      localStorage.setItem('theme', !isDark ? 'dark' : 'light');
-      updateButton();
-    });
-    updateButton();
+      buttons.forEach((button) => {
+        button.setAttribute('aria-pressed', String(isDark));
+        button.innerHTML = isDark ? '&#9728;&#65039;' : '&#127769;';
+      });
+    };
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      root.classList.toggle('dark');
+      localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+      updateButtons();
+    }));
+    updateButtons();
   });
 </script>
