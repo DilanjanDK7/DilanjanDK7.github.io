@@ -282,29 +282,42 @@
         alert('Live sharing is not configured. Please add your Firebase config in assets/js/firebase-config.js and reload.');
         return;
       }
-      // Lazy init if needed
-      if (!state.db && typeof window.initFirebase === 'function') {
-        await window.initFirebase();
+      const originalText = createEventBtn.textContent;
+      createEventBtn.disabled = true;
+      createEventBtn.textContent = 'Creating event…';
+      try {
+        if (!state.db && typeof window.initFirebase === 'function') await window.initFirebase();
+        if (!state.db) throw new Error('Live sharing is still initializing. Please try again in a moment.');
+        if (!readSettingsFromForm()) return;
+        if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
+        await window.ensureSignedIn();
+        const eventId = await window.createOrEnsureEvent();
+        if (!eventId) throw new Error('Unable to create an event.');
+        state.eventId = eventId;
+        state.participantName = (els.participantName?.value || '').trim();
+        await computeParticipantId();
+        const url = new URL('/schedule/', location.origin);
+        url.searchParams.set('event', eventId);
+        eventLink.value = url.toString();
+        try { await navigator.clipboard.writeText(eventLink.value); } catch (_) {}
+        window.subscribeToEvent(eventId);
+        await window.persistEventMeta();
+        await window.persistMyAvailability();
+        updateControlsForRole();
+        showToast('Event link created. You can now share it.');
+      } catch (error) {
+        console.error('[Scheduler] Event creation failed:', error);
+        const message = error?.code === 'auth/operation-not-allowed'
+          ? 'Anonymous sign-in is disabled in Firebase Authentication.'
+          : error?.code === 'permission-denied'
+            ? 'Firebase denied this request. Confirm the new Firestore rules are published.'
+            : (error?.message || 'Unable to create the event. Please try again.');
+        showStatus(message, true);
+        showToast(message, 5000);
+      } finally {
+        createEventBtn.disabled = false;
+        createEventBtn.textContent = originalText;
       }
-      if (!state.db) { alert('Live sharing is still initializing. Please try again in a moment.'); return; }
-      // Always read the complete form before creating/updating an event.
-      if (!readSettingsFromForm()) return;
-      if (els.pageTitle && state.eventName) els.pageTitle.textContent = state.eventName;
-      if (els.pageTitle) els.pageTitle.textContent = state.eventName || 'Plan a Time Together';
-      if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
-      const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
-      state.eventId = eventId;
-      // Firebase anonymous-auth user IDs own participant records.
-      state.participantName = (els.participantName?.value || '').trim();
-      await computeParticipantId();
-      const url = new URL('/schedule/', location.origin);
-      url.searchParams.set('event', eventId);
-      eventLink.value = url.toString();
-      try { await navigator.clipboard.writeText(eventLink.value); } catch (_) {}
-      if (typeof window.subscribeToEvent === 'function') window.subscribeToEvent(eventId);
-      if (typeof window.persistEventMeta === 'function') await window.persistEventMeta();
-      if (typeof window.persistMyAvailability === 'function') await window.persistMyAvailability();
-      updateControlsForRole();
     });
 
     els.selectAll?.addEventListener('click', () => bulkSelect('all'));
@@ -832,9 +845,10 @@
   };
 
   window.ensureSignedIn = async function ensureSignedIn() {
-    if (!state.auth) return;
-    if (state.auth.currentUser) return;
-    await state.auth.signInAnonymously();
+    if (!state.auth) throw new Error('Firebase Authentication is not ready.');
+    if (state.auth.currentUser) return state.auth.currentUser;
+    const credential = await state.auth.signInAnonymously();
+    return credential.user;
   };
 
   window.generateId = function generateId() {

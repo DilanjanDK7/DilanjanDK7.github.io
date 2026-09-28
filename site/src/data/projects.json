@@ -39,5 +39,14 @@
     "image": "/assets/images/projects/neuroimaging-system.jpg",
     "tags": ["Planned", "Python", "Data", "Analytics"],
     "status": "in-progress"
+  },
+  {
+    "key": "q_neurobench",
+    "title": "Q-NeuroBench",
+    "description": "In-progress reproducible benchmark for hybrid quantum-classical machine learning on EEG and neuroimaging features, with rigorous classical baselines and interpretable evaluation.",
+    "link": "/projects/q-neurobench",
+    "image": "/assets/images/projects/qm-fft-feature-package.png",
+    "tags": ["In Progress", "Quantum ML", "EEG", "Python", "Reproducibility"],
+    "status": "in-progress"
   }
 ]
