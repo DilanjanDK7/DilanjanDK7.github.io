@@ -37,6 +37,7 @@
     "description": "Planned research and analytics workspace for exploring live market data, signals, and interpretable visual summaries.",
     "link": "/projects/live-market-analyzer",
     "image": "/assets/images/projects/neuroimaging-system.jpg",
-    "tags": ["Planned", "Python", "Data", "Analytics"]
+    "tags": ["Planned", "Python", "Data", "Analytics"],
+    "status": "in-progress"
   }
 ]

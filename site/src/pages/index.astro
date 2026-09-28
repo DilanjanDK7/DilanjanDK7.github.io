@@ -4,8 +4,9 @@ import BentoFeatured from '../components/BentoFeatured.astro';
 import BentoCard from '../components/BentoCard.astro';
 import projects from '../data/projects.json';
 
-const epiflow = projects.find((p) => p.key === 'epiflow')!;
-const secondary = projects.filter((p) => p.key !== 'epiflow');
+const publishedProjects = projects.filter((p) => p.status !== 'in-progress');
+const epiflow = publishedProjects.find((p) => p.key === 'epiflow')!;
+const secondary = publishedProjects.filter((p) => p.key !== 'epiflow');
 ---
 
 <Layout

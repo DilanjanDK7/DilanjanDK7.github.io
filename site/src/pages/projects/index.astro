@@ -2,6 +2,9 @@
 import Layout from '../../layouts/Layout.astro';
 import BentoCard from '../../components/BentoCard.astro';
 import projects from '../../data/projects.json';
+
+const publishedProjects = projects.filter((project) => project.status !== 'in-progress');
+const inProgressProjects = projects.filter((project) => project.status === 'in-progress');
 ---
 <Layout
   title="Projects | Dilanjan DK"
@@ -9,13 +12,29 @@ import projects from '../../data/projects.json';
 >
   <header class="py-16 px-4 text-center bg-gradient-to-b from-surface to-background">
     <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-foreground">Projects</h1>
-    <p class="mt-2 text-muted">Selected research, pipelines, tools, and one idea currently taking shape.</p>
+    <p class="mt-2 text-muted">Selected research, pipelines, and tools for reproducible neuroscience.</p>
   </header>
   <div class="max-w-6xl mx-auto px-4 py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map((p) => (
+      {publishedProjects.map((p) => (
         <BentoCard title={p.title} description={p.description} image={p.image} link={p.link} tags={p.tags} />
       ))}
     </div>
+    {inProgressProjects.length > 0 && (
+      <section class="mt-16 border-t border-border pt-12" aria-labelledby="in-progress-title">
+        <p class="section-kicker">Things in progress</p>
+        <h2 id="in-progress-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Ideas taking shape.</h2>
+        <div class="mt-6 grid md:grid-cols-2 gap-5">
+          {inProgressProjects.map((project) => (
+            <article class="rounded-[1.25rem] border border-dashed border-primary/50 bg-surface/80 p-6">
+              <span class="inline-flex rounded-full border border-primary/40 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">In progress</span>
+              <h3 class="mt-4 text-xl font-semibold text-foreground">{project.title}</h3>
+              <p class="mt-3 leading-relaxed text-muted">{project.description}</p>
+              <p class="mt-4 text-sm font-medium text-foreground/70">{project.tags.join(' · ')}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
   </div>
 </Layout>
