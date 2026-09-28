@@ -33,6 +33,17 @@ jobs:
         working-directory: site
         run: npm ci
 
+      - name: Inject Firebase web configuration
+        working-directory: site
+        env:
+          FIREBASE_WEB_CONFIG: ${{ secrets.FIREBASE_WEB_CONFIG }}
+        run: |
+          if [ -z "$FIREBASE_WEB_CONFIG" ]; then
+            echo "Missing FIREBASE_WEB_CONFIG repository secret."
+            exit 1
+          fi
+          printf '%s' "$FIREBASE_WEB_CONFIG" > public/assets/js/firebase-config.js
+
       - name: Build
         working-directory: site
         run: npm run build

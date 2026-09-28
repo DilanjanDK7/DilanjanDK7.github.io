@@ -36,7 +36,7 @@ Output is written to `../dist` (repo root). The GitHub Actions workflow runs thi
 To enable the Schedule page with live collaboration:
 
 1. Copy `public/assets/js/firebase-config.example.js` to `public/assets/js/firebase-config.js` (or create it with your Firebase config).
-2. Do not commit real API keys; use environment variables or build-time replacement if needed.
+2. For GitHub Pages deployments, add the complete `window.FIREBASE_CONFIG = ...` assignment as the `FIREBASE_WEB_CONFIG` GitHub Actions secret. The deployment workflow writes it at build time.
 3. Ensure Firebase Auth (Anonymous) and Firestore are enabled.
 
 ## Pages

@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const services = [
+  {
+    number: '01',
+    title: 'AI and machine-learning planning',
+    detail: 'Turn a promising AI idea into a scoped, testable plan: define the problem, assess data readiness, choose suitable methods, and identify the evidence needed to evaluate the result.',
+  },
+  {
+    number: '02',
+    title: 'Neuroimaging and EEG workflows',
+    detail: 'Design reproducible workflows for fMRI and EEG research, including BIDS-aware data organization, preprocessing strategy, feature extraction, quality checks, and interpretable analysis.',
+  },
+  {
+    number: '03',
+    title: 'Scientific software and research infrastructure',
+    detail: 'Improve the reliability of research code with Python tooling, Docker, Snakemake, documentation, version control, and clear handoffs for collaborators and future users.',
+  },
+  {
+    number: '04',
+    title: 'Technical strategy for research teams',
+    detail: 'Translate a research or product goal into practical milestones, architecture decisions, implementation priorities, risks, and a path from prototype to a maintainable system.',
+  },
+];
+
+const fit = [
+  'Research groups building or improving neuroimaging pipelines',
+  'Early-stage teams evaluating an AI or health-data initiative',
+  'Investigators who need a second technical perspective before implementation',
+  'Collaborators who need clear documentation, reproducibility, or workflow design',
+];
+---
+
+<Layout
+  title="Consultation Services | Dilanjan DK"
+  description="Consultation services in AI planning, neuroimaging and EEG workflows, scientific software, and research technology strategy."
+  ogImage="/assets/images/projects/epiflow-system.png"
+>
+  <header class="hero-shell px-4 py-16 md:py-24">
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-end">
+      <div>
+        <p class="eyebrow">Consultation services</p>
+        <h1 class="mt-5 max-w-4xl text-5xl md:text-7xl font-bold leading-[0.95] tracking-[-0.03em] text-foreground">Clear technical direction for difficult data problems.</h1>
+        <p class="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-foreground/80">I help research teams and early-stage organizations turn complex AI, neuroimaging, and research-software questions into thoughtful, reproducible plans.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/contact" class="rounded-full bg-primary px-5 py-3 font-semibold text-white shadow-lg shadow-primary/20 hover:-translate-y-0.5 transition-transform">Discuss a project</a>
+          <a href="/cv" class="rounded-full border border-border bg-surface px-5 py-3 font-semibold text-foreground hover:border-primary hover:text-primary transition-colors">View experience</a>
+        </div>
+      </div>
+      <aside class="rounded-[1.5rem] border border-border bg-card/90 p-6 md:p-8 image-frame">
+        <p class="section-kicker">A practical approach</p>
+        <p class="mt-4 text-2xl font-semibold leading-snug text-foreground">Ground the work in the question, the data, and the people who will use the result.</p>
+        <p class="mt-4 text-sm leading-relaxed text-muted">My perspective combines computational neuroscience, machine learning, reproducible scientific software, technical communication, and research engineering.</p>
+      </aside>
+    </div>
+  </header>
+
+  <section class="max-w-6xl mx-auto px-4 py-16 md:py-20" aria-labelledby="services-title">
+    <p class="section-kicker">How I can help</p>
+    <h2 id="services-title" class="mt-3 text-3xl md:text-4xl font-bold tracking-tight text-foreground">Focused support at the point where it matters.</h2>
+    <div class="mt-8 grid md:grid-cols-2 gap-5">
+      {services.map((service) => (
+        <article class="rounded-[1.25rem] border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:border-primary/60 hover:shadow-xl hover:shadow-black/10">
+          <p class="font-mono text-xs font-semibold tracking-[0.14em] text-primary">{service.number}</p>
+          <h3 class="mt-4 text-xl font-semibold text-foreground">{service.title}</h3>
+          <p class="mt-3 leading-relaxed text-muted">{service.detail}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="surface-band px-4 py-16 md:py-20" aria-labelledby="engagement-title">
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-[0.75fr_1.25fr] gap-12">
+      <div>
+        <p class="section-kicker">Engagements</p>
+        <h2 id="engagement-title" class="mt-3 text-3xl md:text-4xl font-bold tracking-tight text-foreground">Useful from first conversation to next step.</h2>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        <article class="rounded-xl border border-border bg-card p-5"><h3 class="font-semibold text-foreground">Discovery</h3><p class="mt-2 text-sm leading-relaxed text-muted">Clarify the goal, constraints, data, and success criteria.</p></article>
+        <article class="rounded-xl border border-border bg-card p-5"><h3 class="font-semibold text-foreground">Technical review</h3><p class="mt-2 text-sm leading-relaxed text-muted">Review a pipeline, prototype, analysis plan, or implementation decision.</p></article>
+        <article class="rounded-xl border border-border bg-card p-5"><h3 class="font-semibold text-foreground">Roadmap</h3><p class="mt-2 text-sm leading-relaxed text-muted">Leave with priorities, risks, concrete next steps, and a clear owner for each.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="max-w-6xl mx-auto px-4 py-16 md:py-20 grid lg:grid-cols-[1fr_0.8fr] gap-12 items-start">
+    <div>
+      <p class="section-kicker">Good fit</p>
+      <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Bring the hard question early.</h2>
+      <ul class="mt-6 space-y-3 text-muted">
+        {fit.map((item) => <li class="flex gap-3"><span class="text-primary" aria-hidden="true">/</span><span>{item}</span></li>)}
+      </ul>
+    </div>
+    <aside class="rounded-[1.25rem] border border-border bg-card p-6">
+      <p class="section-kicker">Scope note</p>
+      <p class="mt-4 leading-relaxed text-muted">Consultations support research, technical planning, and software decisions. They do not provide clinical diagnosis, medical treatment advice, regulatory certification, or a substitute for domain-specific legal or clinical review.</p>
+      <a href="mailto:ddiyabal@uwo.ca?subject=Consultation%20inquiry" class="inline-flex mt-6 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Email about a consultation</a>
+    </aside>
+  </section>
+</Layout>

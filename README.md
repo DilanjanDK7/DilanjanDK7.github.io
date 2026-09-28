@@ -76,6 +76,8 @@ service cloud.firestore {
 }
 ```
 
+   **Security update:** The rules above are retained only as legacy documentation. Do not deploy them. Deploy the repository's `firestore.rules` file with `npx firebase-tools deploy --only firestore:rules` or paste it into Firebase Console → Firestore Database → Rules. The current rules bind each participant document to the Firebase anonymous-auth user who created it, preventing cross-user edits and spam overwrites. The scheduler no longer stores or uses participant passwords.
+
 3. CSP
    - `schedule.html` includes CSP allowing required Firebase endpoints.
 

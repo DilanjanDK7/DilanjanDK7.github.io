@@ -2,7 +2,6 @@
   const state = {
     eventName: '',
     participantName: '',
-    participantPassword: '',
     tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
     useLocalTZ: true,
     startDate: null,
@@ -31,7 +30,6 @@
     eventNameRow: document.getElementById('eventNameRow'),
     pageTitle: document.getElementById('pageTitle'),
     participantName: document.getElementById('participantName'),
-    participantPassword: document.getElementById('participantPassword'),
     startDate: document.getElementById('startDate'),
     endDate: document.getElementById('endDate'),
     dayStart: document.getElementById('dayStart'),
@@ -123,9 +121,7 @@
   }
 
   function getMeKey() {
-    const name = (els.participantName?.value || '').trim();
-    if (name) return name;
-    return `Guest-${getAnonymousToken()}`;
+    return state.meKey || `Guest-${getAnonymousToken()}`;
   }
 
   function getAnonymousToken() {
@@ -148,27 +144,20 @@
     }
   }
 
-  function getPassword() {
-    return (els.participantPassword?.value || '').trim();
-  }
-
-  async function sha256Hex(str) {
-    const enc = new TextEncoder().encode(str);
-    const buf = await crypto.subtle.digest('SHA-256', enc);
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
   async function computeParticipantId() {
-    if (!state.eventId) return null;
-    const name = (state.meKey || '').trim().toLowerCase();
-    // A password enables the same named participant to recover their entry on
-    // another device. Without one, a private browser token prevents two people
-    // with the same display name from overwriting one another's availability.
-    const credential = (state.participantPassword || '').trim() || `browser:${getAnonymousToken()}`;
-    const key = `${state.eventId}|${name}|${credential}`;
-    const pid = await sha256Hex(key);
-    state.participantId = pid;
-    return pid;
+    const uid = state.auth?.currentUser?.uid;
+    if (!state.eventId || !uid) return null;
+    const previousKey = state.meKey;
+    state.participantId = uid;
+    state.meKey = uid;
+    if (previousKey && previousKey !== uid) {
+      for (const dayMap of state.availability.values()) {
+        for (const participantSet of dayMap.values()) {
+          if (participantSet.delete(previousKey)) participantSet.add(uid);
+        }
+      }
+    }
+    return uid;
   }
 
   function attachHandlers() {
@@ -189,10 +178,9 @@
       updateTZDisplay();
     });
 
-    // Auto-load participant's saved availability when they enter name/password on shared link
+    // Keep the displayed name local; Firebase anonymous auth owns the record.
     const autoLoadParticipantData = async () => {
       if (!state.eventId || !state.db) return; // Only for shared events
-      const oldMeKey = state.meKey;
       if (!state.eventId) return; // Only for shared events
 
       // If Firebase not ready yet, retry a few times
@@ -213,8 +201,6 @@
 
       const oldPid = state.participantId;
       
-      state.meKey = getMeKey();
-      state.participantPassword = getPassword();
       await computeParticipantId();
       
       // If participant identity changed, load their saved data
@@ -224,8 +210,9 @@
       }
     };
 
-    els.participantName?.addEventListener('blur', autoLoadParticipantData);
-    els.participantPassword?.addEventListener('blur', autoLoadParticipantData);
+    els.participantName?.addEventListener('input', () => {
+      state.participantName = (els.participantName?.value || '').trim();
+    });
 
     els.minAvailable?.addEventListener('change', () => computeBest());
 
@@ -235,8 +222,7 @@
       console.log('[Scheduler] Manual save triggered');
       
       // Update state from inputs
-      state.meKey = getMeKey();
-      state.participantPassword = getPassword();
+      state.participantName = (els.participantName?.value || '').trim();
       
       // If not in an event yet, must create one first
       if (!state.eventId) {
@@ -256,10 +242,8 @@
       saveAvailabilityBtn.disabled = true;
       
       try {
-        // Compute participant ID if needed
-        if (!state.participantId) {
-          await computeParticipantId();
-        }
+        await window.ensureSignedIn();
+        await computeParticipantId();
         
         // Persist to Firestore
         if (typeof window.persistMyAvailability === 'function') {
@@ -310,9 +294,8 @@
       if (typeof window.ensureSignedIn === 'function') await window.ensureSignedIn();
       const eventId = typeof window.createOrEnsureEvent === 'function' ? await window.createOrEnsureEvent() : null;
       state.eventId = eventId;
-      // compute participant id from name+password
-      state.meKey = getMeKey();
-      state.participantPassword = getPassword();
+      // Firebase anonymous-auth user IDs own participant records.
+      state.participantName = (els.participantName?.value || '').trim();
       await computeParticipantId();
       const url = new URL('/schedule/', location.origin);
       url.searchParams.set('event', eventId);
@@ -355,7 +338,6 @@
 
     state.eventName = (els.eventName?.value || '').trim();
     state.participantName = (els.participantName?.value || '').trim();
-    state.participantPassword = getPassword();
     state.meKey = getMeKey();
     state.startDate = startDate;
     state.endDate = endDate;
@@ -741,10 +723,7 @@
   function persistDraft() {
     try {
       const draft = serializeState();
-      draft.me = state.meKey;
-      draft.pwd = state.participantPassword || '';
       // Never store raw password — store only the hashed participantId
-      if (state.participantId) draft.participantId = state.participantId;
       localStorage.setItem('scheduleDraft', JSON.stringify(draft));
     } catch (_) {}
   }
@@ -755,13 +734,12 @@
       if (!raw) return;
       const draft = JSON.parse(raw);
       applyRestoredData(draft);
-      if (draft.me) state.meKey = draft.me;
-      if (typeof draft.pwd === 'string') state.participantPassword = draft.pwd;
       // Restore hashed participantId; never restore raw password
-      if (typeof draft.participantId === 'string') state.participantId = draft.participantId;
       // Clean up any legacy raw password from old drafts
       if (draft.pwd !== undefined) {
+        delete draft.me;
         delete draft.pwd;
+        delete draft.participantId;
         try { localStorage.setItem('scheduleDraft', JSON.stringify(draft)); } catch (_) {}
       }
     } catch (_) {}
@@ -834,7 +812,7 @@
           console.log(`[Scheduler] Auth state changed: Signed in as ${u.uid}`);
           if (state.eventId) {
             console.log(`[Scheduler] Auth ready, subscribing to event: ${state.eventId}`);
-            window.subscribeToEvent(state.eventId);
+            computeParticipantId().then(() => window.subscribeToEvent(state.eventId));
           }
         } else {
           console.log('[Scheduler] Auth state changed: Signed out.');
@@ -911,12 +889,14 @@
 
   window.persistMyAvailability = async function persistMyAvailability() {
     if (!state.db || !state.eventId || !state.auth?.currentUser) return;
-    if (!state.participantId) await computeParticipantId();
+    await computeParticipantId();
+    if (!state.participantId) throw new Error('Participant authentication is not ready.');
     const my = exportMyAvailability();
     const pref = window.__fb.doc(state.db, 'events', state.eventId, 'participants', state.participantId);
     await window.__fb.setDoc(pref, {
-      name: state.meKey,
+      name: state.participantName || 'Guest',
       pid: state.participantId,
+      ownerUid: state.auth.currentUser.uid,
       slots: my.slots,
       updatedAt: window.__fb.serverTimestamp(),
     }, { merge: true });
@@ -1061,13 +1041,14 @@
       }
       qs.forEach(docSnap => {
         const pdata = docSnap.data();
+        const participantKey = pdata.pid || docSnap.id;
         const pname = pdata.name || 'Guest';
         names.push(pname);
         const slots = pdata.slots || {};
         for (const [dateIso, arr] of Object.entries(slots)) {
           for (const time of arr) {
             const key = dateIso + ' ' + time;
-            ensure(newAvail, dateIso, key).add(pname);
+            ensure(newAvail, dateIso, key).add(participantKey);
           }
         }
       });
@@ -1198,7 +1179,6 @@
 
     // Always enable grid and participant inputs (name, password, view options)
     if (els.participantName) els.participantName.disabled = false;
-    if (els.participantPassword) els.participantPassword.disabled = false;
     if (els.minAvailable) els.minAvailable.disabled = false;
     if (els.grid) els.grid.style.pointerEvents = 'auto';
     
