@@ -4,7 +4,7 @@
     "title": "QM FFT Feature Package",
     "description": "High-performance NUFFT-based 3D analysis: k-space masking, gradient mapping, spectral metrics, batch HDF5 IO, and interactive 3D visualizations.",
     "link": "/projects/qm_fft_feature_package",
-    "image": "/assets/images/projects/qm-fft-k-space.png",
+    "image": "/assets/images/projects/nested-spectral-k-space.png",
     "tags": ["Python", "NUFFT", "HDF5", "3D Visualization"]
   },
   {
@@ -12,7 +12,7 @@
     "title": "Feature Extraction Container",
     "description": "Dockerized, Snakemake-managed pipeline for ALFF/fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis with robust docs.",
     "link": "/projects/feature_extraction_container",
-    "image": "/assets/images/projects/feature-extraction-workflow.png",
+    "image": "/assets/images/projects/feature-extraction-cortical-layers.png",
     "tags": ["Docker", "Snakemake", "Python", "fMRI"]
   },
   {
@@ -20,7 +20,7 @@
     "title": "EpiFlow",
     "description": "Epilepsy research pipeline: DICOM→BIDS (optional), fMRIPrep preprocessing, and advanced feature extraction for fMRI.",
     "link": "/projects/epiflow",
-    "image": "/assets/images/projects/epiflow-pipeline.png",
+    "image": "/assets/images/projects/epiflow-amber-brain-signal.png",
     "tags": ["Python", "Docker", "BIDS", "Nilearn", "fMRIPrep"]
   },
   {
@@ -28,7 +28,7 @@
     "title": "BrainViz DK",
     "description": "Advanced brain visualization toolkit for neuroimaging data analysis, featuring interactive 3D brain rendering and comprehensive visualization tools.",
     "link": "/projects/brainviz_dk",
-    "image": "/assets/images/projects/brainviz-cortical-layers.png",
+    "image": "/assets/images/projects/brainviz-sculptural-cortex.png",
     "tags": ["Python", "3D", "Neuroimaging", "Open Source"]
   },
   {
@@ -36,7 +36,7 @@
     "title": "MT-WAN EEG Pain Estimation",
     "description": "Collaborative EEG pain-decoding pipeline combining phase-aware multi-task deep learning, classical ML baselines, subject-wise validation, and interpretable evaluation.",
     "link": "/projects/eeg-pain-estimation",
-    "image": "/assets/images/projects/mt-wan-eeg-pain.png",
+    "image": "/assets/images/projects/mt-wan-eeg-pathways.png",
     "tags": ["EEG", "Deep Learning", "Machine Learning", "Interpretability"]
   },
   {
