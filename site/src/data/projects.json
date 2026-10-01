@@ -32,6 +32,14 @@
     "tags": ["Python", "3D", "Neuroimaging", "Open Source"]
   },
   {
+    "key": "eeg_pain_estimation",
+    "title": "MT-WAN EEG Pain Estimation",
+    "description": "Collaborative EEG pain-decoding pipeline combining phase-aware multi-task deep learning, classical ML baselines, subject-wise validation, and interpretable evaluation.",
+    "link": "/projects/eeg-pain-estimation",
+    "image": "/assets/images/neuroimaging-lab.png",
+    "tags": ["EEG", "Deep Learning", "Machine Learning", "Interpretability"]
+  },
+  {
     "key": "live_market_analyzer",
     "title": "Live Market Analyzer",
     "description": "Planned research and analytics workspace for exploring live market data, signals, and interpretable visual summaries.",

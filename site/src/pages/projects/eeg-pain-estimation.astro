@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="MT-WAN EEG Pain Estimation | Dilanjan DK"
+  description="Collaborative EEG pain-decoding research software using phase-aware multi-task learning, classical machine learning baselines, and interpretability analysis."
+  ogImage="/assets/images/neuroimaging-lab.png"
+>
+  <ProjectDetail
+    title="MT-WAN EEG Pain Estimation"
+    subtitle="Phase-aware multi-task learning for EEG-based pain decoding."
+    image="/assets/images/neuroimaging-lab.png"
+    imageAlt="Abstract scientific image representing EEG signals and computational neuroscience analysis"
+    overview="A collaborative research software project for estimating pain from EEG. The pipeline compares engineered-feature classical machine-learning models with deep learning, including MT-WAN: a multi-task CNN-BiLSTM model that uses EEG temporal phase as an auxiliary training signal while requiring no phase labels during inference."
+    features={[
+      'Subject-wise evaluation with GroupShuffleSplit to reduce participant leakage',
+      'Phase-aware multi-task CNN-BiLSTM model with pain and temporal-window prediction heads',
+      'Classical baselines using PSD, regional, and spectral-temporal features with SVM, Random Forest, and XGBoost',
+      'Multiple pain thresholds with balanced accuracy and macro-F1 evaluation',
+      'Bootstrap confidence intervals and Grad × Input saliency-based interpretability analysis',
+    ]}
+    docLinks={[
+      { label: 'GitHub Repository', href: 'https://github.com/AditiSatsangi/EEG-Pain-Estimation' },
+      { label: 'OpenNeuro Dataset ds005280', href: 'https://openneuro.org/datasets/ds005280' },
+    ]}
+  />
+</Layout>
