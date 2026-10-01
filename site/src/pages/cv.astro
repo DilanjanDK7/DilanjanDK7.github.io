@@ -1,195 +1,45 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const education = [
-  {
-    period: '2022 - Present',
-    degree: 'PhD Candidate in Physics',
-    institution: 'University of Western Ontario',
-    detail: 'Collaborative Specialization in Machine Learning in Health and Biomedical Sciences.',
-  },
-  {
-    period: '2021 - 2022',
-    degree: 'MSc in Physics',
-    institution: 'University of Western Ontario',
-    detail: 'Graduate research in computational physics and brain-data analysis.',
-  },
-  {
-    period: '2016 - 2020',
-    degree: 'BSc (Hons.) in Physics',
-    institution: 'University of Colombo, Sri Lanka',
-    detail: 'Special degree in Physics with a focus on rigorous scientific training and quantitative problem-solving.',
-  },
-];
-
-const research = [
-  {
-    period: '2022 - Present',
-    role: 'PhD Research Assistant',
-    institution: 'University of Western Ontario',
-    project: 'Enhancing Neuroimaging Analysis through Physics-based Models and Deep Learning',
-    detail: 'Developing computational models and machine learning methods to interpret complex neuroimaging data.',
-  },
-  {
-    period: '2021 - 2022',
-    role: "Master's Research Assistant",
-    institution: 'University of Western Ontario',
-    project: 'Analysis of Source Reconstructed EEG Data by a Model Inspired by Quantum Mechanics',
-    detail: 'Modeling and reconstructing EEG data to extract dynamical features and relate them to spatial information.',
-  },
-  {
-    period: '2019 - 2022',
-    role: 'Undergraduate Research Assistant',
-    institution: 'Department of Physics, University of Colombo',
-    project: 'Investigating Sonoluminescence Bubble Dynamics in Ionic Solutions',
-    detail: 'Undergraduate research in experimental and computational physics.',
-  },
-];
-
-const workExperience = [
-  {
-    period: '2021 - Present',
-    role: 'Teaching Assistant',
-    institution: 'Western University',
-    detail: 'Supporting undergraduate teaching, tutorials, assessment, and student learning across physics and related quantitative coursework.',
-  },
-  {
-    period: '2024 - 2026',
-    role: 'AI Research Associate',
-    institution: 'Brainet.ca',
-    detail: 'Contributing to applied AI research and the development of practical research and technology initiatives.',
-  },
-  {
-    period: 'September 2026 - Present',
-    role: 'Chief Technology Officer',
-    institution: 'Brainet.ca',
-    detail: 'Leading technical direction, research engineering, and the development of AI-focused systems and products.',
-  },
-];
-
-const presentations = [
-  {
-    period: '2026',
-    title: 'MT-WAN: Implicit Window Supervision for Phase-Aware EEG Pain Decoding via Multi-Task Learning',
-    event: 'IEEE EMBC 2026, Toronto, Canada',
-    type: 'Poster presentation',
-    href: 'https://cmsworkshops.com/EMBC2026/view_paper.php?PaperNum=4043&SessionID=1153',
-  },
-  {
-    period: '2026',
-    title: 'Quasi-Instantaneous Neural Excitability (QINe): A Multiscale fMRI Framework Applied to Healthy, Anesthesia, and Epilepsy Cohorts',
-    event: 'Western Epilepsy Research Day 2026',
-    type: 'Research talk',
-    href: 'https://www.schulich.uwo.ca/werg/events/Long-Agenda_WERD2026.pdf',
-  },
-  {
-    period: '2026',
-    title: 'A Containerized, Tissue-Resolved Pipeline for Reproducible Biomarker Extraction in Resting-State fMRI for Epilepsy',
-    event: 'Western Epilepsy Research Day 2026',
-    type: 'Poster presentation',
-    href: 'https://www.schulich.uwo.ca/werg/events/Long-Agenda_WERD2026.pdf',
-  },
-  {
-    period: '2026',
-    title: 'Neural Information Integration Reflects Individual Differences in Inhibitory Control',
-    event: 'OHBM 2026 Annual Meeting, June 14–18, Bordeaux, France',
-    type: 'Accepted poster presentation · Palais 2 l’Atlantique',
-  },
-  {
-    period: '2024',
-    title: 'A Physics-Inspired Probabilistic Model of Neuroimaging Data Analysis and Modelling',
-    event: 'CAP Congress 2024, Western University',
-    type: 'Poster presentation',
-    href: 'https://indico.global/event/440/contributions/10847/',
-  },
-  {
-    period: '2024',
-    title: 'Quantifying Consciousness and Inhibitory Control: An Integrated Information Theory Approach to Neural Dynamics in Go/NoGo Tasks',
-    event: 'CAP Congress 2024, Western University',
-    type: 'Poster presentation',
-    href: 'https://indico.global/event/440/contributions/10637/',
-  },
-  {
-    period: '2023',
-    title: 'Physics-Informed Probabilistic Approach to Analyzing and Modeling Neuroimaging Data',
-    event: 'Centre de recherches mathématiques (CRM), Montreal',
-    type: 'Invited presentation',
-    href: 'https://www.crmath.ca/page-calendrier/resumes-etudiants-2023-inferring/',
-  },
-];
-
-const academicService = [
-  ['SOGS Councillor', 'Department of Physics representative on the Society of Graduate Students’ Council, 2023–May 2024.'],
-  ['Physics & Astronomy Graduate Council', 'Active member, 2022–May 2024.'],
-  ['SOGS committees', 'Member of the International Graduate Student Issues, Sustainability, and Orientation & Socials committees, 2023–May 2024.'],
-  ['BrainHack', 'Participant in BrainHack 2022, 2023, 2025, and 2026.'],
-  ['Science Rendezvous', 'Volunteer in 2022, 2023, and 2024.'],
-  ['Western–Fields School', 'Participant in the Networks and Neuroscience school, September 2022.'],
-  ['Future Prof Series', 'Participant in “Networking at a Conference,” January 2024.'],
-  ['Research outreach', 'Hosted and presented at Fusion Pizza during Summer 2023.'],
-  ['CRANIA 2026', 'Attendee at the EMBC satellite event in Toronto focused on deep brain stimulation and neuroimaging.'],
-];
-
 const focusAreas = [
   'Clinical neuroimaging and fMRI analysis',
-  'Physics-informed neural networks',
-  'Machine learning for health and biomedical sciences',
-  'EEG source reconstruction and dynamical features',
-  'Reproducible scientific software and open research tools',
+  'EEG analysis and machine learning',
+  'Physics-informed computational modelling',
+  'Reproducible scientific software',
 ];
 
-const industryStrengths = [
-  ['Scientific software', 'Python-based tools and packages for neuroimaging, signal analysis, visualization, and research automation.'],
-  ['Production workflows', 'Containerized and workflow-managed systems using Docker and Snakemake for repeatable analysis.'],
-  ['Data-intensive analysis', 'fMRI, EEG, HDF5, 3D data, feature extraction, and interpretable computational methods.'],
-  ['Technical communication', 'Documentation, user guides, troubleshooting, and clear translation of complex research systems.'],
-  ['Research communication', 'Communicating computational neuroscience findings through conference abstracts, invited presentations, and poster sessions.'],
+const capabilities = [
+  ['Scientific data systems', 'Designing practical workflows for fMRI, EEG, feature extraction, quality checks, and interpretable analysis.'],
+  ['Machine learning', 'Applying classical and deep-learning methods to neural and health-data questions with rigorous evaluation.'],
+  ['Research engineering', 'Building portable, documented tools with Python, Docker, Snakemake, version control, and clear handoffs.'],
+  ['Technical planning', 'Turning an open research or product question into a scoped, testable implementation plan.'],
 ];
 
-const industryProjects = [
-  { name: 'EpiFlow', detail: 'An epilepsy fMRI pipeline spanning optional DICOM-to-BIDS conversion, fMRIPrep preprocessing, and advanced feature extraction.' },
-  { name: 'Feature Extraction Container', detail: 'A Dockerized, Snakemake-managed workflow for ALFF/fALFF, ReHo, Hurst, fractal dimension, QM-FFT, and RSN analysis.' },
-  { name: 'BrainViz DK', detail: 'A brain visualization toolkit for interactive 3D rendering and neuroimaging data exploration.' },
-  { name: 'QM FFT Feature Package', detail: 'A high-performance Python package for NUFFT-based 3D analysis, spectral metrics, HDF5 I/O, and visualization.' },
-  { name: 'Conference research communication', detail: 'Presented and communicated computational neuroscience work across invited talks and poster sessions, including an accepted OHBM 2026 poster on neural information integration and inhibitory control.' },
+const selectedWork = [
+  ['EpiFlow', 'A reproducible fMRI workflow for preprocessing and feature extraction in epilepsy research.'],
+  ['Feature Extraction Container', 'A containerized and workflow-managed system for resting-state fMRI feature analysis.'],
+  ['EEG machine learning', 'Deep-learning research for pain decoding, task-state recognition, and tinnitus classification.'],
+  ['Physics-based brain modelling', 'Computational approaches connecting neural dynamics, structural connectivity, and functional organisation.'],
 ];
 
-const technicalToolkit = [
-  {
-    category: 'Languages & development',
-    tools: 'Python, JavaScript, HTML, CSS, SQL, Bash, Git, GitHub',
-    detail: 'Building research software, responsive web interfaces, command-line workflows, and version-controlled projects.',
-  },
-  {
-    category: 'Scientific Python',
-    tools: 'NumPy, SciPy, pandas, scikit-learn, NiBabel, Nilearn, FINUFFT, h5py, Plotly',
-    detail: 'Working with numerical analysis, machine learning, EEG/fMRI data, non-uniform Fourier transforms, HDF5, and interactive visualization.',
-  },
-  {
-    category: 'Neuroimaging workflows',
-    tools: 'BIDS, fMRIPrep, ALFF/fALFF, ReHo, Hurst analysis, fractal dimension, RSN analysis',
-    detail: 'Designing reproducible preprocessing and feature-extraction pipelines for clinical and research neuroimaging.',
-  },
-  {
-    category: 'Workflow & environments',
-    tools: 'Docker, Snakemake, Linux, command-line research environments, Python packaging',
-    detail: 'Packaging tools and workflows so that analyses are portable, repeatable, documented, and easier to run across systems.',
-  },
+const toolkit = [
+  ['Languages & development', 'Python, JavaScript, HTML, CSS, SQL, Bash, Git'],
+  ['Scientific computing', 'NumPy, SciPy, pandas, scikit-learn, NiBabel, Nilearn, FINUFFT, h5py, Plotly'],
+  ['Reproducible environments', 'Docker, Snakemake, BIDS, fMRIPrep, Linux, Python packaging'],
 ];
 ---
 
 <Layout
-  title="Curriculum Vitae | Dilanjan Diyabalanage"
-  description="Academic and research profile of Dilanjan Diyabalanage, a computational neuroscientist and PhD candidate in Physics at Western University."
+  title="Professional Profile | Dilanjan DK"
+  description="Professional profile of Dilanjan DK, a computational neuroscientist focused on neuroimaging, machine learning, and reproducible scientific software."
   ogImage="/assets/images/Epiflow.png"
 >
   <header class="hero-shell px-4 py-16 md:py-24">
     <div class="max-w-6xl mx-auto">
-      <p class="eyebrow">Academic profile / research CV</p>
-      <h1 class="mt-5 max-w-4xl text-5xl md:text-7xl font-bold leading-[0.95] tracking-[-0.03em] text-foreground">Dilanjan Diyabalanage</h1>
-      <p class="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-foreground/75">Computational neuroscientist and PhD candidate working at the intersection of physics, machine learning, and neuroimaging.</p>
+      <p class="eyebrow">Professional profile</p>
+      <h1 class="mt-5 max-w-4xl text-5xl md:text-7xl font-bold leading-[0.95] tracking-[-0.03em] text-foreground">Dilanjan DK</h1>
+      <p class="mt-6 max-w-2xl text-lg md:text-xl leading-relaxed text-foreground/75">Computational neuroscientist working at the intersection of physics, machine learning, neuroimaging, and scientific software.</p>
       <div class="mt-8 flex flex-wrap gap-3 text-sm text-muted">
-        <a href="mailto:ddiyabal@uwo.ca" class="rounded-full border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors">ddiyabal@uwo.ca</a>
         <a href="https://www.linkedin.com/in/dilanjandk" target="_blank" rel="noopener noreferrer" class="rounded-full border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors">LinkedIn ↗</a>
         <a href="https://orcid.org/0009-0004-6672-2636" target="_blank" rel="noopener noreferrer" class="rounded-full border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors">ORCID ↗</a>
       </div>
@@ -207,206 +57,52 @@ const technicalToolkit = [
       </aside>
 
       <div class="space-y-16">
-        <div class="rounded-[1.25rem] border border-border bg-card p-2 flex flex-wrap gap-2" role="tablist" aria-label="CV versions">
-          <button id="academicTab" type="button" role="tab" aria-selected="true" aria-controls="academicPanel" class="cv-tab rounded-full px-4 py-2 text-sm font-semibold bg-primary text-white">Academic CV</button>
-          <button id="industryTab" type="button" role="tab" aria-selected="false" aria-controls="industryPanel" class="cv-tab rounded-full px-4 py-2 text-sm font-semibold text-muted hover:text-foreground">Industry CV</button>
-        </div>
-
-        <div id="academicPanel" role="tabpanel" aria-labelledby="academicTab" class="cv-panel space-y-16">
-        <section aria-labelledby="education-title">
-          <p class="section-kicker">01 / Education</p>
-          <h2 id="education-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Education</h2>
-          <div class="mt-6 border-y border-border divide-y divide-border">
-            {education.map((item) => (
-              <article class="py-6 grid md:grid-cols-[9rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">{item.period}</p>
-                <div>
-                  <h3 class="text-xl font-semibold text-foreground">{item.degree}</h3>
-                  <p class="mt-1 text-foreground/80">{item.institution}</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section aria-labelledby="research-title">
-          <p class="section-kicker">02 / Experience</p>
-          <h2 id="research-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Research experience</h2>
-          <div class="mt-6 border-y border-border divide-y divide-border">
-            {research.map((item) => (
-              <article class="py-6 grid md:grid-cols-[9rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">{item.period}</p>
-                <div>
-                  <h3 class="text-xl font-semibold text-foreground">{item.role}</h3>
-                  <p class="mt-1 text-foreground/80">{item.institution}</p>
-                  <p class="mt-3 text-sm font-semibold text-accent">{item.project}</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section aria-labelledby="presentations-title">
-          <p class="section-kicker">03 / Conferences & presentations</p>
-          <h2 id="presentations-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Conferences & presentations</h2>
-          <div class="mt-6 border-y border-border divide-y divide-border">
-            {presentations.map((item) => (
-              <article class="py-6 grid md:grid-cols-[6rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">{item.period}</p>
-                <div>
-                  <h3 class="text-lg font-semibold text-foreground">{item.title}</h3>
-                  <p class="mt-1 text-foreground/80">{item.event}</p>
-                  <p class="mt-2 text-sm text-muted">{item.type}{item.href && <> · <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Event details ↗</a></>}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section aria-labelledby="service-title">
-          <p class="section-kicker">04 / Leadership & service</p>
-          <h2 id="service-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Academic engagement</h2>
+        <section aria-labelledby="capabilities-title">
+          <p class="section-kicker">01 / Capabilities</p>
+          <h2 id="capabilities-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Rigorous methods, useful delivery.</h2>
           <div class="mt-6 grid sm:grid-cols-2 gap-4">
-            {academicService.map(([title, detail]) => (
+            {capabilities.map(([title, detail]) => (
               <article class="rounded-[1.25rem] border border-border bg-card p-5">
-                <h3 class="text-lg font-semibold text-foreground">{title}</h3>
+                <h3 class="text-xl font-semibold text-foreground">{title}</h3>
                 <p class="mt-2 text-sm leading-relaxed text-muted">{detail}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section aria-labelledby="work-title">
-          <p class="section-kicker">05 / Professional work</p>
-          <h2 id="work-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Professional experience</h2>
+        <section aria-labelledby="selected-work-title">
+          <p class="section-kicker">02 / Selected work</p>
+          <h2 id="selected-work-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Systems and research themes.</h2>
           <div class="mt-6 border-y border-border divide-y divide-border">
-            {workExperience.map((item) => (
-              <article class="py-6 grid md:grid-cols-[9rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">{item.period}</p>
-                <div>
-                  <h3 class="text-xl font-semibold text-foreground">{item.role}</h3>
-                  <p class="mt-1 text-foreground/80">{item.institution}</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
-                </div>
+            {selectedWork.map(([title, detail]) => (
+              <article class="py-6">
+                <h3 class="text-xl font-semibold text-foreground">{title}</h3>
+                <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{detail}</p>
               </article>
             ))}
           </div>
         </section>
 
-        <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Contact invitation">
-          <p class="section-kicker">06 / Connect</p>
-          <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Interested in the work?</h2>
-          <p class="mt-3 max-w-2xl text-muted leading-relaxed">For research, collaboration, or scientific software conversations, email me or connect through LinkedIn.</p>
-          <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Get in touch <span aria-hidden="true">↗</span></a>
+        <section aria-labelledby="toolkit-title">
+          <p class="section-kicker">03 / Technical toolkit</p>
+          <h2 id="toolkit-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Packages and environments I use.</h2>
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            {toolkit.map(([title, tools]) => (
+              <article class="rounded-[1.25rem] border border-border bg-card p-5">
+                <h3 class="text-lg font-semibold text-foreground">{title}</h3>
+                <p class="mt-2 text-sm font-semibold leading-relaxed text-accent">{tools}</p>
+              </article>
+            ))}
+          </div>
         </section>
-        </div>
 
-        <div id="industryPanel" role="tabpanel" aria-labelledby="industryTab" class="cv-panel hidden space-y-16">
-          <section aria-labelledby="industry-strengths-title">
-            <p class="section-kicker">01 / Capabilities</p>
-            <h2 id="industry-strengths-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Research engineering, made useful.</h2>
-            <div class="mt-6 grid sm:grid-cols-2 gap-4">
-              {industryStrengths.map(([title, detail]) => (
-                <article class="rounded-[1.25rem] border border-border bg-card p-5">
-                  <h3 class="text-xl font-semibold text-foreground">{title}</h3>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{detail}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section aria-labelledby="industry-experience-title">
-            <p class="section-kicker">02 / Professional experience</p>
-            <h2 id="industry-experience-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Experience across teaching, research, and technology leadership.</h2>
-            <div class="mt-6 border-y border-border divide-y divide-border">
-              <article class="py-6 grid md:grid-cols-[10rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">2021 - Present</p>
-                <div>
-                  <h3 class="text-xl font-semibold text-foreground">Teaching Assistant</h3>
-                  <p class="mt-1 text-foreground/80">Western University</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">Supporting learning at scale through tutorials, assessment, technical explanations, and one-to-one guidance. Translating complex quantitative and physics concepts into clear, usable instruction for diverse learners.</p>
-                </div>
-              </article>
-              <article class="py-6 grid md:grid-cols-[10rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">2024 - 2026</p>
-                <div>
-                  <h3 class="text-xl font-semibold text-foreground">AI Research Associate</h3>
-                  <p class="mt-1 text-foreground/80">Brainet.ca</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">Contributing to applied AI and neuroimaging initiatives by connecting research questions with data analysis, machine-learning methods, reproducible software, and practical technical outputs.</p>
-                </div>
-              </article>
-              <article class="py-6 grid md:grid-cols-[10rem_1fr] gap-4">
-                <p class="text-sm font-semibold text-primary">September 2026 - Present</p>
-                <div>
-                  <h3 class="text-xl font-semibold text-foreground">Chief Technology Officer</h3>
-                  <p class="mt-1 text-foreground/80">Brainet.ca</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">Leading technical direction across AI-focused systems and products, with responsibility for research engineering priorities, technical strategy, reliable delivery, and translating organizational goals into buildable technology.</p>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <section aria-labelledby="industry-projects-title">
-            <p class="section-kicker">03 / Selected systems</p>
-            <h2 id="industry-projects-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Tools built for real workflows.</h2>
-            <div class="mt-6 border-y border-border divide-y divide-border">
-              {industryProjects.map((project) => (
-                <article class="py-6">
-                  <h3 class="text-xl font-semibold text-foreground">{project.name}</h3>
-                  <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{project.detail}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section aria-labelledby="toolkit-title">
-            <p class="section-kicker">04 / Technical toolkit</p>
-            <h2 id="toolkit-title" class="mt-3 text-3xl font-bold tracking-tight text-foreground">Packages and environments I use.</h2>
-            <div class="mt-6 grid sm:grid-cols-2 gap-4">
-              {technicalToolkit.map((item) => (
-                <article class="rounded-[1.25rem] border border-border bg-card p-5">
-                  <h3 class="text-lg font-semibold text-foreground">{item.category}</h3>
-                  <p class="mt-2 text-sm font-semibold leading-relaxed text-accent">{item.tools}</p>
-                  <p class="mt-2 text-sm leading-relaxed text-muted">{item.detail}</p>
-                </article>
-              ))}
-            </div>
-          </section>
-
-          <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Industry contact invitation">
-            <p class="section-kicker">05 / Connect</p>
-            <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Building a research product or pipeline?</h2>
-            <p class="mt-3 max-w-2xl text-muted leading-relaxed">I am interested in collaborations where rigorous scientific thinking meets reliable implementation.</p>
-            <a href="mailto:ddiyabal@uwo.ca" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Start a conversation <span aria-hidden="true">↗</span></a>
-          </section>
-        </div>
+        <section class="surface-band rounded-[1.25rem] p-6 md:p-8" aria-label="Full CV request">
+          <p class="section-kicker">04 / Full CV</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground">Need a detailed CV?</h2>
+          <p class="mt-3 max-w-2xl text-muted leading-relaxed">A detailed CV, including full education, experience, and presentation history, is available upon request.</p>
+          <a href="/contact" class="inline-flex mt-6 items-center gap-2 rounded-full bg-primary px-5 py-3 font-semibold text-white hover:-translate-y-0.5 transition-transform">Request full CV <span aria-hidden="true">↗</span></a>
+        </section>
       </div>
     </div>
   </div>
 </Layout>
-
-<script>
-  const academicTab = document.getElementById('academicTab');
-  const industryTab = document.getElementById('industryTab');
-  const academicPanel = document.getElementById('academicPanel');
-  const industryPanel = document.getElementById('industryPanel');
-
-  function setCvMode(mode: 'academic' | 'industry') {
-    const academic = mode === 'academic';
-    academicPanel?.classList.toggle('hidden', !academic);
-    industryPanel?.classList.toggle('hidden', academic);
-    academicTab?.setAttribute('aria-selected', String(academic));
-    industryTab?.setAttribute('aria-selected', String(!academic));
-    academicTab?.classList.toggle('bg-primary', academic);
-    academicTab?.classList.toggle('text-white', academic);
-    academicTab?.classList.toggle('text-muted', !academic);
-    industryTab?.classList.toggle('bg-primary', !academic);
-    industryTab?.classList.toggle('text-white', !academic);
-    industryTab?.classList.toggle('text-muted', academic);
-  }
-
-  academicTab?.addEventListener('click', () => setCvMode('academic'));
-  industryTab?.addEventListener('click', () => setCvMode('industry'));
-</script>

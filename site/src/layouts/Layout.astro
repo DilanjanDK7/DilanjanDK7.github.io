@@ -20,12 +20,11 @@ const image = ogImage ? (ogImage.startsWith('http') ? ogImage : `${site}${ogImag
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Person',
-  name: 'Dilanjan Diyabalanage',
+  name: 'Dilanjan DK',
   url: site,
   jobTitle: 'Computational Neuroscientist',
   affiliation: { '@type': 'Organization', name: 'Western University' },
   sameAs: [
-    'https://github.com/DilanjanDK7',
     'https://www.linkedin.com/in/dilanjandk',
     'https://orcid.org/0009-0004-6672-2636',
   ],
@@ -39,7 +38,7 @@ const structuredData = {
     <meta name="theme-color" content="#0a0a0a" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="author" content="Dilanjan Diyabalanage" />
+    <meta name="author" content="Dilanjan DK" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -95,7 +94,7 @@ const structuredData = {
             form.reset();
             if (message) message.textContent = 'Thanks — your message has been sent.';
           } catch {
-            if (message) message.textContent = 'Your message could not be sent. Please email me directly instead.';
+            if (message) message.textContent = 'Your message could not be sent. Please try again later.';
           } finally {
             if (button) button.disabled = false;
           }

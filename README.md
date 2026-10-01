@@ -1,6 +1,6 @@
 # DilanjanDK7.github.io
 
-Personal portfolio for Dilanjan DK (ddiyabal@uwo.ca). Deployable via GitHub Pages.
+Personal portfolio for Dilanjan DK. Deployable via GitHub Pages.
 
 ## Astro site (recommended)
 
@@ -106,4 +106,4 @@ Push to the default branch of this repository. In repository settings, enable Gi
 
 ## Author
 
-Dilanjan DK — ddiyabal@uwo.ca
+Dilanjan DK — use the deployed contact form for inquiries.
