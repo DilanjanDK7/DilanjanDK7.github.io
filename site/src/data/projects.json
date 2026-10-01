@@ -40,6 +40,14 @@
     "tags": ["EEG", "Deep Learning", "Machine Learning", "Interpretability"]
   },
   {
+    "key": "generative_ising_model",
+    "title": "Generative Ising Model for Resting-State fMRI",
+    "description": "Structure-informed Monte Carlo Ising simulations that model how brain-network architecture can give rise to functional connectivity patterns observed in resting-state fMRI.",
+    "link": "/projects/generative-ising-model",
+    "image": "/assets/images/projects/neuroimaging-system.jpg",
+    "tags": ["Python", "Monte Carlo", "Ising Model", "Connectomics", "rs-fMRI"]
+  },
+  {
     "key": "live_market_analyzer",
     "title": "Live Market Analyzer",
     "description": "Planned research and analytics workspace for exploring live market data, signals, and interpretable visual summaries.",

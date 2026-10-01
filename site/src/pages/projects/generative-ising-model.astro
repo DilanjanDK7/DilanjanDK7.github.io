@@ -1,0 +1,26 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="Generative Ising Model for Resting-State fMRI | Dilanjan DK"
+  description="Structure-informed Monte Carlo Ising simulations for investigating functional connectivity in resting-state fMRI."
+>
+  <ProjectDetail
+    title="Generative Ising Model for Resting-State fMRI"
+    subtitle="Using structural brain networks and Monte Carlo simulations to model resting-state functional dynamics."
+    image="/assets/images/projects/neuroimaging-system.jpg"
+    imageAlt="Structural brain network and MRI-inspired resting-state functional connectivity visual"
+    overview="This project investigates whether structural connectivity can predict functional organization in resting-state fMRI. A generative Ising model uses brain-network architecture to constrain Monte Carlo simulations, producing simulated activity patterns that can be compared with empirical functional-connectivity measures. The work examines the relationship between anatomical structure, emergent network dynamics, and observed resting-state brain function."
+    features={[
+      'Structure-informed coupling matrices derived from brain-network architecture',
+      'Monte Carlo sampling of Ising-model dynamics across parameter regimes',
+      'Simulated functional-connectivity estimates for comparison with resting-state fMRI',
+      'Correlation-based assessment of structure–function correspondence',
+      'Reproducible analysis, parameter sweeps, and network visualisation workflows',
+    ]}
+    docLinks={[
+      { label: 'Research Repository', href: 'https://github.com/WesternBrainLab/FINAL_GIM' },
+    ]}
+  />
+</Layout>

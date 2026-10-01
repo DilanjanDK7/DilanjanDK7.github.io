@@ -6,7 +6,7 @@ import projects from '../data/projects.json';
 
 const publishedProjects = projects.filter((p) => p.status !== 'in-progress');
 const epiflow = publishedProjects.find((p) => p.key === 'epiflow')!;
-const secondary = publishedProjects.filter((p) => p.key !== 'epiflow').slice(0, 3);
+const secondary = publishedProjects.filter((p) => p.key !== 'epiflow');
 ---
 
 <Layout
