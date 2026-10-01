@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="Task-State EEG Classification | Dilanjan DK"
+  description="Deep-learning classification of video-watching, audio-listening, and resting EEG states."
+>
+  <ProjectDetail
+    title="Task-State EEG Classification"
+    subtitle="Classifying video-watching, audio-listening, and resting states from EEG biosignals."
+    image="/assets/images/projects/feature-extraction-cortical-layers.png"
+    imageAlt="Brain-derived feature layers representing EEG task-state classification"
+    overview="This project evaluates whether EEG biosignals can distinguish cognitive state during video watching, audio listening, and rest. It compares convolutional and recurrent neural-network architectures, including CNN, RNN, LSTM, and bidirectional LSTM models, to learn discriminative temporal patterns from electrophysiological data."
+    features={[
+      'Multi-class classification of video-watching, audio-listening, and resting EEG',
+      'Comparative evaluation of CNN, RNN, LSTM, and bidirectional-LSTM architectures',
+      'Temporal modelling of EEG biosignal dynamics',
+      'Model-performance analysis across task conditions',
+      'Reusable deep-learning workflow for EEG state-recognition experiments',
+    ]}
+    docLinks={[]}
+  />
+</Layout>

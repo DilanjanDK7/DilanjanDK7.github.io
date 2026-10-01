@@ -1,0 +1,24 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+---
+<Layout
+  title="Tinnitus EEG Classification | Dilanjan DK"
+  description="Deep-learning classification of tinnitus and healthy-control participants using EEG biosignals."
+>
+  <ProjectDetail
+    title="Tinnitus EEG Classification"
+    subtitle="Recognising tinnitus-related EEG patterns with deep-learning models."
+    image="/assets/images/projects/mt-wan-eeg-pain.png"
+    imageAlt="EEG signal patterns representing tinnitus classification"
+    overview="This project investigates EEG-based recognition of tinnitus by training machine-learning and deep-learning models to distinguish participants with tinnitus from healthy controls. It explores how different model families can capture signal features associated with the condition and supports systematic evaluation of classification performance."
+    features={[
+      'EEG-based classification of tinnitus and healthy-control groups',
+      'Comparison of multiple deep-learning model architectures',
+      'Biosignal preprocessing and feature-learning workflows',
+      'Performance evaluation for clinically motivated classification tasks',
+      'Interpretable foundation for future tinnitus-biomarker research',
+    ]}
+    docLinks={[]}
+  />
+</Layout>

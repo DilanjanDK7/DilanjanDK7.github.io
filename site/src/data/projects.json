@@ -48,6 +48,22 @@
     "tags": ["Python", "Monte Carlo", "Ising Model", "Connectomics", "rs-fMRI"]
   },
   {
+    "key": "task_state_eeg_classification",
+    "title": "Task-State EEG Classification",
+    "description": "Deep-learning classification of video-watching, audio-listening, and resting EEG using CNN, RNN, LSTM, and bidirectional-LSTM models.",
+    "link": "/projects/task-state-eeg-classification",
+    "image": "/assets/images/projects/feature-extraction-cortical-layers.png",
+    "tags": ["EEG", "CNN", "LSTM", "RNN", "Deep Learning"]
+  },
+  {
+    "key": "tinnitus_eeg_classification",
+    "title": "Tinnitus EEG Classification",
+    "description": "EEG-based deep-learning classification for distinguishing people with tinnitus from healthy-control participants across multiple model architectures.",
+    "link": "/projects/tinnitus-eeg-classification",
+    "image": "/assets/images/projects/mt-wan-eeg-pain.png",
+    "tags": ["EEG", "Tinnitus", "Deep Learning", "Classification"]
+  },
+  {
     "key": "live_market_analyzer",
     "title": "Live Market Analyzer",
     "description": "Planned research and analytics workspace for exploring live market data, signals, and interpretable visual summaries.",

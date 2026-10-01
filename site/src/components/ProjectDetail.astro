@@ -27,16 +27,18 @@ const { title, subtitle, overview, features, docLinks, image, imageAlt = `${titl
       {features.map((f) => <li>{f}</li>)}
     </ul>
   </section>
-  <section>
-    <h3 class="text-lg font-semibold text-foreground mb-2">Documentation & Usage</h3>
-    <ul class="space-y-2">
-      {docLinks.map(({ label, href }) => (
-        <li>
-          <a href={href} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">{label}</a>
-        </li>
-      ))}
-    </ul>
-  </section>
+  {docLinks.length > 0 && (
+    <section>
+      <h3 class="text-lg font-semibold text-foreground mb-2">Documentation & Usage</h3>
+      <ul class="space-y-2">
+        {docLinks.map(({ label, href }) => (
+          <li>
+            <a href={href} target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">{label}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
   <section>
     <h3 class="text-lg font-semibold text-foreground mb-2">Contact</h3>
     <p class="text-foreground/90">For questions or collaboration, contact Dilanjan DK at <a href="mailto:ddiyabal@uwo.ca" class="text-primary hover:underline">ddiyabal@uwo.ca</a>.</p>
