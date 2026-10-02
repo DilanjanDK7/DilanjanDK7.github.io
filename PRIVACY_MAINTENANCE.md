@@ -19,9 +19,10 @@ This site uses the public professional name **Dilanjan DK**. The public site doe
 
 Complete these account-side steps once for the existing form:
 
-1. Open the Formspree project settings for form `xoevzgqd`.
-2. Enable spam protection / reCAPTCHA.
-3. Set **Restrict to Domain** to `dilanjandk.com` (without `www`, so both the root domain and subdomains are covered).
-4. Test one normal form submission and one submission with the `_gotcha` field populated; the latter should be ignored as spam.
+1. Create a Cloudflare Turnstile widget for `dilanjandk.com` and `www.dilanjandk.com`; save its site key and secret key.
+2. In the Formspree settings for form `xoevzgqd`, enable CAPTCHA, select **Cloudflare Turnstile**, and enter the Turnstile **secret key**. Do not put this secret in the repository or GitHub Actions.
+3. In GitHub, open the repository's **Settings → Secrets and variables → Actions**, add a repository secret named `TURNSTILE_SITE_KEY`, and paste the Turnstile **site key**. This key is public by design and is injected during deployment.
+4. Set Formspree's **Restrict to Domain** to `dilanjandk.com` (without `www`, so both the root domain and subdomains are covered).
+5. Test one normal form submission and one submission with the `_gotcha` field populated; the latter should be ignored as spam.
 
-The repository adds the `_gotcha` honeypot field to both public forms. Domain restriction is intentionally configured in Formspree's dashboard because it cannot be safely controlled by deployed static-site source code.
+The repository adds Turnstile and the `_gotcha` honeypot to both public forms. The Turnstile secret and Formspree domain restriction are intentionally configured outside the repository.

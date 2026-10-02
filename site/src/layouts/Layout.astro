@@ -56,7 +56,9 @@ const structuredData = {
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
     <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)}></script>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://formspree.io; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formspree.io https://www.gstatic.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.googleapis.com; upgrade-insecure-requests" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://formspree.io; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data:; frame-src https://challenges.cloudflare.com; connect-src 'self' https://formspree.io https://www.gstatic.com https://challenges.cloudflare.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://firebase.googleapis.com https://www.googleapis.com; upgrade-insecure-requests" />
+    <script is:inline src="/assets/js/turnstile-config.js"></script>
+    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
     <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="/assets/manifest.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -77,21 +79,76 @@ const structuredData = {
     <Footer />
     <ThemeToggle />
     <script>
+      declare global {
+        interface Window {
+          TURNSTILE_SITE_KEY?: string;
+          turnstile?: {
+            render: (container: HTMLElement, options: Record<string, unknown>) => string;
+            reset: (widgetId: string) => void;
+          };
+        }
+      }
+
+      const turnstileWidgets = new Map<HTMLFormElement, string>();
+
+      function renderTurnstileWidgets() {
+        const siteKey = window.TURNSTILE_SITE_KEY?.trim();
+        const canRender = Boolean(siteKey && window.turnstile);
+
+        document.querySelectorAll<HTMLFormElement>('form[data-turnstile-form]').forEach((form) => {
+          const container = form.querySelector<HTMLElement>('[data-turnstile-widget]');
+          const status = form.querySelector<HTMLElement>('[data-turnstile-status]');
+          if (!container || turnstileWidgets.has(form)) return;
+
+          if (!canRender) {
+            if (status) status.textContent = 'Contact verification is temporarily unavailable. Please try again later.';
+            return;
+          }
+
+          const widgetId = window.turnstile!.render(container, {
+            sitekey: siteKey,
+            theme: 'auto',
+            callback: () => {
+              if (status) status.textContent = '';
+            },
+            'expired-callback': () => {
+              if (status) status.textContent = 'Verification expired. Please complete it again.';
+            },
+            'error-callback': () => {
+              if (status) status.textContent = 'Verification could not be loaded. Please try again later.';
+            },
+          });
+          turnstileWidgets.set(form, widgetId);
+        });
+      }
+
+      window.addEventListener('load', renderTurnstileWidgets);
+
       document.querySelectorAll<HTMLFormElement>('form[action*="formspree.io"]').forEach((form) => {
         const message = form.parentElement?.querySelector<HTMLElement>('[role="status"]');
         form.addEventListener('submit', async (event) => {
           event.preventDefault();
           const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+          const verificationStatus = form.querySelector<HTMLElement>('[data-turnstile-status]');
+          const formData = new FormData(form);
+          const token = formData.get('cf-turnstile-response');
+          if (!turnstileWidgets.has(form) || typeof token !== 'string' || !token) {
+            if (message) message.textContent = 'Please complete the contact verification before sending.';
+            return;
+          }
           if (button) button.disabled = true;
           if (message) message.textContent = 'Sending…';
           try {
             const response = await fetch(form.action, {
               method: 'POST',
-              body: new FormData(form),
+              body: formData,
               headers: { Accept: 'application/json' },
             });
             if (!response.ok) throw new Error('The form service returned an error.');
             form.reset();
+            const widgetId = turnstileWidgets.get(form);
+            if (widgetId && window.turnstile) window.turnstile.reset(widgetId);
+            if (verificationStatus) verificationStatus.textContent = '';
             if (message) message.textContent = 'Thanks — your message has been sent.';
           } catch {
             if (message) message.textContent = 'Your message could not be sent. Please try again later.';

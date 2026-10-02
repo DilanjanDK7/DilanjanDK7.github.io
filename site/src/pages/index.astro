@@ -104,7 +104,7 @@ const secondary = publishedProjects.filter((p) => p.key !== 'epiflow');
   <section id="contact" class="py-20 px-4 max-w-xl mx-auto">
     <p class="section-kicker">Start a conversation</p>
     <h2 class="mt-3 text-3xl font-bold tracking-tight text-foreground mb-6">Have a difficult dataset?</h2>
-    <form id="contactForm" action="https://formspree.io/f/xoevzgqd" method="POST" class="relative space-y-4">
+    <form id="contactForm" action="https://formspree.io/f/xoevzgqd" method="POST" class="relative space-y-4" data-turnstile-form>
       <label class="block text-sm font-medium text-foreground">Name
         <input type="text" name="name" placeholder="Your name" required autocomplete="name" class="mt-1 w-full px-4 py-3 rounded-lg bg-surface border border-border text-foreground placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary" />
       </label>
@@ -126,6 +126,10 @@ const secondary = publishedProjects.filter((p) => p.key !== 'epiflow');
       <div class="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
         <label for="homepage-gotcha">Leave this field empty</label>
         <input id="homepage-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+      </div>
+      <div>
+        <div data-turnstile-widget></div>
+        <p data-turnstile-status role="status" aria-live="polite" class="mt-2 text-sm text-muted"></p>
       </div>
       <p class="text-sm leading-relaxed text-muted">Please do not include confidential, clinical, financial, or other sensitive personal information. Detailed CVs are shared after review.</p>
       <button type="submit" class="w-full py-3 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background">Send</button>

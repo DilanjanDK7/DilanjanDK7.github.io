@@ -44,6 +44,13 @@ jobs:
           fi
           printf '%s' "$FIREBASE_WEB_CONFIG" > public/assets/js/firebase-config.js
 
+      - name: Inject Cloudflare Turnstile site key
+        working-directory: site
+        env:
+          TURNSTILE_SITE_KEY: ${{ secrets.TURNSTILE_SITE_KEY }}
+        run: |
+          printf "window.TURNSTILE_SITE_KEY = '%s';\n" "$TURNSTILE_SITE_KEY" > public/assets/js/turnstile-config.js
+
       - name: Build
         working-directory: site
         run: npm run build
