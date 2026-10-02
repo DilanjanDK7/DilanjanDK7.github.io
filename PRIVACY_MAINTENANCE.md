@@ -19,7 +19,7 @@ This site uses the public professional name **Dilanjan DK**. The public site doe
 
 Complete these account-side steps once for the existing form:
 
-1. Open the Formspree project settings for form `mwkggdjb`.
+1. Open the Formspree project settings for form `xoevzgqd`.
 2. Enable spam protection / reCAPTCHA.
 3. Set **Restrict to Domain** to `dilanjandk.com` (without `www`, so both the root domain and subdomains are covered).
 4. Test one normal form submission and one submission with the `_gotcha` field populated; the latter should be ignored as spam.
